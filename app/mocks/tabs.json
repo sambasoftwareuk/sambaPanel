@@ -1,0 +1,10 @@
+[
+    { "title": "Life Issues", "content": ["Life Events Will Be Discussed Here."] },
+    { "title": "Work Issues", "content": ["Work-Related Topics Will Be Discussed Here."] },
+    { "title": "Relationship Issues", "content": ["Relationship Topics Will Be Discussed Here."] },
+    { "title": "Personal Issues", "content": ["Personal Development Topics Will Be Discussed Here."] },
+    { "title": "Social Issues", "content": ["Social Interaction Topics Will Be Discussed Here."] },
+    { "title": "Legal Issues", "content": ["Legal Matters Will Be Discussed Here."] },
+    { "title": "Travel Issues", "content": ["Travel Tips and Experiences Will Be Shared Here."] },
+    { "title": "Technology Issues", "content": ["Tech-Related Discussions Will Be Held Here."] }
+]

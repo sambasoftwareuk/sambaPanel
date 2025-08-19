@@ -1,0 +1,134 @@
+{
+  "/": {
+    "title": " Greenstep Su Soğutma Kuleleri",
+    "description": " Greenstep Su Soğutma Kuleleri"
+  },
+  "/kurumsal": {
+    "title": "Kurumsal - Greenstep Su Soğutma Kuleleri",
+    "description": "Kurumsal sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler": {
+    "title": "Ürünlerimiz - Greenstep Su Soğutma Kuleleri",
+    "description": "Ürünlerimiz sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler/monoblok-antibakteriyel-kuleler": {
+    "title": "Monoblok Antibakteriyel Kuleler - Greenstep Su Soğutma Kuleleri",
+    "description": "Monoblok Antibakteriyel Kuleler sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler/duz-guverteli-paket-kuleler": {
+    "title": "Düz Güverteli Paket Kuleler - Greenstep Su Soğutma Kuleleri",
+    "description": "Düz Güverteli Paket Kuleler sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler/kapali-devre-kuleler": {
+    "title": "Kapalı Devre Kuleler - Greenstep Su Soğutma Kuleleri",
+    "description": "Kapalı Devre Kuleler sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler/insai-tip-kuleler": {
+    "title": "İnşai Tip Kuleler - Greenstep Su Soğutma Kuleleri",
+    "description": "İnşai Tip Kuleler sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler/sogutma-kulesi-yedek-parcalari": {
+    "title": "Soğutma Kulesi Yedek Parçaları - Greenstep Su Soğutma Kuleleri",
+    "description": "Soğutma Kulesi Yedek Parçaları sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/urunler/sogutma-kulesi-bakim-onarim": {
+    "title": "Soğutma Kulesi Bakım Onarım İşleri - Greenstep Su Soğutma Kuleleri",
+    "description": "Soğutma Kulesi Bakım Onarım İşleri sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar": {
+    "title": "Yedek Parçalar - Greenstep Su Soğutma Kuleleri",
+    "description": "Yedek Parçalar sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/rashing-halkasi": {
+    "title": "Rashing Halkası - Greenstep Su Soğutma Kuleleri",
+    "description": "Rashing Halkası sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/fan-sistemleri": {
+    "title": "Fan Sistemleri - Greenstep Su Soğutma Kuleleri",
+    "description": "Fan Sistemleri sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/bigudi": {
+    "title": "Bigudi - Greenstep Su Soğutma Kuleleri",
+    "description": "Bigudi sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/pvc-film-dolgu": {
+    "title": "PVC Film Dolgu - Greenstep Su Soğutma Kuleleri",
+    "description": "PVC Film Dolgu sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/splash-grid-dolgu": {
+    "title": "Splash Grid Dolgu - Greenstep Su Soğutma Kuleleri",
+    "description": "Splash Grid Dolgu sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/trickle-dolgu": {
+    "title": "Trickle Dolgu - Greenstep Su Soğutma Kuleleri",
+    "description": "Trickle Dolgu sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/damla-tutucu": {
+    "title": "Damla Tutucu - Greenstep Su Soğutma Kuleleri",
+    "description": "Damla Tutucu sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/serpantin": {
+    "title": "Serpantin - Greenstep Su Soğutma Kuleleri",
+    "description": "Serpantin sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/vibrasyon-salteri": {
+    "title": "Vibrasyon Şalteri - Greenstep Su Soğutma Kuleleri",
+    "description": "Vibrasyon Şalteri sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/yedek-parcalar/kademeli-nozul": {
+    "title": "Kademeli Nozul - Greenstep Su Soğutma Kuleleri",
+    "description": "Kademeli Nozul sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/hizmetler": {
+    "title": "Hizmetlerimiz - Greenstep Su Soğutma Kuleleri",
+    "description": "Hizmetlerimiz sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/hizmetler/otomasyon-hizmeti": {
+    "title": "Otomasyon Hizmeti - Greenstep Su Soğutma Kuleleri",
+    "description": "Otomasyon Hizmeti sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/hizmetler/tasarim-hizmeti": {
+    "title": "Tasarım Hizmeti - Greenstep Su Soğutma Kuleleri",
+    "description": "Tasarım Hizmeti sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/hizmetler/bakim-onarim-hizmeti": {
+    "title": "Bakım Onarım Hizmeti - Greenstep Su Soğutma Kuleleri",
+    "description": "Bakım Onarım Hizmeti sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/hizmetler/montaj-demontaj-hizmeti": {
+    "title": "Montaj-Demontaj Hizmeti - Greenstep Su Soğutma Kuleleri",
+    "description": "Montaj-Demontaj Hizmeti sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/hizmetler/enerji-analiz-hizmeti": {
+    "title": "Enerji Analiz Hizmeti - Greenstep Su Soğutma Kuleleri",
+    "description": "Enerji Analiz Hizmeti sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/galeri": {
+    "title": "Galeri - Greenstep Su Soğutma Kuleleri",
+    "description": "Galeri sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/galeri/fotograflar": {
+    "title": "Fotograflar - Greenstep Su Soğutma Kuleleri",
+    "description": "Fotograflar sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/galeri/videolar": {
+    "title": "Videolar - Greenstep Su Soğutma Kuleleri",
+    "description": "Videolar sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/referanslar": {
+    "title": "Referanslarımız - Greenstep Su Soğutma Kuleleri",
+    "description": "Referanslarımız sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/blog": {
+    "title": "Blog - Greenstep Su Soğutma Kuleleri",
+    "description": "Blog sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/e-katalog": {
+    "title": "E-Katalog - Greenstep Su Soğutma Kuleleri",
+    "description": "E-Katalog sayfası - Greenstep Su Soğutma Kuleleri"
+  },
+  "/iletisim": {
+    "title": "İletişim - Greenstep Su Soğutma Kuleleri",
+    "description": "İletişim sayfası - Greenstep Su Soğutma Kuleleri"
+  }
+}

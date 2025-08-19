@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "title": "Otomasyon hizmeti",
+    "slug": "otomasyon-hizmeti",
+    "image": "/tek-hucreli.png",
+    "description": "<strong>GreenStep Cooling Towers Otomasyon Sistemleri:</strong><br><br><strong>365 Gün Verimlilik ve Tasarruf</strong><br>Gelişmiş kontrol teknolojisiyle tüm mevsim koşullarına uyum sağlar, sabit sıcaklıkta optimum soğutma performansı sunar.<br><strong>Kesintisiz Sıcaklık Kontrolü</strong><ul><li>Kule çıkış suyu sıcaklığı sürekli izlenir</li><li>PID kontrollü PLC ile fan hızı dinamik olarak ayarlanır</li><li>Prosesler için ideal çalışma ortamı sağlanır</li></ul><strong>Enerji ve Su Tasarrufu</strong><ul><li>Fan hız kontrolüyle %60’a varan enerji tasarrufu</li><li>Fanlar sadece ihtiyaç duyulan hızda çalışır</li><li>Azalan su tüketimi ile çevresel katkı</li></ul><strong>Fan Ömründe Artış</strong><ul><li>Yüksek hızda sürekli çalışmanın önüne geçilir</li><li>Fan-motor üzerindeki mekanik yükler dengelenir</li><li>Titreşim ve aşınma azalır, bakım maliyetleri düşer</li></ul><strong>GreenStep Otomasyonunun Kazanımları</strong><ul><li>Daha düşük enerji ve su faturaları</li><li>Uzun ömürlü sistemler</li><li>Minimum bakım, maksimum güvenilirlik</li></ul>"
+  },
+  {
+    "id": 2,
+    "title": "Tasarım Hizmeti",
+    "slug": "tasarim-hizmeti",
+    "image": "/iki-hucreli.png",
+    "description": "<strong>GreenStep Cooling Towers Soğutma Kulesi Tasarımı:</strong><br><br><strong>25 Yıllık Deneyimle Özel Çözümler</strong><br>Mühendislik uzmanlığıyla yüksek verimli, dayanıklı ve çevre dostu kuleler tasarlanır.<br><strong>Proje Bazlı Özelleştirme</strong><ul><li>İhtiyaca özel kapasite ve proses hesaplamaları</li><li>Pratik, ekonomik ve montaj kolaylığı sağlayan çözümler</li></ul><strong>Modern Malzeme ve Teknoloji</strong><ul><li>PE, CTP, çelik veya betonarme seçenekleri</li><li>Anti mikrobiyel ve çevreci malzeme kullanımı</li><li>Fan ve dolgu optimizasyonlarıyla enerji tasarrufu</li></ul><strong>3D Modelleme ve Simülasyon</strong><ul><li>Tasarım sürecinde ileri görselleştirme</li><li>Akışkan ve yapısal analizlerle optimum sonuçlar</li></ul><strong>Yönetmeliklere Uyum</strong><ul><li>ISO, CE, TSE gibi standartlara uygun tasarımlar</li><li>Hijyenik ve bakım kolaylığı sağlayan yapı</li></ul><strong>Teknik Danışmanlık</strong><ul><li>Saha analizi ve tasarım doğrulama</li><li>Müşteri eğitimleri ve bakım planlaması</li></ul>"
+  },
+  {
+    "id": 3,
+    "title": "Bakım Onarım Hizmeti",
+    "slug": "bakim-onarim-hizmeti",
+    "image": "/uc-hucreli.png",
+    "description": "<strong>GreenStep Cooling Towers Bakım ve Onarım Hizmetleri:</strong><br><br><strong>Eski Kulelerde Yüksek Verimlilik</strong><br>25 yıllık tecrübeyle yedek parça değişimi ve modernizasyon hizmetleri.<br><strong>Yedek Parça Değişimi</strong><ul><li>Orijinal kalıplarla üretilen yüksek kaliteli parçalar</li><li>Fan, motor, dolgu, nozul gibi kritik elemanların yenilenmesi</li><li>Hızlı montajla üretim kaybı önlenir</li></ul><strong>Verimlilik Artışı</strong><ul><li>Ahşap taşıyıcıların çelik/CTP ile değiştirilmesi</li><li>Modern dolgu sistemleri ile ısı transfer kapasitesinin yükseltilmesi</li><li>Yeni nesil fan-motor sistemleriyle enerji tasarrufu</li><li>Otomasyon entegrasyonu ile sıcaklık kontrolü</li></ul><strong>GreenStep Farkı</strong><ul><li>Yüksek hassasiyetli parça üretimi</li><li>Saha tecrübesi ile hızlı ve etkili müdahale</li><li>Eski kuleleri modern seviyeye getiren kapsamlı çözümler</li></ul>"
+  },
+  {
+    "id": 4,
+    "title": "Montaj-Demontaj Hizmeti",
+    "slug": "montaj-demontaj-hizmeti",
+    "image": "/tek-hucreli.png",
+    "description": "<strong>GreenStep Cooling Towers Montaj-Demontaj Hizmeti:</strong><br><br><strong>Yer Değişikliği ve Taşınabilirlikte Esnek Çözümler</strong><br>Modüler kule yapısı sayesinde güvenli ve ekonomik taşıma imkânı.<br><strong>Kule Yer Değişikliği</strong><ul><li>Komple demontaj ve güvenli montaj imkânı</li><li>Yatırım maliyetlerinde tasarruf</li></ul><strong>Paket Tip Kulelerde Kolay Taşıma</strong><ul><li>Dolgu malzemeleri hasar görmeden çıkarılır</li><li>Serpantin ve iskelet tek parça taşınabilir</li><li>Montaj sonrası kolay kurulum</li></ul><strong>GreenStep Farkı</strong><ul><li>Uzman ekip ile planlama, taşıma ve montaj</li><li>Özel ambalaj ve koruma çözümleri</li><li>Yeni lokasyonda performans testleri ve devreye alma</li></ul>"
+  },
+  {
+    "id": 5,
+    "title": "Enerji Analiz Hizmeti",
+    "slug": "enerji-analiz-hizmeti",
+    "image": "/tek-hucreli.png",
+    "description": "<strong>GreenStep Cooling Towers Enerji Analiz Hizmeti:</strong><br><br><strong>Sahada Verimlilik Ölçümü ve İyileştirme</strong><br>Mevcut kulelerin performansı analiz edilir, gerekli modernizasyon uygulanır.<br><strong>Verimlilik Analizi</strong><ul><li>Soğutma kapasitesi ve sıcaklık verileri ölçülür</li><li>Fan, dolgu ve otomasyon sistemleri değerlendirilir</li><li>Teknik raporlarla mevcut durum belgelenir</li></ul><strong>Modernizasyon Adımları</strong><ul><li>Yüksek verimli dolgu değişimi</li><li>Yeni nesil fan-motor sistemleri</li><li>Nozul ve damla tutucu yenilemesi</li><li>CTP/çelik yapısal güçlendirme</li><li>Hijyenik tasarım ve lejyonella risk azaltımı</li></ul><strong>GreenStep ile Kazanımlar</strong><ul><li>Enerji ve su tüketiminde ciddi tasarruf</li><li>Artan sistem ömrü ve güvenilirlik</li><li>Gereksiz bakım maliyetlerinden kurtulma</li><li>Yeni kule ihtiyacını erteleme</li></ul>"
+  }
+]

@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Antibakteriyel Soğutma Kuleleri",
+    "subtitle": "Bakteri ve korozyon önleyici özellikler.",
+    "body": "Greenstep Soğutma Kuleleri, antibakteriyel özellikleri ile uzun ömürlü ve dayanıklıdır.",
+    "primaryLabel": "Bilgi Al",
+    "primaryLabelLink": "/iletisim",
+    "secondaryLabel": "Detay",
+    "secondaryLabelLink": "/urunler/monoblok-antibakteriyel-kuleler",
+    "imageLink" : "tek-hucreli.png"
+  },
+  {
+    "title": "Düz Güverteli Kuleler",
+    "subtitle": "Düz güverte tasarımı ile verimli soğutma.",
+    "body": "Greenstep Düz Güverteli Soğutma Kuleleri, verimli soğutma performansı sağlar.",
+    "primaryLabel": "Bilgi Al",
+    "primaryLabelLink": "/iletisim",
+    "secondaryLabel": "Detay",
+    "secondaryLabelLink": "/urunler/duz-guverteli-paket-kuleler",
+    "imageLink": "iki-hucreli.png"
+  },
+  {
+    "title": "Kapalı Devre Soğutma Kuleleri",
+    "subtitle": "Kapalı devre tasarımı ile yüksek verimlilik.",
+    "body": "Greenstep Kapalı Devre Soğutma Kuleleri, enerji verimliliği ile öne çıkar.",
+    "primaryLabel": "Bilgi Al",
+    "primaryLabelLink": "/iletisim",
+    "secondaryLabel": "Detay",
+    "secondaryLabelLink": "/urunler/kapali-devre-kuleler",
+    "imageLink": "uc-hucreli.png"
+  }
+]

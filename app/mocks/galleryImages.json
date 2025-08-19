@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "imageLink": "/4.jpg",
+    "title": "Soğutma Kulesi 1",
+    "description": "Monoblok soğutma kulesi görseli"
+  },
+  {
+    "id": 2,
+    "imageLink": "/5.jpg",
+    "title": "Soğutma Kulesi 2",
+    "description": "İnşai tip soğutma kulesi görseli"
+  },
+  {
+    "id": 3,
+    "imageLink": "/6.jpg",
+    "title": "Soğutma Kulesi 3",
+    "description": "Kapalı devre soğutma kulesi görseli"
+  },
+  {
+    "id": 4,
+    "imageLink": "/7.jpg",
+    "title": "Soğutma Kulesi 4",
+    "description": "Fan sistemleri görseli"
+  },
+  {
+    "id": 5,
+    "imageLink": "/8.jpg",
+    "title": "Soğutma Kulesi 5",
+    "description": "Yedek parça görseli"
+  },
+  {
+    "id": 6,
+    "imageLink": "/9.jpg",
+    "title": "Soğutma Kulesi 6",
+    "description": "Üretim tesisi görseli"
+  }
+]

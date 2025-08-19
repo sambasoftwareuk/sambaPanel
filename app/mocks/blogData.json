@@ -1,0 +1,47 @@
+[
+  {
+    "title": "Sogutma Kulelerinde Sudaki Katı Madde Oranına Göre Dolgu Seçimi Nasıl Olmalıdır",
+    "slug": "sogutma-kulelerinde-sudaki-kati-madde-oranina-gore-dolgu-secimi-nasil-olmalidir",
+    "date": "29 Haziran 2025",
+    "excerpt": "GreenStep Cooling Towers markasında (ve genel olarak her soğutma kulesinde) dolgu seçimi, suyun kalitesi yani sudaki katı madde oranı (TSS – Total Suspended Solids) ve suyun genel kirlilik durumu dikkate alınarak yapılmalıdır. Bu seçim, hem dolgunun ömrünü hem de soğutma verimini doğrudan etkiler.\n\nAşağıda GreenStep kuleleri için, katı madde oranına göre dolgu tipi seçimi önerilerini bulabilirsin:\n\n1. Düşük Katı Madde İçeriği (TSS < 50 ppm)\n- Yüksek ısı transfer yüzey alanına sahip PVC film dolgular\n- Yüksek soğutma verimi, kompakt kule boyutu\n- HVAC sistemleri, chiller sistemleri için idealdir\n\n2. Orta Katı Madde İçeriği (TSS 50–150 ppm)\n- Splash (darbe tipi), PP bigudi/trickle dolgular\n- Tıkanma riski düşüktür, periyodik temizlikle uzun ömür\n- Endüstriyel proses suyu, tekstil/plastik soğutması gibi uygulamalarda kullanılır\n\n3. Yüksek Katı Madde İçeriği (TSS > 150 ppm)\n- Tamamen splash tipi dolgular önerilir\n- Tıkanmaz, dayanıklıdır, kolay temizlik yapılabilir\n- Çimento, demir-çelik, enerji santrali gibi ağır sanayi sistemleri için uygundur\n\nGreenStep'in PE gövde ve CTP üst yapısı sayesinde dolgu temizliği kolaydır. Ayrıca antimikrobiyel yapı biyolojik kirlenmeyi azaltır.",
+    "imageLink": "/5.jpg",
+    "imageAlt": "Dolgu seçimi blog görseli",
+    "aspectRatio": "aspect-[16/16]"
+  },
+  {
+    "title": "Green Step Su Sogutma Kuleleri Nasil Calisir? Acik, Kapali Ve Dogal Cekisli Kuleler",
+    "slug": "green-step-su-sogutma-kuleleri-nasil-calisir-acik-kapali-ve-dogal-cekisli-kuleler",
+    "date": "26 Haziran 2025",
+    "excerpt": "GreenStep su soğutma kuleleri üç ana prensibe göre çalışır: açık devre, kapalı devre ve doğal çekişli sistemler.\n\n1. Açık Devre Soğutma Kuleleri:\n- Su, doğrudan havayla temas ederek ısı kaybeder\n- Buharlaşma ile ısı transferi sağlanır\n- Enerji verimlidir, bakım gerektirir\n\n2. Kapalı Devre Soğutma Kuleleri:\n- Isı taşıyan su kapalı borular içinde dolaşır\n- Dıştan püskürtülen su ile ısı transferi olur\n- Su kaybı azdır, sistem korumalıdır\n\n3. Doğal Çekişli Soğutma Kuleleri:\n- Fan yerine bacadan yükselen sıcak havanın doğal yükselme kuvveti kullanılır\n- Yüksek kule tasarımı ile doğal hava akımı oluşur\n- Enerji tüketimi düşüktür, ancak büyük alan gerektirir\n\nGreenStep, bu 3 sistemi farklı sektör ihtiyaçlarına göre modüler ve çevreci malzeme kullanarak üretmektedir.",
+    "imageLink": "/tek-hucreli.png",
+    "imageAlt": "Soğutma kuleleri blog görseli",
+    "aspectRatio": "aspect-[16/16]"
+  },
+  {
+    "title": "Sogutma Kuleleri Ne Amacla Kullanilir? Chiller'dan Farki Nedir?",
+    "slug": "sogutma-kuleleri-ne-amacla-kullanilir-chillerdan-farki-nedir",
+    "date": "23 Haziran 2025",
+    "excerpt": "Soğutma kuleleri, endüstriyel veya ticari sistemlerde ısınan suyu soğutarak tekrar kullanılabilir hale getirmek için kullanılır.\n\nSoğutma Kulesi:\n- Suyu hava ile temas ettirerek buharlaştırma yoluyla soğutur\n- Genellikle HVAC sistemleri, üretim tesisleri ve enerji santrallerinde kullanılır\n- Su sirkülasyonu sayesinde sistemin genel enerji verimini artırır\n\nChiller (Soğutucu):\n- Kompresörlü sistemle suyu doğrudan soğutur\n- Kapalı devredir, havayla doğrudan teması yoktur\n- Daha kontrollü ve hassas sıcaklıklar sağlar\n\nFarklar:\n- Soğutma kulesi, suyun ısısını doğrudan dış ortama verirken; chiller bunu gaz devresiyle yapar\n- Chiller sistemleri genelde küçük/orta ölçekli yapılarda, soğutma kuleleri ise büyük sistemlerde kullanılır\n- Genellikle birlikte çalışabilirler: chiller'in yoğuşma tarafındaki ısı, kule ile atılır\n\nSonuç olarak, sistem tasarımı yapılırken bu iki yapının farkı, enerji verimliliği ve uygulama alanları dikkate alınmalıdır.",
+    "imageLink": "/6.jpg",
+    "imageAlt": "Soğutma ve chiller blog görseli",
+    "aspectRatio": "aspect-[16/16]"
+  },
+  {
+    "title": "SOĞUTMA KULELERİNDE ÇEVRİM SULARININ FİLTRASYON YÖNTEMLERİ",
+    "slug": "sogutma-kulelerinde-cevrim-sularinin-filtrasyon-yontemleri",
+    "date": "20 Haziran 2025",
+    "excerpt": "Soğutma kulelerinde çevrim sularının filtrasyonu, sistem verimliliğini korumak, ekipman ömrünü uzatmak ve biyolojik kirlenmeyi önlemek açısından son derece kritiktir. Bu belgede en yaygın filtrasyon yöntemleri, avantajları ve hangi durumlarda tercih edilmeleri gerektiği açıklanmıştır.\n\n1. Yüksek Hızlı Kum Filtrasyon Sistemleri (Basınçlı Filtreler)\n- Otomatik geri yıkama özelliğiyle bakım kolaydır\n- 10 mikrona kadar partikül tutma hassasiyeti\n- Kimyasal kullanımı gerekmez\n\n2. Hidrosiklon (Siklonik Filtre) Sistemleri\n- Enerji sarfiyatı düşüktür\n- Hareketli parça içermez, dayanıklıdır\n- Filtrasyon oranı genellikle 50–100 mikron seviyesindedir\n\n3. Kartuş ve Torba Tipi Filtreler\n- Hassas filtrasyon (1–50 mikron arası)\n- Kolay montaj ve düşük ilk yatırım maliyeti\n- Kimyasala gerek kalmadan yüksek filtreleme performansı sağlar\n\n4. Tam Otomatik Filtrasyon Sistemleri\n- Minimum insan müdahalesi\n- Sabit debi ve sürekli filtrasyon sağlar\n- 10 mikrona kadar hassasiyet\n\n5. Biyolojik Filtrasyon Sistemleri\n- Genellikle yosun ve bakteri oluşumunu önlemek amacıyla kullanılır\n- UV sistemleri veya biyolojik ortamlar sayesinde su içerisindeki mikroorganizmaları etkisiz hale getirir\n\nSoğutma kulelerinde suyun sürekli temiz tutulması, hem sistem ömrünü uzatmak hem de enerji ve su verimliliğini maksimize etmek için vazgeçilmezdir.",
+    "imageLink": "/bakim-onarim.png",
+    "imageAlt": "Filtrasyon sistemleri blog görseli",
+    "aspectRatio": "aspect-[16/16]"
+  },
+  {
+    "title": "GREENTOWER SOĞUTMA KULELERİ DOĞAYA VE ÇEVREYE ZARAR VERİR Mİ?",
+    "slug": "greentower-sogutma-kuleleri-dogaya-ve-cevreye-zarar-verir-mi",
+    "date": "17 Haziran 2025",
+    "excerpt": "Greentower soğutma kuleleri, sürdürülebilir mühendislik anlayışıyla tasarlanmış, çevre dostu teknolojilere sahip soğutma sistemleridir. Gerek kullanılan malzemeler gerekse çalışma prensipleri açısından doğaya en az müdahale eden sistemlerden biridir.\n\n1. Çevre Dostu Malzeme Seçimi\n- Polietilen (PE) gövde, paslanmaz ve toksik olmayan bir yapı sunar\n- CTP (Cam Elyaf Takviyeli Polyester) malzeme, UV dayanımı yüksek, doğa dostu bir kompozittir\n- Kullanılan tüm metal parçalar galvanizli veya paslanmaz çelik olup çevreye atık bırakmaz\n\n2. Enerji Verimliliği ile Karbon Ayak İzi Azalır\n- Yüksek verimli motor ve fan sistemleri, düşük enerjiyle maksimum performans sağlar\n- Akıllı kontrol sistemleri, yalnızca ihtiyaç kadar çalışarak enerji israfını önler\n- Free Cooling teknolojisi, soğuk hava koşullarında %70'e varan enerji tasarrufu sağlar\n\n3. Su Kullanımı ve Geri Kazanım Özellikleri\n- Kapalı devre çalışma prensibi, buharlaşma kaynaklı su kayıplarını minimumda tutar\n- Su arıtma ve filtrasyon sistemleri, suyun yeniden kullanılmasını sağlar\n- Gelişmiş kontrol ekipmanlarıyla kimyasal kullanımı optimize edilir\n\n4. Antibakteriyel Yüzeyler ile Sağlıklı Ortam\n- Kullanılan PE ve CTP yüzeyler, bakteri, yosun ve mikrop barındırmaz\n- Legionella gibi halk sağlığına zarar verebilecek bakterilerin oluşumu engellenir\n- Soğutma suyunun dış ortamla minimum teması sayesinde hava kalitesi korunur\n\n5. Sessiz Çalışma ile Gürültü Kirliliği Oluşmaz\n- Düşük ses seviyeli fan ve motor sistemleri, yerleşim yerlerine uygundur\n- Gürültü düzeyi 65 dB altındadır\n\nGreentower soğutma kuleleri, doğaya zarar vermeyen, düşük enerji ve su tüketimi ile çalışan, buhar salınımı açısından da çevreyi tehdit etmeyen bir sistem sunar.",
+    "imageLink": "/mono-blok.png",
+    "imageAlt": "Greentower çevre dostu blog görseli",
+    "aspectRatio": "aspect-[16/16]"
+  }
+]

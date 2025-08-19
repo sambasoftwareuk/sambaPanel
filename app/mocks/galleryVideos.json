@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Kapalı Devre Soğutma Kulesi Montaj Süreci",
+    "description": "Monoblok soğutma kulesinin montaj aşamalarını gösteren video",
+    "thumbnailLink": "/4.jpg",
+    "videoLink": "https://www.youtube.com/embed/7Ud46RKuB6U",
+    "duration": "2:35"
+  },
+  {
+    "id": 2,
+    "title": "Su Soğutma Kulesi Nedir, Çalışma Prensibi Nasıldır?",
+    "description": "Soğutma kulesi fan sistemlerinin test edilme süreci",
+    "thumbnailLink": "/5.jpg",
+    "videoLink": "https://www.youtube.com/embed/UTMlcTMeHh4",
+    "duration": "1:45"
+  },
+  {
+    "id": 3,
+    "title": "Su Soğutma Kulesi Nakliye İşlemi",
+    "description": "Kapalı devre soğutma kulesinin nasıl çalıştığını açıklayan video",
+    "thumbnailLink": "/6.jpg",
+    "videoLink": "https://www.youtube.com/embed/Lgp26D8tjp0",
+    "duration": "3:20"
+  },
+  {
+    "id": 4,
+    "title": "Su Soğutma Kulesi Sistemleri Kurulumu",
+    "description": "Soğutma kulesi yedek parçalarının değiştirilme süreci",
+    "thumbnailLink": "/7.jpg",
+    "videoLink": "https://www.youtube.com/embed/L0a0qITancA",
+    "duration": "4:15"
+  },
+  {
+    "id": 5,
+    "title": "Soğutma Kulesi Kurulum Tasarımı ve Hesaplama",
+    "description": "Soğutma kulesi üretim tesisinin detaylı tur videosu",
+    "thumbnailLink": "/8.jpg",
+    "videoLink": "https://www.youtube.com/embed/BDWJvHFOWj0",
+    "duration": "5:30"
+  },
+  {
+    "id": 6,
+    "title": "Çift Hücreli Kapalı Devre Soğutma Kulesi",
+    "description": "Soğutma kulesi bakım ve onarım hizmetlerinin sunumu",
+    "thumbnailLink": "/9.jpg",
+    "videoLink": "https://www.youtube.com/embed/tbjKNFd3HFo",
+    "duration": "2:50"
+  }
+]

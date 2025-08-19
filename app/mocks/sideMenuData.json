@@ -1,0 +1,99 @@
+[
+  {
+    "title": "Ürünlerimiz",
+    "href": "/urunler",
+    "items": [
+      {
+        "label": "Monoblok Antibakteriyel Kuleler",
+        "href": "/urunler/monoblok-antibakteriyel-kuleler"
+      },
+      {
+        "label": "Düz Güverteli Paket Kuleler",
+        "href": "/urunler/duz-guverteli-paket-kuleler"
+      },
+      {
+        "label": "Kapalı Devre Kuleler",
+        "href": "/urunler/kapali-devre-kuleler"
+      },
+      { "label": "İnşai Tip Kuleler", "href": "/urunler/insai-tip-kuleler" },
+      {
+        "label": "Soğutma Kulesi Yedek Parçaları",
+        "href": "/urunler/sogutma-kulesi-yedek-parcalari"
+      },
+      {
+        "label": "Soğutma Kulesi Bakım Onarım İşleri",
+        "href": "/urunler/sogutma-kulesi-bakim-onarim"
+      }
+    ]
+  },
+  {
+    "title": "Yedek Parçalar",
+    "href": "/yedek-parcalar",
+    "items": [
+      { "label": "Rashing Halkası", "href": "/yedek-parcalar/rashing-halkasi" },
+      { "label": "Fan Sistemleri", "href": "/yedek-parcalar/fan-sistemleri" },
+      { "label": "Bigudi", "href": "/yedek-parcalar/bigudi" },
+      { "label": "PVC Film Dolgu", "href": "/yedek-parcalar/pvc-film-dolgu" },
+      {
+        "label": "Splash Grid Dolgu",
+        "href": "/yedek-parcalar/splash-grid-dolgu"
+      },
+      { "label": "Trickle Dolgu", "href": "/yedek-parcalar/trickle-dolgu" },
+      { "label": "Damla Tutucu", "href": "/yedek-parcalar/damla-tutucu" },
+      { "label": "Serpantin", "href": "/yedek-parcalar/serpantin" },
+      {
+        "label": "Vibrasyon Şalteri",
+        "href": "/yedek-parcalar/vibrasyon-salteri"
+      },
+      { "label": "Kademeli Nozul", "href": "/yedek-parcalar/kademeli-nozul" }
+    ]
+  },
+  {
+    "title": "Hizmetlerimiz",
+    "href": "/hizmetler",
+
+    "items": [
+      { "label": "Otomasyon Hizmeti", "href": "/hizmetler/otomasyon-hizmeti" },
+      { "label": "Tasarım Hizmeti", "href": "/hizmetler/tasarim-hizmeti" },
+      {
+        "label": "Bakım Onarım Hizmeti",
+        "href": "/hizmetler/bakim-onarim-hizmeti"
+      },
+      {
+        "label": "Montaj-Demontaj Hizmeti",
+        "href": "/hizmetler/montaj-demontaj-hizmeti"
+      },
+      {
+        "label": "Enerji Analiz Hizmeti",
+        "href": "/hizmetler/enerji-analiz-hizmeti"
+      }
+    ]
+  },
+  {
+    "title": "Tüm Bloglar",
+    "href": "/blog",
+
+    "items": [
+      {
+        "label": "Sogutma Kulelerinde Sudaki Kati Madde Oranina Gore Dolgu Secimi Nasil Olmalidir",
+        "href": "/blog/sogutma-kulelerinde-sudaki-kati-madde-oranina-gore-dolgu-secimi-nasil-olmalidir"
+      },
+      {
+        "label": "Green Step Su Sogutma Kuleleri Nasil Calisir? Acik, Kapali Ve Dogal Cekisli Kuleler",
+        "href": "/blog/green-step-su-sogutma-kuleleri-nasil-calisir-acik-kapali-ve-dogal-cekisli-kuleler"
+      },
+      {
+        "label": "Sogutma Kuleleri Ne Amacla Kullanilir? Chiller’dan Farki Nedir?",
+        "href": "/blog/sogutma-kuleleri-ne-amacla-kullanilir-chillerdan-farki-nedir"
+      },
+      {
+        "label": "Soğutma kulelerinde çevrim sularının filtrasyon yöntemleri",
+        "href": "/blog/sogutma-kulelerinde-cevrim-sularinin-filtrasyon-yontemleri"
+      },
+      {
+        "label": "Greentower soğutma kuleleri doğaya ve çevreye zarar verir mi?",
+        "href": "/blog/greentower-sogutma-kuleleri-dogaya-ve-cevreye-zarar-verir-mi"
+      }
+    ]
+  }
+]

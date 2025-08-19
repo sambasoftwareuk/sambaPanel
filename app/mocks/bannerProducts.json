@@ -1,0 +1,22 @@
+[
+ {
+    "id": 1,
+    "title": "MONOBLOK ANTİBAKTERİYEL KULELER",
+    "image": "/mono-blok.png"
+  },
+  {
+    "id": 2,
+    "title": "DÜZ GÜVERTELİ PAKET KULELER",
+    "image": "/iki-hucreli.png"
+  },
+  {
+    "id": 3,
+    "title": "KAPALI DEVRE KULELER",
+    "image": "/uc-hucreli.png"
+  },
+  {
+    "id": 4,
+    "title": "İNŞAİ TİP KULELER",
+    "image": "/tek-hucreli.png"
+  }
+]

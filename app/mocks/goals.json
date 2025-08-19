@@ -1,0 +1,34 @@
+[
+  {
+    "icon": "Certificate",
+    "title": "Hands-on training",
+    "description": "Upskill effectively with AI-powered coding exercises, practice tests, and quizzes.",
+    "badge": "Enterprise Plan",
+    "linkText": "Explore courses",
+    "linkHref": "#"
+  },
+  {
+    "icon": "Certificate",
+    "title": "Real-world projects",
+    "description": "Work on real-life projects and gain portfolio-ready experience.",
+    "badge": "Pro Plan",
+    "linkText": "View projects",
+    "linkHref": "#"
+  },
+  {
+    "icon": "Certificate",
+    "title": "Expert mentorship",
+    "description": "Get guidance from industry experts and AI-enhanced feedback.",
+    "badge": "Enterprise Plan",
+    "linkText": "Meet mentors",
+    "linkHref": "#"
+  },
+  {
+    "icon": "Certificate",
+    "title": "Certifications",
+    "description": "Earn verified certificates to showcase your skills.",
+    "badge": "Basic Plan",
+    "linkText": "Browse certificates",
+    "linkHref": "#"
+  }
+]

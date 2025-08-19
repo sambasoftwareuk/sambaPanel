@@ -1,0 +1,26 @@
+[
+  {
+    "quote": "The Empower gives you the ability to be persistent. I learned exactly what I needed to know in the real world. It helped me sell myself to get a new role.",
+    "authorName": "William Wallace",
+    "authorTitle": "Partner Account Manager at Samba Web Services",
+    "authorImage": "/images/testimonials/william.png",
+    "courseLink": "/aws-course",
+    "courseTitle": "View this AWS course"
+  },
+  {
+    "quote": "This course truly transformed my career. The hands-on experience gave me the confidence to apply for my current role.",
+    "authorName": "Sarah Connor",
+    "authorTitle": "Cloud Engineer at Cyberdyne Systems",
+    "authorImage": "/images/testimonials/sarah.png",
+    "courseLink": "/cloud-course",
+    "courseTitle": "Explore the Cloud course"
+  },
+  {
+    "quote": "I appreciated the clarity and real-world examples. It felt like I was already working in the industry.",
+    "authorName": "Neo Anderson",
+    "authorTitle": "Security Analyst at Matrix Corp",
+    "authorImage": "/images/testimonials/neo.png",
+    "courseLink": "/security-course",
+    "courseTitle": "Check out the Cybersecurity course"
+  }
+]

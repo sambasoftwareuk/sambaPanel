@@ -1,0 +1,109 @@
+[
+  {
+    "label": "Kurumsal",
+    "href": "/kurumsal",
+    "iconName": "Home"
+  },
+  {
+    "label": "Ürünlerimiz",
+    "href": "/urunler",
+    "dropdown": [
+      {
+        "label": "Monoblok Antibakteriyel Kuleler",
+        "href": "/urunler/monoblok-antibakteriyel-kuleler"
+      },
+      {
+        "label": "Düz Güverteli Paket Kuleler",
+        "href": "/urunler/duz-guverteli-paket-kuleler"
+      },
+      {
+        "label": "Kapalı Devre Kuleler",
+        "href": "/urunler/kapali-devre-kuleler"
+      },
+      { "label": "İnşai Tip Kuleler", "href": "/urunler/insai-tip-kuleler" },
+      {
+        "label": "Soğutma Kulesi Yedek Parçaları",
+        "href": "/urunler/sogutma-kulesi-yedek-parcalari"
+      },
+      {
+        "label": "Soğutma Kulesi Bakım Onarım İşleri",
+        "href": "/urunler/sogutma-kulesi-bakim-onarim"
+      }
+    ],
+    "iconName": "Certificate"
+  },
+  {
+    "label": "Yedek Parçalar",
+    "href": "/yedek-parcalar",
+    "dropdown": [
+      { "label": "Rashing Halkası", "href": "/yedek-parcalar/rashing-halkasi" },
+      { "label": "Fan Sistemleri", "href": "/yedek-parcalar/fan-sistemleri" },
+      { "label": "Bigudi", "href": "/yedek-parcalar/bigudi" },
+      { "label": "PVC Film Dolgu", "href": "/yedek-parcalar/pvc-film-dolgu" },
+      {
+        "label": "Splash Grid Dolgu",
+        "href": "/yedek-parcalar/splash-grid-dolgu"
+      },
+      { "label": "Trickle Dolgu", "href": "/yedek-parcalar/trickle-dolgu" },
+      { "label": "Damla Tutucu", "href": "/yedek-parcalar/damla-tutucu" },
+      { "label": "Serpantin", "href": "/yedek-parcalar/serpantin" },
+      {
+        "label": "Vibrasyon Şalteri",
+        "href": "/yedek-parcalar/vibrasyon-salteri"
+      },
+      { "label": "Kademeli Nozul", "href": "/yedek-parcalar/kademeli-nozul" }
+    ],
+    "iconName": "Cart"
+  },
+  {
+    "label": "Hizmetlerimiz",
+    "href": "/hizmetler",
+    "iconName": "Services",
+
+    "dropdown": [
+      { "label": "Otomasyon Hizmeti", "href": "/hizmetler/otomasyon-hizmeti" },
+      { "label": "Tasarım Hizmeti", "href": "/hizmetler/tasarim-hizmeti" },
+      {
+        "label": "Bakım Onarım Hizmeti",
+        "href": "/hizmetler/bakim-onarim-hizmeti"
+      },
+      {
+        "label": "Montaj-Demontaj Hizmeti",
+        "href": "/hizmetler/montaj-demontaj-hizmeti"
+      },
+      {
+        "label": "Enerji Analiz Hizmeti",
+        "href": "/hizmetler/enerji-analiz-hizmeti"
+      }
+    ]
+  },
+  {
+    "label": "Galeri",
+    "href": "/galeri",
+    "iconName": "Gallery",
+    "dropdown": [
+      { "label": "Fotograflar", "href": "/galeri/fotograflar" },
+      { "label": "Videolar", "href": "/galeri/videolar" }
+    ]
+  },
+  {
+    "label": "Referanslarımız",
+    "href": "/referanslar",
+    "iconName": "Reference"
+  },
+  {
+    "label": "Blog",
+    "href": "/blog",
+    "iconName": "Blog"
+  },
+  {
+    "label": "E-Katalog",
+    "href": "/e-katalog",
+    "iconName": "Certificate"
+  },
+  {
+    "label": "İletişim",
+    "href": "/iletisim",
+    "iconName": "Phone"
+  }
+]
