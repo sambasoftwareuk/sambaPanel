@@ -6,6 +6,7 @@ import { Home, TurkishFlag, UKFlag } from "../_atoms/Icons";
 import navLinks from "../constants/navLinks";
 import { LogoImage } from "../_atoms/images";
 import Logo from "../constants/logo.json";
+import { UserButton } from "@clerk/nextjs";
 
 const DesktopNavbar = () => {
   return (
@@ -59,6 +60,7 @@ const DesktopNavbar = () => {
             <IconOnlyButton icon={<Icon variant={UKFlag} size={22} />} />
           </div> */}
         </div>
+        <div><UserButton /></div>
       </nav>
     </header>
   );

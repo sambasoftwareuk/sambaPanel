@@ -5,6 +5,15 @@ import { Footer } from "./_components/footer";
 import WhatsAppStickyButton from "./_components/whatsAppStickyButton";
 import ScrollToTopButton from "./_components/ScrollToTopButton";
 import { getMetadataForPath } from "./utils/metadataHelper";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs';
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,18 +45,20 @@ export function generateMetadata() {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${merriweather.variable} antialiased`}
-      >
-        <Navbar />
-        <main id="top">{children}</main>
-        <Footer />
-        <div className="fixed bottom-6 right-6 md:bottom-16 flex items-center gap-4 z-50">
-          <WhatsAppStickyButton />
-          <ScrollToTopButton />
-        </div>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} ${merriweather.variable} antialiased`}
+        >
+          <Navbar />
+          <main id="top">{children}</main>
+          <Footer />
+          <div className="fixed bottom-6 right-6 md:bottom-16 flex items-center gap-4 z-50">
+            <WhatsAppStickyButton />
+            <ScrollToTopButton />
+          </div>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
