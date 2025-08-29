@@ -1,41 +1,43 @@
-import Link from 'next/link';
-import Popup from '../_components/Popup.jsx';
+"use client";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { useState } from "react";
 
-export default function HomePage({ searchParams }) {
-  const initialOpen = searchParams?.popup === '1';
+export default function InlineEditable({ pageId, initialTitle, locale="tr-TR" }) {
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(initialTitle || "");
+
+  async function save() {
+    const res = await fetch(`/api/pages/${pageId}`, {
+      method: "PATCH",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ locale, title }),
+    });
+    if (res.ok) setOpen(false);
+  }
 
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>Popup (Server Page + Client Popup)</h1>
+    <div className="flex items-center gap-2">
+      <h1 className="text-2xl font-bold">{title}</h1>
 
-      {/* JS’siz aç: aynı sayfaya GET ile ?popup=1 ekle */}
-      <form method="GET" style={{ marginTop: '1rem', display: 'inline-block' }}>
-        <input type="hidden" name="popup" value="1" />
-        <button
-          type="submit"
-          style={{
-            padding: '0.6rem 1rem',
-            borderRadius: '10px',
-            border: '1px solid #ddd',
-            background: 'white',
-            cursor: 'pointer',
-          }}
-        >
-          Popup’ı Aç (GET)
-        </button>
-      </form>
+      <SignedIn>
+        <button className="rounded border px-2 py-1" onClick={()=>setOpen(true)} title="Düzenle">✏️</button>
+      </SignedIn>
 
-      <div style={{ display: 'inline-block', marginLeft: '1rem' }}>
-        <Link href="/other-page" style={{ textDecoration: 'underline' }}>
-          Diğer sayfa
-        </Link>
-      </div>
+      <SignedOut>{/* misafirler kalemi görmez */}</SignedOut>
 
-      {/* initialOpen sunucudan gelir; component kendi içinde yönetir */}
-      <Popup initialOpen={initialOpen} title="Merhaba!">
-        <p>Bu popup yalnızca component içinde client, sayfa ise server.</p>
-        <p>Popup’ı kapatınca URL değişmez; tekrar açmak için butonu/linki kullan.</p>
-      </Popup>
-    </main>
+      {open && (
+        <div className="fixed inset-0 grid place-items-center bg-black/40">
+          <div className="w-full max-w-md rounded bg-white p-4">
+            <h2 className="mb-2 font-semibold">Başlığı Düzenle</h2>
+            <input className="w-full rounded border px-3 py-2"
+                   value={title} onChange={e=>setTitle(e.target.value)} />
+            <div className="mt-3 flex justify-end gap-2">
+              <button onClick={()=>setOpen(false)} className="border px-3 py-1 rounded">Vazgeç</button>
+              <button onClick={save} className="bg-black text-white px-3 py-1 rounded">Kaydet</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
