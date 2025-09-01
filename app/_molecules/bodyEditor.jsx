@@ -6,6 +6,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
+import EditButton from "../_atoms/EditButton";
 
 export default function BodyEditor({
   pageId,
@@ -96,14 +97,11 @@ export default function BodyEditor({
 
   return (
     <>
-      <button
-        className={`ml-2 inline-flex items-center rounded-md border px-2 py-1 text-sm hover:bg-gray-50 ${className}`}
+      <EditButton
         onClick={() => setOpen(true)}
-        title="Metni düzenle"
-        aria-label="Metni düzenle"
-      >
-        ✍️
-      </button>
+        className={className}
+        size="small"
+      />
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
@@ -112,7 +110,7 @@ export default function BodyEditor({
               <h2 className="text-lg font-semibold">İçeriği Düzenle</h2>
               <button
                 onClick={() => setOpen(false)}
-                className="rounded border px-2 py-1 text-sm"
+                className="rounded border px-3 py-1 text-sm"
               >
                 ✖
               </button>

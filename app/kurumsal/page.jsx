@@ -23,7 +23,6 @@ export default async function KurumsalPage() {
     );
   }
 
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
@@ -46,29 +45,30 @@ export default async function KurumsalPage() {
               </div>
 
               {/* Özet varsa */}
-              {page.summary && (
+              {/* {page.summary && (
                 <p className="text-gray-600 mb-4">{page.summary}</p>
-              )}
+              )} */}
+              <div className="flex items-start gap-3">
+                {/* Gövde: HTML */}
+                {page.content_html ? (
+                  <div
+                    className="prose max-w-none text-gray-700 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: page.content_html }}
+                  />
+                ) : (
+                  <p className="text-gray-500">İçerik henüz eklenmemiş.</p>
+                )}
 
-              {/* Gövde: HTML */}
-              {page.content_html ? (
-                <div
-                  className="prose max-w-none text-gray-700 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: page.content_html }}
-                />
-              ) : (
-                <p className="text-gray-500">İçerik henüz eklenmemiş.</p>
-              )}
-
-              <SignedIn>
-                <BodyEditor
-                  className="ml-2"
-                  pageId={page.id}
-                  locale={page.locale}
-                  initialHtml={page.content_html || "<p></p>"}
-                  // initialJson={...} // eğer DB’de content_json doluysa onu da geçebilirsin
-                />
-              </SignedIn>
+                <SignedIn>
+                  <BodyEditor
+                    className="ml-2"
+                    pageId={page.id}
+                    locale={page.locale}
+                    initialHtml={page.content_html || "<p></p>"}
+                    // initialJson={...} // eğer DB’de content_json doluysa onu da geçebilirsin
+                  />
+                </SignedIn>
+              </div>
             </div>
 
             <div className="w-80 shrink-0">
@@ -79,7 +79,6 @@ export default async function KurumsalPage() {
                 height={320}
                 className="rounded-lg object-cover w-80 h-80"
               />
-
             </div>
           </div>
         </div>
