@@ -1,34 +1,21 @@
 // app/kurumsal/page.jsx
 import React from "react";
 import Image from "next/image";
-import Link from "next/link";
 import Breadcrumb from "../_molecules/breadCrumb";
 import { Header1 } from "../_atoms/Headers";
 import { SignedIn } from "@clerk/nextjs";
-import TitleEditor from "../_molecules/TitleEditor";
-import { q } from "@/lib/db";
+import TitleEditor from "../_molecules/titleEditor";
+import BodyEditor from "../_molecules/bodyEditor";
+import { getKurumsalPage } from "@/lib/repos/page";
 
 // Bu sayfa server component: DB'den doğrudan okuyor
 export default async function KurumsalPage() {
   const locale = "tr-TR";
 
   // Kurumsal'ı iki şekilde bulalım: (a) pages.slug='hakkimizda' (b) page_locales.slug_i18n='kurumsal'
-  const rows = await q(
-    `
-    SELECT p.id, p.slug, p.status,
-           pl.locale, pl.slug_i18n, pl.title, pl.summary, pl.content_html,
-           m.url AS hero_url, m.alt_text AS hero_alt
-    FROM pages p
-    JOIN page_locales pl ON pl.page_id = p.id AND pl.locale = :locale
-    LEFT JOIN media m ON m.id = p.hero_media_id
-    WHERE (p.slug = 'hakkimizda' OR pl.slug_i18n = 'kurumsal')
-      AND p.status IN ('published','draft')
-    LIMIT 1;
-    `,
-    { locale }
-  );
+  const page = await getKurumsalPage(locale);
 
-  if (!rows.length) {
+  if (!page) {
     return (
       <div className="container mx-auto px-4 py-16">
         <p className="text-gray-600">Kurumsal sayfası bulunamadı.</p>
@@ -36,7 +23,6 @@ export default async function KurumsalPage() {
     );
   }
 
-  const page = rows[0];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -73,6 +59,16 @@ export default async function KurumsalPage() {
               ) : (
                 <p className="text-gray-500">İçerik henüz eklenmemiş.</p>
               )}
+
+              <SignedIn>
+                <BodyEditor
+                  className="ml-2"
+                  pageId={page.id}
+                  locale={page.locale}
+                  initialHtml={page.content_html || "<p></p>"}
+                  // initialJson={...} // eğer DB’de content_json doluysa onu da geçebilirsin
+                />
+              </SignedIn>
             </div>
 
             <div className="w-80 shrink-0">
@@ -83,10 +79,7 @@ export default async function KurumsalPage() {
                 height={320}
                 className="rounded-lg object-cover w-80 h-80"
               />
-              {/* örnek linkler */}
-              <div className="mt-4 text-sm text-gray-500">
-                <Link href="/">Ana sayfa</Link>
-              </div>
+
             </div>
           </div>
         </div>

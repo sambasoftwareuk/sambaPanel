@@ -8,16 +8,22 @@ import { q, tx } from '@/lib/db';
 import sanitizeHtml from 'sanitize-html';
 import { makeSlug } from '@/lib/slug';
 
-export async function PATCH(request, { params }) {
-  const { userId, sessionId } = getAuth(request); // <-- auth'u request'ten oku
-  // geçici log
+export async function PATCH(request, ctx) {
+  const { userId, sessionId } = getAuth(request);
   console.log('PATCH getAuth =>', { userId, sessionId });
 
   if (!userId) {
     return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: { 'Cache-Control': 'no-store' }});
   }
 
-  const id = Number(params.id);
+  // ✅ params senkron mu async mi? Her iki durumu da güvenle ele al
+  const awaitedParams = typeof ctx?.params?.then === 'function' ? await ctx.params : ctx.params;
+  const id = Number(awaitedParams?.id);
+
+  if (!Number.isFinite(id)) {
+    return NextResponse.json({ ok:false, error:'Invalid id' }, { status:400 });
+  }
+
   const body = await request.json();
   const locale = body.locale || 'tr-TR';
   const safeHtml = body.content_html !== undefined ? sanitizeHtml(body.content_html || '') : undefined;
@@ -39,6 +45,7 @@ export async function PATCH(request, { params }) {
       `SELECT id FROM page_locales WHERE page_id=? AND locale=? LIMIT 1`,
       [id, locale]
     );
+
     if (Array.isArray(exists) && exists.length) {
       await conn.execute(
         `UPDATE page_locales SET
