@@ -5,8 +5,9 @@ import Link from "next/link";
 import Breadcrumb from "../_molecules/breadCrumb";
 import { Header1 } from "../_atoms/Headers";
 import { SignedIn } from "@clerk/nextjs";
-import TitleEditor from "../_molecules/TitleEditor";
+import TitleEditor from "../_molecules/titleEditor";
 import { q } from "@/lib/db";
+import BodyEditor from "../_molecules/bodyEditor";
 
 // Bu sayfa server component: DB'den doğrudan okuyor
 export default async function KurumsalPage() {
@@ -73,6 +74,16 @@ export default async function KurumsalPage() {
               ) : (
                 <p className="text-gray-500">İçerik henüz eklenmemiş.</p>
               )}
+
+              <SignedIn>
+                <BodyEditor
+                  className="ml-2"
+                  pageId={page.id}
+                  locale={page.locale}
+                  initialHtml={page.content_html || "<p></p>"}
+                  // initialJson={...} // eğer DB’de content_json doluysa onu da geçebilirsin
+                />
+              </SignedIn>
             </div>
 
             <div className="w-80 shrink-0">
