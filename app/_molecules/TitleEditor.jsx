@@ -1,8 +1,14 @@
 // app/_molecules/TitleEditor.jsx
 "use client";
 import { useState } from "react";
+import EditButton from "../_atoms/EditButton";
 
-export default function TitleEditor({ pageId, locale = "tr-TR", initialTitle = "", className = "" }) {
+export default function TitleEditor({
+  pageId,
+  locale = "tr-TR",
+  initialTitle = "",
+  className = "",
+}) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(initialTitle);
   const [saving, setSaving] = useState(false);
@@ -33,14 +39,11 @@ export default function TitleEditor({ pageId, locale = "tr-TR", initialTitle = "
 
   return (
     <>
-      <button
-        className={`ml-1 inline-flex items-center rounded-md border px-2 py-1 text-sm hover:bg-gray-50 ${className}`}
+      <EditButton
         onClick={() => setOpen(true)}
-        title="Başlığı düzenle"
-        aria-label="Başlığı düzenle"
-      >
-        ✏️
-      </button>
+        className={className}
+        size="small"
+      />
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
