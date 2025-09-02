@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import EditButton from "../_atoms/EditButton";
+import { usePageUpdate } from "../hooks/usePageUpdate";
 
 export default function TitleEditor({
   pageId,
@@ -13,22 +14,13 @@ export default function TitleEditor({
   const [title, setTitle] = useState(initialTitle);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const { updatePage } = usePageUpdate();
 
   async function save() {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch(`/api/pages/${pageId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ locale, title }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || "Kaydedilemedi");
-      }
-      // sayfadaki başlığı da hemen güncelle
-      // (basitçe local state; istersen router.refresh() da yapabilirsin)
+      await updatePage(pageId, { locale, title });
       setOpen(false);
     } catch (e) {
       setError(e.message);
@@ -36,6 +28,17 @@ export default function TitleEditor({
       setSaving(false);
     }
   }
+
+  const handleKeyDown = (e) => {
+    console.log("Key pressed:", e.key, "Shift:", e.shiftKey);
+    if (e.key === "Enter" && !e.shiftKey) {
+      console.log("Enter pressed, saving...");
+      e.preventDefault();
+      if (!saving) {
+        save();
+      }
+    }
+  };
 
   return (
     <>
@@ -52,8 +55,10 @@ export default function TitleEditor({
             <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
+              onKeyDown={handleKeyDown}
               className="w-full rounded border px-3 py-2"
               placeholder="Başlık"
+              autoFocus
             />
             {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
             <div className="mt-4 flex justify-end gap-2">

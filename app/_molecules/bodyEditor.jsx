@@ -7,6 +7,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import EditButton from "../_atoms/EditButton";
+import { usePageUpdate } from "../hooks/usePageUpdate";
 
 export default function BodyEditor({
   pageId,
@@ -19,6 +20,7 @@ export default function BodyEditor({
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
+  const { updatePage } = usePageUpdate();
 
   useEffect(() => setMounted(true), []);
 
@@ -39,6 +41,16 @@ export default function BodyEditor({
       attributes: {
         class: "prose max-w-none min-h-[240px] focus:outline-none px-3 py-2",
       },
+      handleKeyDown: (view, event) => {
+        if (event.key === "Enter" && event.metaKey) {
+          event.preventDefault();
+          if (!saving) {
+            save();
+          }
+          return true;
+        }
+        return false;
+      },
     },
     immediatelyRender: false, // <<< ÖNEMLİ: SSR hatasını engeller
   });
@@ -58,21 +70,13 @@ export default function BodyEditor({
       const html = editor.getHTML();
       const json = editor.getJSON();
 
-      const res = await fetch(`/api/pages/${pageId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          locale,
-          content_html: html,
-          content_json: json,
-        }),
+      await updatePage(pageId, {
+        locale,
+        content_html: html,
+        content_json: json,
       });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || "Kaydedilemedi");
-      }
+
       setOpen(false);
-      // İstersen: const { refresh } = useRouter(); refresh();
     } catch (e) {
       setError(e.message);
     } finally {
@@ -272,6 +276,9 @@ export default function BodyEditor({
               >
                 {saving ? "Kaydediliyor..." : "Kaydet"}
               </button>
+            </div>
+            <div className="mt-2 text-xs text-gray-500 text-center">
+              💡 Cmd + Enter ile kaydet
             </div>
           </div>
         </div>
