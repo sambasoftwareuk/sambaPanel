@@ -54,26 +54,11 @@ export default async function KurumsalPage() {
 
                 {/* Save all button */}
                 <div className="mt-6">
-                  <SaveAllButton pageId={page.id} locale={page.locale} />
+                  <SignedIn>
+                    <SaveAllButton pageId={page.id} locale={page.locale} />
+                  </SignedIn>
                 </div>
               </PageEditProvider>
-
-              {/* ✅ What others see (not signed in) */}
-              <SignedIn
-                fallback={
-                  <>
-                    <h1 className="text-primary mb-2">{page.title}</h1>
-                    <div
-                      className="prose max-w-none text-gray-700 leading-relaxed mt-4"
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          page.content_html ||
-                          "<p>İçerik henüz eklenmemiş.</p>",
-                      }}
-                    />
-                  </>
-                }
-              />
             </div>
 
             {/* Right-side image */}
