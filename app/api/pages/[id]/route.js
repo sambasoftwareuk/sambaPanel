@@ -1,50 +1,52 @@
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
+// app/api/pages/[id]/route.js
 import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
-import { updatePageLocale } from "@/lib/repos/page";
+import { q } from "@/lib/db"; // kendi yoluna göre düzelt
+export const runtime = "nodejs"; // Edge değil
 
-export async function PATCH(request, ctx) {
-  const { userId, sessionId } = getAuth(request);
-  console.log("PATCH getAuth =>", { userId, sessionId });
+export async function PATCH(req, ctx) {
+  // Next.js 14/15 farkını güvenli şekilde ele al
+  const paramsMaybePromise = ctx?.params;
+  const params =
+    typeof paramsMaybePromise?.then === "function"
+      ? await paramsMaybePromise
+      : paramsMaybePromise;
 
-  if (!userId) {
-    return NextResponse.json(
-      { ok: false, error: "Unauthorized" },
-      { status: 401, headers: { "Cache-Control": "no-store" } }
-    );
+  const id = params?.id;
+  const body = await req.json();
+  const { locale, ...rest } = body;
+
+  if (!id || !locale) {
+    return NextResponse.json({ error: "id ve locale gerekli" }, { status: 400 });
   }
 
-  // ✅ params senkron mu async mi? Her iki durumu da güvenle ele al
-  const awaitedParams =
-    typeof ctx?.params?.then === "function" ? await ctx.params : ctx.params;
-  const id = Number(awaitedParams?.id);
+  // İzinli alanlar
+  const allowed = ["title", "content_html", "content_json"];
+  const fields = [];
+  const paramsObj = { id, locale };
 
-  if (!Number.isFinite(id)) {
-    return NextResponse.json(
-      { ok: false, error: "Invalid id" },
-      { status: 400 }
-    );
+  for (const key of allowed) {
+    if (rest[key] !== undefined) {
+      fields.push(`${key} = :${key}`);
+      paramsObj[key] = key === "content_json" ? JSON.stringify(rest[key]) : rest[key];
+    }
   }
 
-  const body = await request.json();
-  const locale = body.locale || "tr-TR";
+  if (fields.length === 0) {
+    return NextResponse.json({ error: "Güncellenecek alan yok" }, { status: 400 });
+  }
+
+  const sql = `
+    UPDATE page_locales
+       SET ${fields.join(", ")}
+     WHERE page_id = :id AND locale = :locale
+     LIMIT 1
+  `;
 
   try {
-    // Repository'deki fonksiyonu kullan
-    await updatePageLocale({ id, locale, payload: body });
-
-    return NextResponse.json(
-      { ok: true },
-      { headers: { "Cache-Control": "no-store" } }
-    );
-  } catch (error) {
-    console.error("Update error:", error);
-    return NextResponse.json(
-      { ok: false, error: error.message },
-      { status: 500 }
-    );
+    const result = await q(sql, paramsObj); // OkPacket döner
+    const affected = result?.affectedRows ?? 0;
+    return NextResponse.json({ ok: true, affectedRows: affected });
+  } catch (e) {
+    return NextResponse.json({ error: e?.message || "Sunucu hatası" }, { status: 500 });
   }
 }
