@@ -11,6 +11,7 @@ import { EditSessionProvider } from "../_context/EditSessionContext";
 import SaveBar from "../_molecules/SaveBar";
 import DraftTitle from "../_molecules/DraftTitle";
 import DraftBody from "../_molecules/DraftBody";
+import UnsavedChangesGuard from "../_molecules/UnsavedChangesGuard";
 
 // Bu sayfa server component: DB'den doğrudan okuyor
 export default async function KurumsalPage() {
@@ -53,7 +54,10 @@ export default async function KurumsalPage() {
           </div>
 
           <SignedIn>
-            <SaveBar />
+            <SaveBar /> 
+          </SignedIn>
+          <SignedIn>
+            <UnsavedChangesGuard />
           </SignedIn>
         </EditSessionProvider>
       </div>
