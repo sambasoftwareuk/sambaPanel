@@ -9,6 +9,7 @@ import BodyEditor from "../_molecules/BodyEditor";
 import SaveAllButton from "../_molecules/SaveAllButton";
 import { PageEditProvider } from "../_molecules/PageEditProvider";
 import { getKurumsalPage } from "@/lib/repos/page";
+import { NavigationGuard } from "../_molecules/NavigationGuard";
 
 // ✅ still a server component (SEO)
 export default async function KurumsalPage() {
@@ -37,6 +38,7 @@ export default async function KurumsalPage() {
                 initialBody={page.content_html || "<p></p>"}
               >
                 {/* Title */}
+                <NavigationGuard />
                 <div className="flex items-center gap-2">
                   <TitleDisplay initialTitle={page.title} />
                   <SignedIn>

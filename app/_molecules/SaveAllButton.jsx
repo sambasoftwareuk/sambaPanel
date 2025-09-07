@@ -4,8 +4,9 @@ import { useState } from "react";
 import { usePageEdit } from "./PageEditProvider";
 
 export default function SaveAllButton({ pageId, locale }) {
-  const { title, bodyHtml } = usePageEdit();
+  const { title, bodyHtml, isDirty } = usePageEdit();
   const [loading, setLoading] = useState(false);
+
   async function handleSave() {
     setLoading(true);
     try {
@@ -14,12 +15,10 @@ export default function SaveAllButton({ pageId, locale }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, content_html: bodyHtml, locale }),
       });
-
       if (!res.ok) throw new Error("API error");
 
-      // DB update başarılı → sayfayı revalidate et
-      // (Next.js 15: revalidatePath client'tan çağrılamıyor, onun yerine refresh yapabilirsin)
-      window.location.reload();
+      // Update initial values after successful save
+      window.location.reload(); // or use router.refresh() in Next.js
     } catch (err) {
       console.error("Save failed:", err);
     } finally {
@@ -30,10 +29,14 @@ export default function SaveAllButton({ pageId, locale }) {
   return (
     <button
       onClick={handleSave}
-      disabled={loading}
-      className="rounded bg-green-600 px-4 py-2 text-white"
+      disabled={loading || !isDirty}
+      className={`rounded px-4 py-2 text-white transition-colors ${
+        isDirty
+          ? "bg-green-600 hover:bg-green-700"
+          : "bg-gray-400 cursor-not-allowed"
+      }`}
     >
-      {loading ? "Saving..." : "Save All"}
+      {loading ? "Saving..." : isDirty ? "Save All" : "Save All"}
     </button>
   );
 }
