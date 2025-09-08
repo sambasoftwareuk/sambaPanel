@@ -36,6 +36,8 @@ export default async function KurumsalPage() {
               <PageEditProvider
                 initialTitle={page.title}
                 initialBody={page.content_html || "<p></p>"}
+                pageId={page.id}
+                locale={page.locale}
               >
                 {/* Title */}
                 <NavigationGuard />
