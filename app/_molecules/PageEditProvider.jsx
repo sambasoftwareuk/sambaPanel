@@ -1,45 +1,40 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useRef,
-  useMemo,
-  useEffect,
-} from "react";
+import { createContext, useContext, useState, useMemo } from "react";
 
-const PageEditContext = createContext();
+const PageEditContext = createContext(null);
 
-export function PageEditProvider({ children, initialTitle, initialBody }) {
+export function PageEditProvider({ initialTitle, initialBody, children }) {
   const [title, setTitle] = useState(initialTitle);
   const [bodyHtml, setBodyHtml] = useState(initialBody);
 
-  const initialRef = useRef({ title: initialTitle, bodyHtml: initialBody });
+  // ✅ Baseline (kaydedilmiş son değerler)
+  const [baseline, setBaseline] = useState({
+    title: initialTitle,
+    bodyHtml: initialBody,
+  });
 
+  // ✅ isDirty: sadece title veya body değişmişse true
   const isDirty = useMemo(() => {
-    return (
-      title !== initialRef.current.title ||
-      bodyHtml !== initialRef.current.bodyHtml
-    );
-  }, [title, bodyHtml]);
+    return title !== baseline.title || bodyHtml !== baseline.bodyHtml;
+  }, [title, bodyHtml, baseline]);
 
-  // // Warn user on page refresh or closing tab if there are unsaved changes
-  // useEffect(() => {
-  //   const handleBeforeUnload = (e) => {
-  //     if (isDirty) {
-  //       e.preventDefault();
-  //       e.returnValue = ""; // required for Chrome
-  //     }
-  //   };
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
-  //   return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  // }, [isDirty]);
+  // ✅ Save sonrası baseline güncelleyici
+  const markSaved = () => {
+    setBaseline({ title, bodyHtml });
+  };
+
+  const value = {
+    title,
+    setTitle,
+    bodyHtml,
+    setBodyHtml,
+    isDirty,
+    markSaved,
+  };
 
   return (
-    <PageEditContext.Provider
-      value={{ title, setTitle, bodyHtml, setBodyHtml, isDirty }}
-    >
+    <PageEditContext.Provider value={value}>
       {children}
     </PageEditContext.Provider>
   );
@@ -47,6 +42,8 @@ export function PageEditProvider({ children, initialTitle, initialBody }) {
 
 export function usePageEdit() {
   const ctx = useContext(PageEditContext);
-  if (!ctx) throw new Error("usePageEdit must be used inside PageEditProvider");
+  if (!ctx) {
+    throw new Error("usePageEdit must be used within PageEditProvider");
+  }
   return ctx;
 }

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { usePageEdit } from "./PageEditProvider";
 
 export default function SaveAllButton({ pageId, locale }) {
-  const { title, bodyHtml, isDirty } = usePageEdit();
+  const { title, bodyHtml, isDirty, markSaved } = usePageEdit();
   const [loading, setLoading] = useState(false);
 
   async function handleSave() {
@@ -17,8 +17,8 @@ export default function SaveAllButton({ pageId, locale }) {
       });
       if (!res.ok) throw new Error("API error");
 
-      // Update initial values after successful save
-      window.location.reload(); // or use router.refresh() in Next.js
+      // ✅ Başarılı kayıttan sonra baseline güncelle
+      markSaved();
     } catch (err) {
       console.error("Save failed:", err);
     } finally {
@@ -36,7 +36,7 @@ export default function SaveAllButton({ pageId, locale }) {
           : "bg-gray-400 cursor-not-allowed"
       }`}
     >
-      {loading ? "Saving..." : isDirty ? "Save All" : "Save All"}
+      {loading ? "Saving..." : "Save All"}
     </button>
   );
 }
