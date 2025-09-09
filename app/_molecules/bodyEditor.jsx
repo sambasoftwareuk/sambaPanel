@@ -5,9 +5,10 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import EditButton from "../_atoms/EditButton";
 import { usePageEdit } from "./PageEditProvider";
+import XButton from "../_atoms/XButton";
 
 export default function BodyEditor({ className = "" }) {
-  const { bodyHtml, setBodyHtml } = usePageEdit();
+  const { bodyHtml, setBodyHtml, resetBody } = usePageEdit();
   const [open, setOpen] = useState(false);
   const [draftBody, setDraftBody] = useState(bodyHtml || "<p></p>");
 
@@ -51,11 +52,14 @@ export default function BodyEditor({ className = "" }) {
 
   return (
     <>
-      <EditButton
-        onClick={() => setOpen(true)}
-        className={className}
-        size="small"
-      />
+      <div className=" flex items-center gap-1">
+        <EditButton
+          onClick={() => setOpen(true)}
+          className={className}
+          size="small"
+        />
+        <XButton onClick={resetBody} />
+      </div>
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">

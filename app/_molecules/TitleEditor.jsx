@@ -2,9 +2,10 @@
 import { usePageEdit } from "./PageEditProvider";
 import { useState, useEffect } from "react";
 import EditButton from "../_atoms/EditButton";
+import XButton from "../_atoms/XButton";
 
 export default function TitleEditor({ className = "" }) {
-  const { title, setTitle } = usePageEdit();
+  const { title, setTitle, resetTitle } = usePageEdit();
   const [open, setOpen] = useState(false);
   const [draftTitle, setDraftTitle] = useState(title);
 
@@ -26,11 +27,14 @@ export default function TitleEditor({ className = "" }) {
 
   return (
     <>
-      <EditButton
-        onClick={() => setOpen(true)}
-        className={className}
-        size="small"
-      />
+      <div className=" flex items-center gap-1">
+        <EditButton
+          onClick={() => setOpen(true)}
+          className={className}
+          size="small"
+        />
+        <XButton onClick={resetTitle} />
+      </div>
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">

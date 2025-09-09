@@ -19,6 +19,13 @@ export function PageEditProvider({
   });
   const [saving, setSaving] = useState(false); // ✅ added saving state
 
+  function resetTitle() {
+    setTitle(baseline.title);
+  }
+  function resetBody() {
+    setBodyHtml(baseline.bodyHtml);
+  }
+
   const isDirty = useMemo(
     () => title !== baseline.title || bodyHtml !== baseline.bodyHtml,
     [title, bodyHtml, baseline]
@@ -54,6 +61,9 @@ export function PageEditProvider({
         isDirty,
         saving,
         handleSave,
+
+        resetTitle,
+        resetBody,
       }}
     >
       {children}
