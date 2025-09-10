@@ -12,7 +12,7 @@ import SaveBar from "../_molecules/SaveBar";
 import DraftTitle from "../_molecules/DraftTitle";
 import DraftBody from "../_molecules/DraftBody";
 import UnsavedChangesGuard from "../_molecules/UnsavedChangesGuard";
-import DraftHeroImage from "../_molecules/DreaftHeroImage";
+import DraftHeroImage from "../_molecules/DraftHeroImage";
 import ImageEditor from "../_molecules/ImageEditor";
 
 // Bu sayfa server component: DB'den doğrudan okuyor
@@ -56,6 +56,7 @@ export default async function KurumsalPage() {
                   </SignedIn>
                 </div>
                 <div className="w-80 shrink-0">
+                  {/* {console.log("hero id:", page)} */}
                   <DraftHeroImage
                     initialUrl={page.hero_url || "/5.jpg"}
                     initialAlt={page.hero_alt || page.title || "Kurumsal"}

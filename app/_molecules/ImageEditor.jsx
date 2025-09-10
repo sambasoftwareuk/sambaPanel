@@ -5,6 +5,7 @@ import { useEditSession } from "../_context/EditSessionContext";
 import EditButton from "../_atoms/EditButton";
 
 export default function ImageEditor({
+  initialImageId = null,
   initialUrl = "/5.jpg",
   initialAlt = "Kurumsal",
   className = "mt-2",
@@ -13,6 +14,7 @@ export default function ImageEditor({
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(initialUrl);
   const [alt, setAlt] = useState(initialAlt);
+  const [imageId, setImageId] = useState(initialImageId);
   const [previewOk, setPreviewOk] = useState(true);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
@@ -22,31 +24,47 @@ export default function ImageEditor({
     if (!open) return;
     setUrl(draft.hero_url ?? initialUrl ?? "");
     setAlt(draft.hero_alt ?? initialAlt ?? "");
+    setImageId(draft.hero_media_id ?? initialImageId ?? null);
     setError("");
     setPreviewOk(true);
-  }, [open, draft, initialUrl, initialAlt]);
+  }, [open, draft, initialUrl, initialAlt, initialImageId]);
 
   // Basit bir URL/erişilebilirlik kontrolü (görsel yükleniyor mu?)
   useEffect(() => {
     if (!open) return;
-    if (!url) { setPreviewOk(false); return; }
+    if (!url) {
+      setPreviewOk(false);
+      return;
+    }
 
     let cancelled = false;
     setChecking(true);
     const img = new Image();
-    img.onload = () => { if (!cancelled) { setPreviewOk(true); setChecking(false); } };
-    img.onerror = () => { if (!cancelled) { setPreviewOk(false); setChecking(false); } };
+    img.onload = () => {
+      if (!cancelled) {
+        setPreviewOk(true);
+        setChecking(false);
+      }
+    };
+    img.onerror = () => {
+      if (!cancelled) {
+        setPreviewOk(false);
+        setChecking(false);
+      }
+    };
     img.src = url;
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [open, url]);
 
   function apply() {
-    if (!url) {
+    if (!imageId) {
       setError("Görsel URL gerekli");
       return;
     }
-    setFields({ hero_url: url, hero_alt: alt || "Görsel" });
+    setFields({ hero_url: url, hero_alt: alt, hero_media_id: imageId || "Görsel" });
     setOpen(false);
   }
 
@@ -58,7 +76,17 @@ export default function ImageEditor({
 
   return (
     <>
-      <EditButton onClick={() => setOpen(true)} className={className} size="small" />
+      <EditButton
+        onClick={() => setOpen(true)}
+        className={className}
+        size="small"
+      />
+      <button
+        onClick={() => setOpen(true)}
+        className="rounded border px-3 py-1 text-sm"
+      >
+        Kaydet
+      </button>
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
@@ -86,6 +114,17 @@ export default function ImageEditor({
               </label>
 
               <label className="text-sm">
+                Görsel ID
+                <input
+                  type="id"
+                  value={imageId}
+                  onChange={(e) => setImageId(e.target.value)}
+                  placeholder="id"
+                  className="mt-1 w-full rounded border px-3 py-2 text-sm"
+                />
+              </label>
+
+              <label className="text-sm">
                 Alt Metin (SEO)
                 <input
                   type="text"
@@ -103,7 +142,9 @@ export default function ImageEditor({
                     <span className="text-xs text-gray-500">URL girin…</span>
                   )}
                   {url && checking && (
-                    <span className="text-xs text-gray-500">Kontrol ediliyor…</span>
+                    <span className="text-xs text-gray-500">
+                      Kontrol ediliyor…
+                    </span>
                   )}
                   {url && !checking && previewOk && (
                     // eslint-disable-next-line @next/next/no-img-element

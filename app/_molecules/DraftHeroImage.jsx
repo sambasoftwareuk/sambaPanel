@@ -13,11 +13,14 @@ export default function DraftHeroImage({
   const { draft } = useEditSession();
   const url = draft.hero_url ?? initialUrl;
   const alt = draft.hero_alt ?? initialAlt;
-
+  const id = draft.hero_media_id ?? null;
+  console.log("Draft:", draft);
+  
   return (
     <Image
       src={url}
       alt={alt}
+      imageid={id}
       width={width}
       height={height}
       className={className}
