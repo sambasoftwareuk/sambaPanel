@@ -1,5 +1,5 @@
 "use client";
-import { usePageEdit } from "./PageEditProvider";
+import { usePageEdit } from "../context/PageEditProvider";
 
 export default function BodyDisplay({ initialHtml }) {
   const { bodyHtml } = usePageEdit();

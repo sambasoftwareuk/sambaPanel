@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { XIcon } from "./Icons";
+import { LineXIcon } from "./Icons";
+import Icon from "./Icon";
 
 const XButton = ({ onClick, className = "", title = "İptal" }) => {
   return (
@@ -10,7 +11,7 @@ const XButton = ({ onClick, className = "", title = "İptal" }) => {
       className={`p-2 text-white bg-red rounded-full hover:bg-red-200 transition-colors duration-200 shadow-lg ${className}`}
       title={title}
     >
-      <XIcon />
+      <Icon variant={LineXIcon} size={14} />
     </button>
   );
 };

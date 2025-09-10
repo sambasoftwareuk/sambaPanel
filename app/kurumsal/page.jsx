@@ -7,7 +7,7 @@ import BodyDisplay from "../_molecules/BodyDisplay";
 import TitleEditor from "../_molecules/TitleEditor";
 import BodyEditor from "../_molecules/BodyEditor";
 import SaveAllButton from "../_molecules/SaveAllButton";
-import { PageEditProvider } from "../_molecules/PageEditProvider";
+import { PageEditProvider } from "../context/PageEditProvider";
 import { getKurumsalPage } from "@/lib/repos/page";
 import { NavigationGuard } from "../_molecules/NavigationGuard";
 

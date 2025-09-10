@@ -1,8 +1,9 @@
 "use client";
-import { usePageEdit } from "./PageEditProvider";
+import { usePageEdit } from "../context/PageEditProvider";
 import { useState, useEffect } from "react";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
+import { OutlinedButton, PrimaryButton } from "../_atoms/buttons";
 
 export default function TitleEditor({ className = "" }) {
   const { title, setTitle, resetTitle } = usePageEdit();
@@ -47,18 +48,12 @@ export default function TitleEditor({ className = "" }) {
               placeholder="Başlık"
             />
             <div className="mt-4 flex justify-end gap-2">
-              <button
-                onClick={handleCancel}
-                className="rounded border px-3 py-1"
-              >
-                Vazgeç
-              </button>
-              <button
+              <OutlinedButton label="Vazgeç" onClick={handleCancel} />
+              <PrimaryButton
+                label="Kaydet "
                 onClick={handleSave}
-                className="rounded bg-black px-3 py-1 text-white"
-              >
-                Kaydet (Local)
-              </button>
+                className="bg-black text-white"
+              />
             </div>
           </div>
         </div>

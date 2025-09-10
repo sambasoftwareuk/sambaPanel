@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { usePageEdit } from "./PageEditProvider";
+import { usePageEdit } from "../context/PageEditProvider";
+import { PrimaryButton } from "../_atoms/buttons";
 
 export function NavigationGuard() {
   const { isDirty, handleSave, saving } = usePageEdit();
@@ -108,13 +109,7 @@ export function NavigationGuard() {
   if (!showModal) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 grid place-items-center bg-black/50"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="unsaved-changes-title"
-      aria-describedby="unsaved-changes-desc"
-    >
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/50">
       <div className="w-full max-w-md rounded-xl bg-white p-5 shadow-2xl border">
         <h3 id="unsaved-changes-title" className="text-lg font-semibold mb-2">
           You have unsaved changes
@@ -124,27 +119,24 @@ export function NavigationGuard() {
         </p>
 
         <div className="flex justify-end gap-2">
-          <button
+          <PrimaryButton
             onClick={handleCancel}
-            className="rounded bg-green-500 text-white border px-3 py-1 text-sm"
+            className=" bg-gray-900"
             disabled={saving}
-          >
-            Cancel
-          </button>
-          <button
+            label="Cancel"
+          ></PrimaryButton>
+          <PrimaryButton
             onClick={handleLeaveWithoutSaving}
-            className="rounded bg-red border text-white px-3 py-1 text-sm"
+            className=" bg-red "
             disabled={saving}
-          >
-            Leave without Saving
-          </button>
-          <button
+            label="Leave without Saving"
+          ></PrimaryButton>
+          <PrimaryButton
             onClick={handleSaveAndLeave}
-            className="rounded bg-black text-white px-3 py-1 text-sm disabled:opacity-60"
+            className=""
             disabled={saving}
-          >
-            {saving ? "Saving…" : "Save & Leave"}
-          </button>
+            label={saving ? "Saving…" : "Save & Leave"}
+          ></PrimaryButton>
         </div>
       </div>
     </div>

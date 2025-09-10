@@ -4,8 +4,15 @@ import { useState, useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import EditButton from "../_atoms/EditButton";
-import { usePageEdit } from "./PageEditProvider";
+import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
+import {
+  IconOnlyButton,
+  OutlinedButton,
+  PrimaryButton,
+} from "../_atoms/buttons";
+import Icon from "../_atoms/Icon";
+import { LineXIcon } from "../_atoms/Icons";
 
 export default function BodyEditor({ className = "" }) {
   const { bodyHtml, setBodyHtml, resetBody } = usePageEdit();
@@ -66,12 +73,11 @@ export default function BodyEditor({ className = "" }) {
           <div className="w-full max-w-3xl rounded-xl bg-white p-4 shadow-lg">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-lg font-semibold">İçeriği Düzenle</h2>
-              <button
+
+              <IconOnlyButton
+                icon={<Icon variant={LineXIcon} size={22} />}
                 onClick={handleCancel}
-                className="rounded border px-3 py-1 text-sm"
-              >
-                ✖
-              </button>
+              />
             </div>
 
             <div className="border rounded">
@@ -83,18 +89,12 @@ export default function BodyEditor({ className = "" }) {
             </div>
 
             <div className="mt-4 flex justify-end gap-2">
-              <button
-                onClick={handleCancel}
-                className="rounded border px-3 py-1"
-              >
-                Vazgeç
-              </button>
-              <button
+              <OutlinedButton label="Vazgeç" onClick={handleCancel} />
+              <PrimaryButton
+                label="Kaydet "
                 onClick={handleSaveLocal}
-                className="rounded bg-black px-3 py-1 text-white"
-              >
-                Kaydet (Local)
-              </button>
+                className="bg-black text-white"
+              />
             </div>
           </div>
         </div>
