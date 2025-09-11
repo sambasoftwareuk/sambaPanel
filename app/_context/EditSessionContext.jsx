@@ -11,6 +11,8 @@ const GROUPS = {
   content_html: "content",
   content_json: "content",
   hero_media_id: "hero",
+  hero_url: "hero",
+  hero_alt: "hero",
 };
 const groupOf = (k) => GROUPS[k] || k;
 
@@ -39,7 +41,9 @@ export function EditSessionProvider({ pageId, locale, initial, children }) {
   if (initialRef.current === null) {
     const obj = { ...initial };
     if (obj.content_json && typeof obj.content_json !== "string") {
-      try { obj.content_json = JSON.stringify(obj.content_json); } catch {}
+      try {
+        obj.content_json = JSON.stringify(obj.content_json);
+      } catch {}
     }
     initialRef.current = obj;
   }
@@ -93,7 +97,8 @@ export function EditSessionProvider({ pageId, locale, initial, children }) {
     const payload = { locale };
     for (const k of changedKeys) {
       const v = draft[k];
-      payload[k] = k.endsWith("_json") && typeof v !== "string" ? JSON.stringify(v) : v;
+      payload[k] =
+        k.endsWith("_json") && typeof v !== "string" ? JSON.stringify(v) : v;
     }
 
     setSaving(true);
@@ -125,9 +130,9 @@ export function EditSessionProvider({ pageId, locale, initial, children }) {
       draft,
       setField,
       setFields,
-      dirty,        // kirlenen alanlar (ham)
-      dirtyGroups,  // kirlenen gruplar (title, content, hero…)
-      dirtyCount,   // gruplara göre sayaç
+      dirty, // kirlenen alanlar (ham)
+      dirtyGroups, // kirlenen gruplar (title, content, hero…)
+      dirtyCount, // gruplara göre sayaç
       reset,
       saveAll,
       saving,
@@ -145,6 +150,7 @@ export function EditSessionProvider({ pageId, locale, initial, children }) {
 
 export function useEditSession() {
   const ctx = useContext(EditSessionContext);
-  if (!ctx) throw new Error("useEditSession must be used inside EditSessionProvider");
+  if (!ctx)
+    throw new Error("useEditSession must be used inside EditSessionProvider");
   return ctx;
 }

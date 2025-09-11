@@ -12,23 +12,49 @@ export default function ImageEditor({
 }) {
   const { draft, setFields } = useEditSession();
   const [open, setOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("gallery"); // gallery, upload, url
   const [url, setUrl] = useState(initialUrl);
   const [alt, setAlt] = useState(initialAlt);
   const [previewOk, setPreviewOk] = useState(true);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [gallery, setGallery] = useState([]);
+  const [loadingGallery, setLoadingGallery] = useState(false);
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
 
-  // Modal açıldığında değerleri yükle
+  // Galeri yükle
+  const loadGallery = async () => {
+    setLoadingGallery(true);
+    try {
+      const res = await fetch("/api/media?limit=50");
+      const data = await res.json();
+      setGallery(data.media || []);
+    } catch (e) {
+      console.error("Galeri yüklenemedi:", e);
+    } finally {
+      setLoadingGallery(false);
+    }
+  };
+
+  // Modal açıldığında galeri yükle
   useEffect(() => {
-    if (!open) return;
-    setUrl(initialUrl ?? "");
-    setAlt(initialAlt ?? "");
-    setError("");
-    setPreviewOk(true);
+    if (open) {
+      loadGallery();
+      setUrl(initialUrl ?? "");
+      setAlt(initialAlt ?? "");
+      setError("");
+      setPreviewOk(true);
+    }
   }, [open, initialUrl, initialAlt]);
+
+  // Galeri resmi seç
+  const selectFromGallery = (mediaItem) => {
+    setUrl(mediaItem.url);
+    setAlt(mediaItem.alt_text || "");
+    setPreviewOk(true);
+  };
 
   // URL kontrolü
   useEffect(() => {
@@ -118,8 +144,7 @@ export default function ImageEditor({
     }
 
     try {
-      // 1. Yeni media kaydı oluştur
-      const mediaRes = await fetch(`/api/media`, {
+      const mediaRes = await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, alt_text: alt }),
@@ -131,8 +156,13 @@ export default function ImageEditor({
 
       const newMedia = await mediaRes.json();
 
-      // 2. Yeni media ID'sini kullan
-      setFields({ hero_media_id: newMedia.id });
+      // HEM hero_media_id HEM de hero_url ve hero_alt'ı güncelle
+      setFields({
+        hero_media_id: newMedia.id,
+        hero_url: url, // Yeni URL'yi draft'a ekle
+        hero_alt: alt, // Yeni alt'ı draft'a ekle
+      });
+
       setOpen(false);
     } catch (e) {
       setError(e.message || "Güncellenemedi");
@@ -140,10 +170,88 @@ export default function ImageEditor({
   }
 
   function clearImage() {
-    // Görseli kaldırmak istersen: url'yi boşalt, alt'ı koru (veya boşalt)
-    setFields({ hero_media_id: null });
+    setFields({ hero_media_id: null, hero_url: "", hero_alt: "" });
     setOpen(false);
   }
+
+  // Tab içerikleri
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "gallery":
+        return (
+          <div className="max-h-64 overflow-y-auto">
+            {loadingGallery ? (
+              <p className="text-sm text-gray-500 text-center py-4">
+                Galeri yükleniyor...
+              </p>
+            ) : (
+              <div className="grid grid-cols-4 gap-2">
+                {gallery.map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => selectFromGallery(item)}
+                    className={`cursor-pointer rounded border-2 p-1 ${
+                      url === item.url ? "border-blue-500" : "border-gray-200"
+                    }`}
+                  >
+                    <img
+                      src={item.url}
+                      alt={item.alt_text || "Galeri"}
+                      className="w-full h-16 object-cover rounded"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+
+      case "upload":
+        return (
+          <div
+            ref={dropZoneRef}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileSelect}
+              className="hidden"
+            />
+            {uploading ? (
+              <p className="text-sm text-gray-500">Yükleniyor...</p>
+            ) : (
+              <div>
+                <p className="text-sm text-gray-600 mb-2">
+                  Resmi buraya sürükleyin veya tıklayın
+                </p>
+                <p className="text-xs text-gray-500">
+                  JPG, PNG, GIF desteklenir
+                </p>
+              </div>
+            )}
+          </div>
+        );
+
+      case "url":
+        return (
+          <input
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://..."
+            className="w-full rounded border px-3 py-2 text-sm"
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <>
@@ -161,7 +269,7 @@ export default function ImageEditor({
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
-          <div className="w-full max-w-lg rounded-xl bg-white p-5 shadow-2xl border">
+          <div className="w-full max-w-2xl rounded-xl bg-white p-5 shadow-2xl border">
             <div className="flex items-center justify-between mb-3">
               <h2 className="text-lg font-semibold">Görseli Düzenle</h2>
               <button
@@ -172,92 +280,74 @@ export default function ImageEditor({
               </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-3">
-              {/* Sürükle-bırak alanı */}
-              <div
-                ref={dropZoneRef}
-                onDragOver={handleDragOver}
-                onDrop={handleDrop}
-                className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
-                />
-                {uploading ? (
-                  <p className="text-sm text-gray-500">Yükleniyor...</p>
-                ) : (
-                  <div>
-                    <p className="text-sm text-gray-600 mb-2">
-                      Resmi buraya sürükleyin veya tıklayın
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      JPG, PNG, GIF desteklenir
-                    </p>
-                  </div>
+            {/* Tab'lar */}
+            <div className="flex border-b mb-4">
+              {[
+                { id: "gallery", label: "Galeri" },
+                { id: "upload", label: "Upload" },
+                { id: "url", label: "URL" },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-2 text-sm font-medium border-b-2 ${
+                    activeTab === tab.id
+                      ? "border-blue-500 text-blue-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tab içeriği */}
+            <div className="mb-4">{renderTabContent()}</div>
+
+            {/* Alt metin */}
+            <label className="text-sm block mb-4">
+              Alt Metin (SEO)
+              <input
+                type="text"
+                value={alt}
+                onChange={(e) => setAlt(e.target.value)}
+                placeholder="Örn. Şirketimiz üretim tesisi"
+                className="mt-1 w-full rounded border px-3 py-2 text-sm"
+              />
+            </label>
+
+            {/* Önizleme */}
+            <div className="mb-4">
+              <p className="text-sm text-gray-700 mb-2">Önizleme</p>
+              <div className="border rounded p-2 grid place-items-center min-h-[200px]">
+                {!url && (
+                  <span className="text-xs text-gray-500">
+                    Resim seçin veya URL girin
+                  </span>
                 )}
-              </div>
-
-              {/* URL girişi */}
-              <label className="text-sm">
-                Veya URL girin
-                <input
-                  type="url"
-                  value={url}
-                  onChange={(e) => setUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="mt-1 w-full rounded border px-3 py-2 text-sm"
-                />
-              </label>
-
-              {/* Alt metin */}
-              <label className="text-sm">
-                Alt Metin (SEO)
-                <input
-                  type="text"
-                  value={alt}
-                  onChange={(e) => setAlt(e.target.value)}
-                  placeholder="Örn. Şirketimiz üretim tesisi"
-                  className="mt-1 w-full rounded border px-3 py-2 text-sm"
-                />
-              </label>
-
-              <div className="mt-2">
-                <p className="text-sm text-gray-700 mb-2">Önizleme</p>
-                <div className="border rounded p-2 grid place-items-center min-h-[220px]">
-                  {!url && (
-                    <span className="text-xs text-gray-500">
-                      Resim seçin veya URL girin
-                    </span>
-                  )}
-                  {url && checking && (
-                    <span className="text-xs text-gray-500">
-                      Kontrol ediliyor...
-                    </span>
-                  )}
-                  {url && !checking && previewOk && (
-                    <img
-                      src={url}
-                      alt={alt || "Önizleme"}
-                      className="max-h-64 max-w-full rounded object-cover"
-                    />
-                  )}
-                  {url && !checking && !previewOk && (
-                    <span className="text-xs text-red-600">
-                      Görsel yüklenemedi. URL'yi kontrol edin.
-                    </span>
-                  )}
-                </div>
+                {url && checking && (
+                  <span className="text-xs text-gray-500">
+                    Kontrol ediliyor...
+                  </span>
+                )}
+                {url && !checking && previewOk && (
+                  <img
+                    src={url}
+                    alt={alt || "Önizleme"}
+                    className="max-h-48 max-w-full rounded object-cover"
+                  />
+                )}
+                {url && !checking && !previewOk && (
+                  <span className="text-xs text-red-600">
+                    Görsel yüklenemedi. URL'yi kontrol edin.
+                  </span>
+                )}
               </div>
             </div>
 
-            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+            {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
 
-            <div className="mt-4 flex justify-between">
+            <div className="flex justify-between">
               <button
                 onClick={clearImage}
                 className="rounded border px-3 py-1 text-sm"
@@ -280,12 +370,6 @@ export default function ImageEditor({
                 </button>
               </div>
             </div>
-
-            <p className="mt-3 text-xs text-gray-500">
-              {/* Not: Harici alan adlarından görsel göstermek için{" "}
-              <code>next.config.js</code> içinde <code>images.domains</code> listesine
-              alan adını eklemeyi unutmayın. */}
-            </p>
           </div>
         </div>
       )}

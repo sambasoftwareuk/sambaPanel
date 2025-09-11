@@ -1,6 +1,29 @@
 import { NextResponse } from "next/server";
 import { q } from "@/lib/db";
 
+export async function GET(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const limit = searchParams.get("limit") || 20;
+    const offset = searchParams.get("offset") || 0;
+
+    const media = await q(
+      `
+      SELECT id, url, alt_text, created_at
+      FROM media 
+      ORDER BY created_at DESC
+      LIMIT ? OFFSET ?
+    `,
+      [parseInt(limit), parseInt(offset)]
+    );
+
+    return NextResponse.json({ media });
+  } catch (e) {
+    console.error("Gallery load error:", e);
+    return NextResponse.json({ error: "Galeri yüklenemedi" }, { status: 500 });
+  }
+}
+
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -10,19 +33,48 @@ export async function POST(req) {
       return NextResponse.json({ error: "URL gerekli" }, { status: 400 });
     }
 
-    const result = await q(
+    // Önce aynı URL'de kayıt var mı kontrol et
+    const existingMedia = await q(
       `
-      INSERT INTO media (url, alt_text, created_at)
-      VALUES (?, ?, NOW())
+      SELECT id FROM media WHERE url = ? LIMIT 1
     `,
-      [url, alt_text || null]
+      [url]
     );
 
-    return NextResponse.json({
-      id: result.insertId,
-      url,
-      alt_text,
-    });
+    if (existingMedia.length > 0) {
+      // Aynı URL varsa, mevcut kaydı güncelle
+      const result = await q(
+        `
+        UPDATE media 
+        SET alt_text = ?, updated_at = NOW()
+        WHERE url = ?
+      `,
+        [alt_text || null, url]
+      );
+
+      return NextResponse.json({
+        id: existingMedia[0].id,
+        url,
+        alt_text,
+        updated: true,
+      });
+    } else {
+      // Aynı URL yoksa, yeni kayıt oluştur
+      const result = await q(
+        `
+        INSERT INTO media (url, alt_text, created_at)
+        VALUES (?, ?, NOW())
+      `,
+        [url, alt_text || null]
+      );
+
+      return NextResponse.json({
+        id: result.insertId,
+        url,
+        alt_text,
+        created: true,
+      });
+    }
   } catch (e) {
     console.error("Media creation error:", e);
     return NextResponse.json(

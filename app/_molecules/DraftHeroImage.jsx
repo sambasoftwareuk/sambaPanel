@@ -11,11 +11,13 @@ export default function DraftHeroImage({
   className = "rounded-lg object-cover w-80 h-80",
 }) {
   const { draft } = useEditSession();
-  const url = draft.hero_url ?? initialUrl;
-  const alt = draft.hero_alt ?? initialAlt;
-  const id = draft.hero_media_id ?? null;
-  console.log("Draft:", draft);
-  
+
+  // Draft'ta hero_media_id varsa, o media'nın URL'sini al
+  const url = draft.hero_media_id ? draft.hero_url || initialUrl : initialUrl;
+
+  const alt = draft.hero_alt || initialAlt;
+  const id = draft.hero_media_id || null;
+
   return (
     <Image
       src={url}
