@@ -104,6 +104,16 @@ export default function BodyEditor({ className = "" }) {
 
       const result = await response.json();
 
+      // Media API'ye kaydet (gallery için)
+      await fetch("/api/media", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          url: result.url, 
+          alt_text: "Yüklenen resim" 
+        }),
+      });
+
       // URL ile resmi editöre ekle
       const imageHtml = `<img src="${result.url}" alt="Yüklenen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;
       const pos = editor.state.selection.from;
@@ -114,15 +124,14 @@ export default function BodyEditor({ className = "" }) {
     }
   };
 
-  async function save() {
+  function save() {
     if (!editor) return;
     setSaving(true);
     setError("");
     try {
       const html = editor.getHTML();
-      const json = editor.getJSON();
 
-      // Context'i güncelle (local state)
+      // Context'i güncelle (local state) - API call yok!
       setBodyHtml(html);
       
       setOpen(false);
