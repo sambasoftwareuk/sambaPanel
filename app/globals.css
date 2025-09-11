@@ -9,3 +9,33 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* HTML Editor Styling */
+.html-tag {
+  color: #0066cc;
+}
+
+.html-attribute {
+  color: #cc6600;
+}
+
+.html-value {
+  color: #006600;
+}
+
+/* Tiptap Editor Styles */
+.ProseMirror {
+  outline: none;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.375rem;
+  margin: 0.5rem 0;
+}
+
+.ProseMirror img.ProseMirror-selectednode {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}

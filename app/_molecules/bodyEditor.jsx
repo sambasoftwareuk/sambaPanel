@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import Link from "@tiptap/extension-link";
+import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
 import EditButton from "../_atoms/EditButton";
 import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
@@ -13,53 +16,126 @@ import {
 } from "../_atoms/buttons";
 import Icon from "../_atoms/Icon";
 import { LineXIcon } from "../_atoms/Icons";
+import BodyEditorModal from "./BodyEditorModal";
 
 export default function BodyEditor({ className = "" }) {
   const { bodyHtml, setBodyHtml, resetBody } = usePageEdit();
   const [open, setOpen] = useState(false);
-  const [draftBody, setDraftBody] = useState(bodyHtml || "<p></p>");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const [htmlContent, setHtmlContent] = useState("");
+
+  useEffect(() => setMounted(true), []);
 
   const editor = useEditor({
-    extensions: [StarterKit],
-    content: draftBody, // use draft instead of global state
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3, 4] } }),
+      Link.configure({
+        openOnClick: true,
+        autolink: true,
+        HTMLAttributes: { rel: "noopener noreferrer nofollow" },
+      }),
+      TextAlign.configure({
+        types: ["paragraph"],
+      }),
+      Image.configure({
+        HTMLAttributes: {
+          class: "max-w-full h-auto rounded",
+          style: "max-width: 100%; height: auto; max-height: 400px;",
+        },
+      }),
+    ],
+    content: "",
     editorProps: {
       attributes: {
         class: "prose max-w-none min-h-[240px] focus:outline-none px-3 py-2",
       },
     },
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      const html = editor.getHTML();
+      setHtmlContent(html);
+    },
   });
 
-  // Reset draft when modal opens
+  // Modal açıldığında veya editor hazır olduğunda içeriği set et
   useEffect(() => {
-    if (open) {
-      setDraftBody(bodyHtml || "<p></p>");
-      if (editor) {
-        editor.commands.setContent(bodyHtml || "<p></p>");
+    if (!editor || !mounted || !open) return;
+    editor.commands.setContent(bodyHtml || "<p></p>", true);
+  }, [editor, mounted, open, bodyHtml]);
+
+  // HTML içeriğini güncelle
+  useEffect(() => {
+    if (editor) {
+      const html = editor.getHTML();
+      setHtmlContent(html);
+    }
+  }, [editor, open]);
+
+  // Resmi sunucuya yükle ve editöre ekle
+  const handleImageFile = async (file) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Lütfen sadece resim dosyası seçin");
+      return;
+    }
+
+    // Dosya boyutu kontrolü (5MB limit)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert("Resim dosyası çok büyük. Maksimum 5MB olmalıdır.");
+      return;
+    }
+
+    try {
+      // FormData oluştur
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // Sunucuya yükle
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Resim yüklenemedi");
       }
-    }
-  }, [open, editor, bodyHtml]);
 
-  function handleSaveLocal() {
-    if (editor) {
-      const newHtml = editor.getHTML();
-      setDraftBody(newHtml);
-      setBodyHtml(newHtml); // commit to global context
-    }
-    setOpen(false);
-  }
+      const result = await response.json();
 
-  function handleCancel() {
-    // discard draft, reset editor content
-    if (editor) {
-      editor.commands.setContent(bodyHtml || "<p></p>");
+      // URL ile resmi editöre ekle
+      const imageHtml = `<img src="${result.url}" alt="Yüklenen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;
+      const pos = editor.state.selection.from;
+      editor.chain().focus().insertContentAt(pos, imageHtml).run();
+    } catch (error) {
+      console.error("Resim yükleme hatası:", error);
+      alert("Resim yüklenirken hata oluştu");
     }
-    setOpen(false);
+  };
+
+  async function save() {
+    if (!editor) return;
+    setSaving(true);
+    setError("");
+    try {
+      const html = editor.getHTML();
+      const json = editor.getJSON();
+
+      // Context'i güncelle (local state)
+      setBodyHtml(html);
+      
+      setOpen(false);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
     <>
-      <div className=" flex items-center gap-1">
+      <div className="flex items-center gap-1">
         <EditButton
           onClick={() => setOpen(true)}
           className={className}
@@ -68,37 +144,17 @@ export default function BodyEditor({ className = "" }) {
         <XButton onClick={resetBody} />
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
-          <div className="w-full max-w-3xl rounded-xl bg-white p-4 shadow-lg">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">İçeriği Düzenle</h2>
-
-              <IconOnlyButton
-                icon={<Icon variant={LineXIcon} size={22} />}
-                onClick={handleCancel}
-              />
-            </div>
-
-            <div className="border rounded">
-              {editor ? (
-                <EditorContent editor={editor} />
-              ) : (
-                <div className="p-3 text-sm text-gray-500">Yükleniyor…</div>
-              )}
-            </div>
-
-            <div className="mt-4 flex justify-end gap-2">
-              <OutlinedButton label="Vazgeç" onClick={handleCancel} />
-              <PrimaryButton
-                label="Kaydet "
-                onClick={handleSaveLocal}
-                className="bg-black text-white"
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      <BodyEditorModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        editor={editor}
+        htmlContent={htmlContent}
+        setHtmlContent={setHtmlContent}
+        onImageUpload={handleImageFile}
+        onSave={save}
+        saving={saving}
+        error={error}
+      />
     </>
   );
 }
