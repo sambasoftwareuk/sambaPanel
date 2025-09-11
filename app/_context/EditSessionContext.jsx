@@ -10,8 +10,6 @@ const GROUPS = {
   title: "title",
   content_html: "content",
   content_json: "content",
-  hero_url: "hero",
-  hero_alt: "hero",
   hero_media_id: "hero",
 };
 const groupOf = (k) => GROUPS[k] || k;

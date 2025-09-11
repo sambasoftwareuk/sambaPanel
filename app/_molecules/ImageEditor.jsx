@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useEditSession } from "../_context/EditSessionContext";
 import EditButton from "../_atoms/EditButton";
 
@@ -14,28 +14,25 @@ export default function ImageEditor({
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(initialUrl);
   const [alt, setAlt] = useState(initialAlt);
-  const [imageId, setImageId] = useState(initialImageId);
   const [previewOk, setPreviewOk] = useState(true);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
+  const dropZoneRef = useRef(null);
 
-  // Modal açıldığında, varsa draft; yoksa initial değerleri yükle
+  // Modal açıldığında değerleri yükle
   useEffect(() => {
     if (!open) return;
-    setUrl(draft.hero_url ?? initialUrl ?? "");
-    setAlt(draft.hero_alt ?? initialAlt ?? "");
-    setImageId(draft.hero_media_id ?? initialImageId ?? null);
+    setUrl(initialUrl ?? "");
+    setAlt(initialAlt ?? "");
     setError("");
     setPreviewOk(true);
-  }, [open, draft, initialUrl, initialAlt, initialImageId]);
+  }, [open, initialUrl, initialAlt]);
 
-  // Basit bir URL/erişilebilirlik kontrolü (görsel yükleniyor mu?)
+  // URL kontrolü
   useEffect(() => {
-    if (!open) return;
-    if (!url) {
-      setPreviewOk(false);
-      return;
-    }
+    if (!open || !url) return;
 
     let cancelled = false;
     setChecking(true);
@@ -59,18 +56,92 @@ export default function ImageEditor({
     };
   }, [open, url]);
 
-  function apply() {
-    if (!imageId) {
+  // Sürükle-bırak işlemleri
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      await handleFileUpload(files[0]);
+    }
+  };
+
+  const handleFileSelect = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      await handleFileUpload(file);
+    }
+  };
+
+  const handleFileUpload = async (file) => {
+    if (!file.type.startsWith("image/")) {
+      setError("Sadece resim dosyaları kabul edilir");
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Upload başarısız");
+      }
+
+      const data = await res.json();
+      setUrl(data.url);
+      setPreviewOk(true);
+    } catch (e) {
+      setError(e.message || "Upload başarısız");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  async function apply() {
+    if (!url) {
       setError("Görsel URL gerekli");
       return;
     }
-    setFields({ hero_url: url, hero_alt: alt, hero_media_id: imageId || "Görsel" });
-    setOpen(false);
+
+    try {
+      // 1. Yeni media kaydı oluştur
+      const mediaRes = await fetch(`/api/media`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url, alt_text: alt }),
+      });
+
+      if (!mediaRes.ok) {
+        throw new Error("Media oluşturulamadı");
+      }
+
+      const newMedia = await mediaRes.json();
+
+      // 2. Yeni media ID'sini kullan
+      setFields({ hero_media_id: newMedia.id });
+      setOpen(false);
+    } catch (e) {
+      setError(e.message || "Güncellenemedi");
+    }
   }
 
   function clearImage() {
     // Görseli kaldırmak istersen: url'yi boşalt, alt'ı koru (veya boşalt)
-    setFields({ hero_url: "", hero_alt: alt || "" });
+    setFields({ hero_media_id: null });
     setOpen(false);
   }
 
@@ -81,12 +152,12 @@ export default function ImageEditor({
         className={className}
         size="small"
       />
-      <button
+      {/* <button
         onClick={() => setOpen(true)}
         className="rounded border px-3 py-1 text-sm"
       >
         Kaydet
-      </button>
+      </button> */}
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
@@ -102,8 +173,38 @@ export default function ImageEditor({
             </div>
 
             <div className="grid grid-cols-1 gap-3">
+              {/* Sürükle-bırak alanı */}
+              <div
+                ref={dropZoneRef}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
+                {uploading ? (
+                  <p className="text-sm text-gray-500">Yükleniyor...</p>
+                ) : (
+                  <div>
+                    <p className="text-sm text-gray-600 mb-2">
+                      Resmi buraya sürükleyin veya tıklayın
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      JPG, PNG, GIF desteklenir
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* URL girişi */}
               <label className="text-sm">
-                Görsel URL
+                Veya URL girin
                 <input
                   type="url"
                   value={url}
@@ -113,17 +214,7 @@ export default function ImageEditor({
                 />
               </label>
 
-              <label className="text-sm">
-                Görsel ID
-                <input
-                  type="id"
-                  value={imageId}
-                  onChange={(e) => setImageId(e.target.value)}
-                  placeholder="id"
-                  className="mt-1 w-full rounded border px-3 py-2 text-sm"
-                />
-              </label>
-
+              {/* Alt metin */}
               <label className="text-sm">
                 Alt Metin (SEO)
                 <input
@@ -139,15 +230,16 @@ export default function ImageEditor({
                 <p className="text-sm text-gray-700 mb-2">Önizleme</p>
                 <div className="border rounded p-2 grid place-items-center min-h-[220px]">
                   {!url && (
-                    <span className="text-xs text-gray-500">URL girin…</span>
+                    <span className="text-xs text-gray-500">
+                      Resim seçin veya URL girin
+                    </span>
                   )}
                   {url && checking && (
                     <span className="text-xs text-gray-500">
-                      Kontrol ediliyor…
+                      Kontrol ediliyor...
                     </span>
                   )}
                   {url && !checking && previewOk && (
-                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={url}
                       alt={alt || "Önizleme"}
@@ -156,7 +248,7 @@ export default function ImageEditor({
                   )}
                   {url && !checking && !previewOk && (
                     <span className="text-xs text-red-600">
-                      Görsel yüklenemedi. URL’yi kontrol edin.
+                      Görsel yüklenemedi. URL'yi kontrol edin.
                     </span>
                   )}
                 </div>
@@ -181,7 +273,8 @@ export default function ImageEditor({
                 </button>
                 <button
                   onClick={apply}
-                  className="rounded bg-black px-3 py-1 text-white text-sm"
+                  disabled={uploading || !url}
+                  className="rounded bg-black px-3 py-1 text-white text-sm disabled:opacity-50"
                 >
                   Uygula
                 </button>

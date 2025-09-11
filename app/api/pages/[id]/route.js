@@ -20,7 +20,7 @@ export async function PATCH(req, ctx) {
   }
 
   // İzinli alanlar
-  const allowed = ["title", "content_html", "content_json"];
+  const allowed = ["title", "content_html", "content_json", "hero_media_id"];
   const fields = [];
   const paramsObj = { id, locale };
 
@@ -36,11 +36,11 @@ export async function PATCH(req, ctx) {
   }
 
   const sql = `
-    UPDATE page_locales
-       SET ${fields.join(", ")}
-     WHERE page_id = :id AND locale = :locale
-     LIMIT 1
-  `;
+  UPDATE pages
+     SET ${fields.join(", ")}
+   WHERE id = :id
+   LIMIT 1
+`;
 
   try {
     const result = await q(sql, paramsObj); // OkPacket döner
