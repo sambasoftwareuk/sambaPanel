@@ -143,12 +143,12 @@ export default function BodyEditor({ className = "" }) {
           
           // HTML'deki preview URL'ini gerçek URL ile değiştir
           html = html.replace(
-            new RegExp(`data-pending-id="${pendingImage.id}"`, 'g'),
+            new RegExp(`src="${pendingImage.previewUrl}"`, 'g'),
             `src="${result.url}"`
           );
           html = html.replace(
-            new RegExp(`src="${pendingImage.previewUrl}"`, 'g'),
-            `src="${result.url}"`
+            new RegExp(`data-pending-id="${pendingImage.id}"`, 'g'),
+            ''
           );
           
         } catch (error) {
