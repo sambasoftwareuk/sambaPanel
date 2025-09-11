@@ -1,7 +1,7 @@
 export function BaseButton({ children, className = "", ...props }) {
   return (
     <button
-      className={`py-2 px-2 md:px-4 text-sm md:text-base rounded focus:outline-none transition-all ${className} flex justify-center items-center`}
+      className={`py-2 px-2 md:px-4 text-sm md:text-base rounded focus:outline-none transition-all disabled:bg-gray-400 disabled:border-gray-400 disabled:cursor-not-allowed ${className} flex justify-center items-center`}
       {...props}
     >
       {children}
@@ -9,7 +9,7 @@ export function BaseButton({ children, className = "", ...props }) {
   );
 }
 
-export function PrimaryButton({ label, className="", icon, ...props}) {
+export function PrimaryButton({ label, className = "", icon, ...props }) {
   return (
     <BaseButton
       className={`text-white bg-primary900 border border-primary900 hover:bg-primary  ${className}`}
@@ -92,13 +92,9 @@ export function DirectionButton({ icon, onClick, ...props }) {
 
 export function TabButton({ label, className = "", icon, ...props }) {
   return (
-    <BaseButton
-      className={`text-gray-600 ${className}`}
-      {...props}
-    >
+    <BaseButton className={`text-gray-600 ${className}`} {...props}>
       {icon && <span className={label ? "mr-2" : ""}>{icon}</span>}
       {label}
     </BaseButton>
   );
 }
-

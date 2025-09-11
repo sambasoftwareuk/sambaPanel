@@ -1,76 +1,59 @@
-// app/_molecules/TitleEditor.jsx
 "use client";
-import { useState } from "react";
+import { usePageEdit } from "../context/PageEditProvider";
+import { useState, useEffect } from "react";
 import EditButton from "../_atoms/EditButton";
+import XButton from "../_atoms/XButton";
+import { OutlinedButton, PrimaryButton } from "../_atoms/buttons";
 
-export default function TitleEditor({
-  pageId,
-  locale = "tr-TR",
-  initialTitle = "",
-  className = "",
-}) {
+export default function TitleEditor({ className = "" }) {
+  const { title, setTitle, resetTitle } = usePageEdit();
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState(initialTitle);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
+  const [draftTitle, setDraftTitle] = useState(title);
 
-  async function save() {
-    setSaving(true);
-    setError("");
-    try {
-      const res = await fetch(`/api/pages/${pageId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ locale, title }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data?.error || "Kaydedilemedi");
-      }
-      // sayfadaki başlığı da hemen güncelle
-      // (basitçe local state; istersen router.refresh() da yapabilirsin)
-      setOpen(false);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setSaving(false);
+  // Whenever modal opens, reset draft to current title
+  useEffect(() => {
+    if (open) {
+      setDraftTitle(title);
     }
+  }, [open, title]);
+
+  function handleSave() {
+    setTitle(draftTitle); // commit changes to global state
+    setOpen(false);
+  }
+
+  function handleCancel() {
+    setOpen(false); // just close, discard draft
   }
 
   return (
     <>
-      <EditButton
-        onClick={() => setOpen(true)}
-        className={className}
-        size="small"
-      />
+      <div className=" flex items-center gap-1">
+        <EditButton
+          onClick={() => setOpen(true)}
+          className={className}
+          size="small"
+        />
+        <XButton onClick={resetTitle} />
+      </div>
 
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-full max-w-md rounded-xl bg-white p-4 shadow-lg">
             <h2 className="mb-3 text-lg font-semibold">Başlığı Düzenle</h2>
             <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={draftTitle}
+              onChange={(e) => setDraftTitle(e.target.value)}
               className="w-full rounded border px-3 py-2"
               placeholder="Başlık"
             />
-            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
             <div className="mt-4 flex justify-end gap-2">
-              <button
-                onClick={() => setOpen(false)}
-                className="rounded border px-3 py-1"
-                disabled={saving}
-              >
-                Vazgeç
-              </button>
-              <button
-                onClick={save}
-                className="rounded bg-black px-3 py-1 text-white disabled:opacity-60"
-                disabled={saving}
-              >
-                {saving ? "Kaydediliyor..." : "Kaydet"}
-              </button>
+              <OutlinedButton label="Vazgeç" onClick={handleCancel} />
+              <PrimaryButton
+                label="Kaydet "
+                onClick={handleSave}
+                className="bg-black text-white"
+              />
             </div>
           </div>
         </div>
