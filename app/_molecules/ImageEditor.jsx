@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { usePageEdit } from "../context/PageEditProvider";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
-import { OutlinedButton, PrimaryButton } from "../_atoms/buttons";
+import BodyEditorModal from "./BodyEditorModal";
 
 export default function ImageEditor({
   initialUrl = "/5.jpg",
@@ -21,49 +21,22 @@ export default function ImageEditor({
     resetHero,
   } = usePageEdit();
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("gallery"); // gallery, upload, url
   const [url, setUrl] = useState(initialUrl);
   const [alt, setAlt] = useState(initialAlt);
   const [previewOk, setPreviewOk] = useState(true);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
-  const [gallery, setGallery] = useState([]);
-  const [loadingGallery, setLoadingGallery] = useState(false);
-  const fileInputRef = useRef(null);
-  const dropZoneRef = useRef(null);
 
-  // Galeri yükle
-  const loadGallery = async () => {
-    setLoadingGallery(true);
-    try {
-      const res = await fetch("/api/media?limit=50");
-      const data = await res.json();
-      setGallery(data.media || []);
-    } catch (e) {
-      console.error("Galeri yüklenemedi:", e);
-    } finally {
-      setLoadingGallery(false);
-    }
-  };
-
-  // Modal açıldığında galeri yükle
+  // Modal açıldığında state'i güncelle
   useEffect(() => {
     if (open) {
-      loadGallery();
       setUrl(heroUrl || initialUrl);
       setAlt(heroAlt || initialAlt);
       setError("");
       setPreviewOk(true);
     }
   }, [open, heroUrl, heroAlt, initialUrl, initialAlt]);
-
-  // Galeri resmi seç
-  const selectFromGallery = (mediaItem) => {
-    setUrl(mediaItem.url);
-    setAlt(mediaItem.alt_text || "");
-    setPreviewOk(true);
-  };
 
   // URL kontrolü
   useEffect(() => {
@@ -91,28 +64,6 @@ export default function ImageEditor({
     };
   }, [open, url]);
 
-  // Sürükle-bırak işlemleri
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      await handleFileUpload(files[0]);
-    }
-  };
-
-  const handleFileSelect = async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      await handleFileUpload(file);
-    }
-  };
 
   const handleFileUpload = async (file) => {
     if (!file.type.startsWith("image/")) {
@@ -184,84 +135,6 @@ export default function ImageEditor({
     setOpen(false);
   }
 
-  // Tab içerikleri
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "gallery":
-        return (
-          <div className="max-h-64 overflow-y-auto">
-            {loadingGallery ? (
-              <p className="text-sm text-gray-500 text-center py-4">
-                Galeri yükleniyor...
-              </p>
-            ) : (
-              <div className="grid grid-cols-4 gap-2">
-                {gallery.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => selectFromGallery(item)}
-                    className={`cursor-pointer rounded border-2 p-1 ${
-                      url === item.url ? "border-blue-500" : "border-gray-200"
-                    }`}
-                  >
-                    <img
-                      src={item.url}
-                      alt={item.alt_text || "Galeri"}
-                      className="w-full h-16 object-cover rounded"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-
-      case "upload":
-        return (
-          <div
-            ref={dropZoneRef}
-            onDragOver={handleDragOver}
-            onDrop={handleDrop}
-            className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-gray-400"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-            {uploading ? (
-              <p className="text-sm text-gray-500">Yükleniyor...</p>
-            ) : (
-              <div>
-                <p className="text-sm text-gray-600 mb-2">
-                  Resmi buraya sürükleyin veya tıklayın
-                </p>
-                <p className="text-xs text-gray-500">
-                  JPG, PNG, GIF desteklenir
-                </p>
-              </div>
-            )}
-          </div>
-        );
-
-      case "url":
-        return (
-          <input
-            type="url"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="https://..."
-            className="w-full rounded border px-3 py-2 text-sm"
-          />
-        );
-
-      default:
-        return null;
-    }
-  };
 
   return (
     <>
@@ -274,106 +147,24 @@ export default function ImageEditor({
         <XButton onClick={resetHero} />
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
-          <div className="w-full max-w-2xl rounded-xl bg-white p-5 shadow-2xl border">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-lg font-semibold">Görseli Düzenle</h2>
-              <button
-                onClick={() => setOpen(false)}
-                className="rounded border px-3 py-1 text-sm"
-              >
-                ✖
-              </button>
-            </div>
-
-            {/* Tab'lar */}
-            <div className="flex border-b mb-4">
-              {[
-                { id: "gallery", label: "Galeri" },
-                { id: "upload", label: "Upload" },
-                { id: "url", label: "URL" },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 text-sm font-medium border-b-2 ${
-                    activeTab === tab.id
-                      ? "border-blue-500 text-blue-600"
-                      : "border-transparent text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Tab içeriği */}
-            <div className="mb-4">{renderTabContent()}</div>
-
-            {/* Alt metin */}
-            <label className="text-sm block mb-4">
-              Alt Metin (SEO)
-              <input
-                type="text"
-                value={alt}
-                onChange={(e) => setAlt(e.target.value)}
-                placeholder="Örn. Şirketimiz üretim tesisi"
-                className="mt-1 w-full rounded border px-3 py-2 text-sm"
-              />
-            </label>
-
-            {/* Önizleme */}
-            <div className="mb-4">
-              <p className="text-sm text-gray-700 mb-2">Önizleme</p>
-              <div className="border rounded p-2 grid place-items-center min-h-[200px]">
-                {!url && (
-                  <span className="text-xs text-gray-500">
-                    Resim seçin veya URL girin
-                  </span>
-                )}
-                {url && checking && (
-                  <span className="text-xs text-gray-500">
-                    Kontrol ediliyor...
-                  </span>
-                )}
-                {url && !checking && previewOk && (
-                  <img
-                    src={url}
-                    alt={alt || "Önizleme"}
-                    className="max-h-48 max-w-full rounded object-cover"
-                  />
-                )}
-                {url && !checking && !previewOk && (
-                  <span className="text-xs text-red-600">
-                    Görsel yüklenemedi. URL'yi kontrol edin.
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
-
-            <div className="flex justify-between">
-              <button
-                onClick={clearImage}
-                className="rounded border px-3 py-1 text-sm"
-              >
-                Görseli Kaldır
-              </button>
-              <div className="flex gap-2">
-                <OutlinedButton label="Vazgeç" onClick={() => setOpen(false)} />
-                <PrimaryButton
-                  label="Uygula"
-                  onClick={apply}
-                  disabled={uploading || !url}
-                  className="bg-black text-white disabled:opacity-50"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <BodyEditorModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        mode="image"
+        imageUrl={url}
+        imageAlt={alt}
+        onImageUrlChange={setUrl}
+        onImageAltChange={setAlt}
+        onImageSelect={(selectedUrl) => {
+          setUrl(selectedUrl);
+          setPreviewOk(true);
+        }}
+        onImageUpload={handleFileUpload}
+        onSave={apply}
+        onClearImage={clearImage}
+        saving={uploading}
+        error={error}
+      />
     </>
   );
 }
