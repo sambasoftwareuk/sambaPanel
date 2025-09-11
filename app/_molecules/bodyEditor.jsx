@@ -164,6 +164,11 @@ export default function BodyEditor({ className = "" }) {
       // Context'i güncelle (local state)
       setBodyHtml(html);
       
+      // Editor'ın içeriğini de güncelle
+      if (editor) {
+        editor.commands.setContent(html, true);
+      }
+      
       // Pending images'ları temizle
       setPendingImages([]);
       
