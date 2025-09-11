@@ -38,9 +38,9 @@ export async function POST(request) {
     // Dosya içeriğini oku
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    
+
     // Dosya hash'i oluştur (duplicate kontrolü için)
-    const fileHash = createHash('md5').update(buffer).digest('hex');
+    const fileHash = createHash("md5").update(buffer).digest("hex");
     const fileExtension = file.name.split(".").pop();
     const fileName = `image_${fileHash}.${fileExtension}`;
     const filePath = join(uploadsDir, fileName);

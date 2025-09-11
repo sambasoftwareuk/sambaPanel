@@ -25,6 +25,7 @@ export default function BodyEditor({ className = "" }) {
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
+  const [pendingImages, setPendingImages] = useState([]); // Upload edilmeyi bekleyen resimler
 
   useEffect(() => setMounted(true), []);
 
@@ -73,8 +74,8 @@ export default function BodyEditor({ className = "" }) {
     }
   }, [editor, open]);
 
-  // Resmi sunucuya yükle ve editöre ekle
-  const handleImageFile = async (file) => {
+  // Resmi preview olarak editöre ekle (upload etme)
+  const handleImageFile = (file) => {
     if (!file.type.startsWith("image/")) {
       alert("Lütfen sadece resim dosyası seçin");
       return;
@@ -87,56 +88,84 @@ export default function BodyEditor({ className = "" }) {
       return;
     }
 
-    try {
-      // FormData oluştur
-      const formData = new FormData();
-      formData.append("file", file);
-
-      // Sunucuya yükle
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Resim yüklenemedi");
-      }
-
-      const result = await response.json();
-
-      // Media API'ye kaydet (gallery için) - duplicate kontrolü yapıyor
-      const mediaResponse = await fetch("/api/media", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          url: result.url, 
-          alt_text: "Yüklenen resim" 
-        }),
-      });
-
-      if (!mediaResponse.ok) {
-        console.warn("Media kaydı başarısız, ama resim yüklendi");
-      }
-
-      // URL ile resmi editöre ekle
-      const imageHtml = `<img src="${result.url}" alt="Yüklenen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;
+    // FileReader ile preview oluştur
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const previewUrl = e.target.result;
+      
+      // Pending images listesine ekle
+      const imageId = `pending_${Date.now()}`;
+      setPendingImages(prev => [...prev, { id: imageId, file, previewUrl }]);
+      
+      // Preview URL ile resmi editöre ekle
+      const imageHtml = `<img src="${previewUrl}" alt="Yüklenen resim" data-pending-id="${imageId}" style="max-width: 100%; height: auto; max-height: 400px;" />`;
       const pos = editor.state.selection.from;
       editor.chain().focus().insertContentAt(pos, imageHtml).run();
-    } catch (error) {
-      console.error("Resim yükleme hatası:", error);
-      alert("Resim yüklenirken hata oluştu");
-    }
+    };
+    reader.readAsDataURL(file);
   };
 
-  function save() {
+  async function save() {
     if (!editor) return;
     setSaving(true);
     setError("");
+    
     try {
-      const html = editor.getHTML();
-
-      // Context'i güncelle (local state) - API call yok!
+      let html = editor.getHTML();
+      
+      // Pending images'ları upload et ve URL'leri değiştir
+      for (const pendingImage of pendingImages) {
+        try {
+          // Upload et
+          const formData = new FormData();
+          formData.append("file", pendingImage.file);
+          
+          const response = await fetch("/api/upload", {
+            method: "POST",
+            body: formData,
+          });
+          
+          if (!response.ok) {
+            throw new Error("Resim yüklenemedi");
+          }
+          
+          const result = await response.json();
+          
+          // Media API'ye kaydet
+          await fetch("/api/media", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              url: result.url, 
+              alt_text: "Yüklenen resim" 
+            }),
+          });
+          
+          // HTML'deki preview URL'ini gerçek URL ile değiştir
+          html = html.replace(
+            new RegExp(`data-pending-id="${pendingImage.id}"`, 'g'),
+            `src="${result.url}"`
+          );
+          html = html.replace(
+            new RegExp(`src="${pendingImage.previewUrl}"`, 'g'),
+            `src="${result.url}"`
+          );
+          
+        } catch (error) {
+          console.error("Resim upload hatası:", error);
+          // Hata durumunda preview URL'ini kaldır
+          html = html.replace(
+            new RegExp(`<img[^>]*data-pending-id="${pendingImage.id}"[^>]*>`, 'g'),
+            ''
+          );
+        }
+      }
+      
+      // Context'i güncelle (local state)
       setBodyHtml(html);
+      
+      // Pending images'ları temizle
+      setPendingImages([]);
       
       setOpen(false);
     } catch (e) {
@@ -157,17 +186,20 @@ export default function BodyEditor({ className = "" }) {
         <XButton onClick={resetBody} />
       </div>
 
-      <BodyEditorModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        editor={editor}
-        htmlContent={htmlContent}
-        setHtmlContent={setHtmlContent}
-        onImageUpload={handleImageFile}
-        onSave={save}
-        saving={saving}
-        error={error}
-      />
+        <BodyEditorModal
+          isOpen={open}
+          onClose={() => {
+            setOpen(false);
+            setPendingImages([]); // Modal kapatıldığında pending images'ları temizle
+          }}
+          editor={editor}
+          htmlContent={htmlContent}
+          setHtmlContent={setHtmlContent}
+          onImageUpload={handleImageFile}
+          onSave={save}
+          saving={saving}
+          error={error}
+        />
     </>
   );
 }
