@@ -31,9 +31,9 @@ const page = () => {
         title="Stay One Step Ahead"
         subtitle="Achieve success by learning the most up-to-date skills. Courses starting at just €11.99! Offer ends May 15th."
         primaryLabel="Start Now"
-        onPrimaryClick={() => console.log("Start clicked")}
+        onPrimaryClick={() => {}}
         secondaryLabel="Learn More"
-        onSecondaryClick={() => console.log("Learn More clicked")}
+        onSecondaryClick={() => {}}
       />
       <TestimonialCard
         quote="The Empower gives you the ability to be persistent. I learned exactly what I needed to know in the real world. It helped me sell myself to get a new role."

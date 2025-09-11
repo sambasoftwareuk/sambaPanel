@@ -7,15 +7,24 @@ const PageEditContext = createContext(null);
 export function PageEditProvider({
   initialTitle,
   initialBody,
+  initialHeroUrl,
+  initialHeroAlt,
+  initialHeroMediaId,
   pageId,
   locale,
   children,
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [bodyHtml, setBodyHtml] = useState(initialBody);
+  const [heroUrl, setHeroUrl] = useState(initialHeroUrl);
+  const [heroAlt, setHeroAlt] = useState(initialHeroAlt);
+  const [heroMediaId, setHeroMediaId] = useState(initialHeroMediaId);
   const [baseline, setBaseline] = useState({
     title: initialTitle,
     bodyHtml: initialBody,
+    heroUrl: initialHeroUrl,
+    heroAlt: initialHeroAlt,
+    heroMediaId: initialHeroMediaId,
   });
   const [saving, setSaving] = useState(false); // ✅ added saving state
 
@@ -25,13 +34,30 @@ export function PageEditProvider({
   function resetBody() {
     setBodyHtml(baseline.bodyHtml);
   }
+  function resetHero() {
+    setHeroUrl(baseline.heroUrl);
+    setHeroAlt(baseline.heroAlt);
+    setHeroMediaId(baseline.heroMediaId);
+  }
 
   const isDirty = useMemo(
-    () => title !== baseline.title || bodyHtml !== baseline.bodyHtml,
-    [title, bodyHtml, baseline]
+    () =>
+      title !== baseline.title ||
+      bodyHtml !== baseline.bodyHtml ||
+      heroUrl !== baseline.heroUrl ||
+      heroAlt !== baseline.heroAlt ||
+      heroMediaId !== baseline.heroMediaId,
+    [title, bodyHtml, heroUrl, heroAlt, heroMediaId, baseline]
   );
 
-  const markSaved = () => setBaseline({ title, bodyHtml });
+  const markSaved = () =>
+    setBaseline({
+      title,
+      bodyHtml,
+      heroUrl,
+      heroAlt,
+      heroMediaId,
+    });
 
   async function handleSave() {
     if (!isDirty) return;
@@ -40,7 +66,12 @@ export function PageEditProvider({
       const res = await fetch(`/api/pages/${pageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content_html: bodyHtml, locale }),
+        body: JSON.stringify({
+          title,
+          content_html: bodyHtml,
+          hero_media_id: heroMediaId,
+          locale,
+        }),
       });
       if (!res.ok) throw new Error("API error");
       markSaved();
@@ -58,12 +89,19 @@ export function PageEditProvider({
         setTitle,
         bodyHtml,
         setBodyHtml,
+        heroUrl,
+        setHeroUrl,
+        heroAlt,
+        setHeroAlt,
+        heroMediaId,
+        setHeroMediaId,
         isDirty,
         saving,
         handleSave,
 
         resetTitle,
         resetBody,
+        resetHero,
       }}
     >
       {children}
