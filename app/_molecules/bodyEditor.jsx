@@ -104,8 +104,8 @@ export default function BodyEditor({ className = "" }) {
 
       const result = await response.json();
 
-      // Media API'ye kaydet (gallery için)
-      await fetch("/api/media", {
+      // Media API'ye kaydet (gallery için) - duplicate kontrolü yapıyor
+      const mediaResponse = await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -113,6 +113,10 @@ export default function BodyEditor({ className = "" }) {
           alt_text: "Yüklenen resim" 
         }),
       });
+
+      if (!mediaResponse.ok) {
+        console.warn("Media kaydı başarısız, ama resim yüklendi");
+      }
 
       // URL ile resmi editöre ekle
       const imageHtml = `<img src="${result.url}" alt="Yüklenen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;

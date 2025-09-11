@@ -28,7 +28,9 @@ export default function BodyEditorModal({
   onClearImage = () => {},
 }) {
   const [showHtml, setShowHtml] = useState(false);
-  const [activeTab, setActiveTab] = useState(mode === "body" ? "visual" : "gallery");
+  const [activeTab, setActiveTab] = useState(
+    mode === "body" ? "visual" : "gallery"
+  );
 
   if (!isOpen) return null;
 
@@ -67,7 +69,7 @@ export default function BodyEditorModal({
 
         {/* Tab'lar */}
         <div className="flex border-b mb-4">
-          {(mode === "body" 
+          {(mode === "body"
             ? [
                 { id: "visual", label: "Görsel Editör" },
                 { id: "html", label: "HTML Kodu" },
@@ -103,7 +105,7 @@ export default function BodyEditorModal({
 
         {/* Tab Content */}
         {activeTab === "gallery" ? (
-          <ImageGallery 
+          <ImageGallery
             onImageSelect={(url) => {
               if (mode === "body" && editor) {
                 const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
@@ -120,9 +122,7 @@ export default function BodyEditorModal({
               <p className="text-sm text-gray-600 mb-2">
                 Resmi buraya sürükleyin veya tıklayın
               </p>
-              <p className="text-xs text-gray-500">
-                JPG, PNG, GIF desteklenir
-              </p>
+              <p className="text-xs text-gray-500">JPG, PNG, GIF desteklenir</p>
             </div>
           </DragDropZone>
         ) : activeTab === "url" ? (
@@ -190,16 +190,26 @@ export default function BodyEditorModal({
         {/* Action Buttons */}
         <div className="mt-4 flex justify-between">
           {mode === "image" && (
-            <OutlinedButton 
-              label="Görseli Kaldır" 
-              onClick={onClearImage} 
-              disabled={saving} 
+            <OutlinedButton
+              label="Görseli Kaldır"
+              onClick={onClearImage}
+              disabled={saving}
             />
           )}
           <div className="flex gap-2 ml-auto">
-            <OutlinedButton label="Vazgeç" onClick={onClose} disabled={saving} />
+            <OutlinedButton
+              label="Vazgeç"
+              onClick={onClose}
+              disabled={saving}
+            />
             <PrimaryButton
-              label={saving ? "Kaydediliyor..." : (mode === "body" ? "Kaydet" : "Uygula")}
+              label={
+                saving
+                  ? "Kaydediliyor..."
+                  : mode === "body"
+                  ? "Kaydet"
+                  : "Uygula"
+              }
               onClick={onSave}
               disabled={saving || (mode === "body" && !editor)}
               className="bg-black text-white disabled:opacity-60"

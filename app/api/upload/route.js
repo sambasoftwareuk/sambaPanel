@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 import { existsSync } from "fs";
+import { createHash } from "crypto";
 
 export async function POST(request) {
   try {
@@ -34,18 +35,28 @@ export async function POST(request) {
       await mkdir(uploadsDir, { recursive: true });
     }
 
-    // Benzersiz dosya adı oluştur
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(2, 8);
-    const fileExtension = file.name.split(".").pop();
-    const fileName = `image_${timestamp}_${randomString}.${fileExtension}`;
-
-    // Dosya yolunu oluştur
-    const filePath = join(uploadsDir, fileName);
-
-    // Dosyayı kaydet
+    // Dosya içeriğini oku
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    
+    // Dosya hash'i oluştur (duplicate kontrolü için)
+    const fileHash = createHash('md5').update(buffer).digest('hex');
+    const fileExtension = file.name.split(".").pop();
+    const fileName = `image_${fileHash}.${fileExtension}`;
+    const filePath = join(uploadsDir, fileName);
+
+    // Eğer dosya zaten varsa, yeni dosya oluşturma
+    if (existsSync(filePath)) {
+      const imageUrl = `/uploads/${fileName}`;
+      return NextResponse.json({
+        success: true,
+        url: imageUrl,
+        fileName: fileName,
+        cached: true,
+      });
+    }
+
+    // Dosyayı kaydet
     await writeFile(filePath, buffer);
 
     // URL'i döndür
