@@ -117,39 +117,41 @@ export default function BodyEditor({ className = "" }) {
       for (const pendingImage of pendingImages) {
         try {
           // Upload et
-          const formData = new FormData();
+      const formData = new FormData();
           formData.append("file", pendingImage.file);
-          
-          const response = await fetch("/api/upload", {
-            method: "POST",
-            body: formData,
-          });
-          
-          if (!response.ok) {
-            throw new Error("Resim yüklenemedi");
-          }
-          
-          const result = await response.json();
-          
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Resim yüklenemedi");
+      }
+
+      const result = await response.json();
+
           // Media API'ye kaydet
           await fetch("/api/media", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
               url: result.url, 
               alt_text: "Yüklenen resim" 
-            }),
-          });
+        }),
+      });
           
           // HTML'deki preview URL'ini gerçek URL ile değiştir
-          html = html.replace(
-            new RegExp(`src="${pendingImage.previewUrl}"`, 'g'),
-            `src="${result.url}"`
-          );
-          html = html.replace(
-            new RegExp(`data-pending-id="${pendingImage.id}"`, 'g'),
-            ''
-          );
+          // Önce data-pending-id ile bulup değiştir
+          const pendingIdRegex = new RegExp(`data-pending-id="${pendingImage.id}"`, 'g');
+          const srcRegex = new RegExp(`src="[^"]*"`, 'g');
+          
+          // data-pending-id'li img tag'ini bul
+          const imgTagRegex = new RegExp(`<img[^>]*data-pending-id="${pendingImage.id}"[^>]*>`, 'g');
+          html = html.replace(imgTagRegex, (match) => {
+            // src attribute'unu değiştir
+            return match.replace(srcRegex, `src="${result.url}"`).replace(pendingIdRegex, '');
+          });
           
         } catch (error) {
           console.error("Resim upload hatası:", error);
@@ -183,13 +185,13 @@ export default function BodyEditor({ className = "" }) {
   return (
     <>
       <div className="flex items-center gap-1">
-        <EditButton
-          onClick={() => setOpen(true)}
-          className={className}
-          size="small"
-        />
+      <EditButton
+        onClick={() => setOpen(true)}
+        className={className}
+        size="small"
+      />
         <XButton onClick={resetBody} />
-      </div>
+            </div>
 
         <BodyEditorModal
           isOpen={open}
