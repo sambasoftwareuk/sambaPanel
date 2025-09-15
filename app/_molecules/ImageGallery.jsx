@@ -37,14 +37,16 @@ export default function ImageGallery({ onImageSelect, selectedUrl = "" }) {
             <div
               key={item.id}
               onClick={() => onImageSelect(item.id, item.url)}
-              className={`cursor-pointer rounded border-2 p-1 ${
-                selectedUrl === item.id ? "border-blue-500" : "border-gray-200"
+              className={`cursor-pointer rounded border-2 p-1 transition-colors ${
+                selectedUrl === item.id
+                  ? "border-blue-500"
+                  : "border-gray-200 hover:border-primary900"
               }`}
             >
               <img
                 src={item.url}
                 alt={item.alt_text || "Galeri"}
-                className="w-full h-16 object-cover rounded"
+                className="w-full h-20 object-contain rounded"
               />
             </div>
           ))}
