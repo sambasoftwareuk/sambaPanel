@@ -75,7 +75,11 @@ export default function BodyEditor({ className = "" }) {
   // Resim seçildiğinde editöre ekleme fonksiyonu
   const handleImageSelect = (imageUrl) => {
     if (editor && imageUrl) {
-      const imageHtml = `<img src="${imageUrl}" alt="Seçilen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;
+      // URL'den dosya adını çıkar ve alt text oluştur
+      const fileName = imageUrl.split("/").pop();
+      const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
+      const imageHtml = `<img src="${imageUrl}" alt="${altText}" style="max-width: 100%; height: auto; max-height: 400px;" />`;
       const pos = editor.state.selection.from;
       editor.chain().focus().insertContentAt(pos, imageHtml).run();
     }
@@ -104,18 +108,26 @@ export default function BodyEditor({ className = "" }) {
 
       const data = await res.json();
 
+      // Dosya adından alt text oluştur
+      const fileName = data.fileName || data.url.split("/").pop();
+      const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+
       // Media API'ye kaydet
       await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url: data.url,
-          alt_text: "Yüklenen resim",
+          alt_text: altText,
         }),
       });
 
-      // Resmi editöre ekle
-      handleImageSelect(data.url);
+      // Resmi editöre ekle (doğru alt text ile)
+      if (editor && data.url) {
+        const imageHtml = `<img src="${data.url}" alt="${altText}" style="max-width: 100%; height: auto; max-height: 400px;" />`;
+        const pos = editor.state.selection.from;
+        editor.chain().focus().insertContentAt(pos, imageHtml).run();
+      }
     } catch (e) {
       alert("Resim yüklenirken hata oluştu: " + e.message);
     }

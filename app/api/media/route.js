@@ -33,6 +33,15 @@ export async function POST(req) {
       return NextResponse.json({ error: "URL gerekli" }, { status: 400 });
     }
 
+    // Sıralı numaralandırma için sayaç bul
+    const existingMediaCount = await q(
+      `
+      SELECT COUNT(*) as count FROM media WHERE id LIKE 'sambaImage%'
+    `
+    );
+    const counter = (existingMediaCount[0]?.count || 0) + 1;
+    const mediaId = `sambaImage${counter.toString().padStart(2, "0")}`;
+
     // Önce aynı URL'de kayıt var mı kontrol et
     const existingMedia = await q(
       `
@@ -59,17 +68,17 @@ export async function POST(req) {
         updated: true,
       });
     } else {
-      // Aynı URL yoksa, yeni kayıt oluştur
+      // Aynı URL yoksa, yeni kayıt oluştur (sıralı ID ile)
       const result = await q(
         `
-        INSERT INTO media (url, alt_text, created_at)
-        VALUES (?, ?, NOW())
+        INSERT INTO media (id, url, alt_text, created_at)
+        VALUES (?, ?, ?, NOW())
       `,
-        [url, alt_text || null]
+        [mediaId, url, alt_text || null]
       );
 
       return NextResponse.json({
-        id: result.insertId,
+        id: mediaId,
         url,
         alt_text,
         created: true,

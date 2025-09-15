@@ -42,19 +42,48 @@ export async function POST(request) {
     // Dosya hash'i oluştur (duplicate kontrolü için)
     const fileHash = createHash("md5").update(buffer).digest("hex");
     const fileExtension = file.name.split(".").pop();
-    const fileName = `image_${fileHash}.${fileExtension}`;
-    const filePath = join(uploadsDir, fileName);
 
-    // Eğer dosya zaten varsa, yeni dosya oluşturma
-    if (existsSync(filePath)) {
-      const imageUrl = `/uploads/${fileName}`;
-      return NextResponse.json({
-        success: true,
-        url: imageUrl,
-        fileName: fileName,
-        cached: true,
-      });
+    // Mevcut dosyaları kontrol et
+    const existingFiles = await import("fs").then((fs) =>
+      fs.promises.readdir(uploadsDir).catch(() => [])
+    );
+
+    // Aynı hash'e sahip dosya var mı kontrol et (mevcut dosyaların içeriğini kontrol et)
+    for (const existingFile of existingFiles) {
+      try {
+        const existingFilePath = join(uploadsDir, existingFile);
+        const existingBuffer = await import("fs").then((fs) =>
+          fs.promises.readFile(existingFilePath)
+        );
+        const existingHash = createHash("md5")
+          .update(existingBuffer)
+          .digest("hex");
+
+        if (existingHash === fileHash) {
+          const imageUrl = `/uploads/${existingFile}`;
+          return NextResponse.json({
+            success: true,
+            url: imageUrl,
+            fileName: existingFile,
+            cached: true,
+          });
+        }
+      } catch (e) {
+        // Dosya okunamazsa devam et
+        continue;
+      }
     }
+
+    // Sıralı numaralandırma için sayaç bul
+    const sambaImageFiles = existingFiles.filter((f) =>
+      f.startsWith("sambaImage")
+    );
+    const counter = sambaImageFiles.length + 1;
+
+    const fileName = `sambaImage${counter
+      .toString()
+      .padStart(2, "0")}.${fileExtension}`;
+    const filePath = join(uploadsDir, fileName);
 
     // Dosyayı kaydet
     await writeFile(filePath, buffer);
