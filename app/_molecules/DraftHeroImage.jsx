@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+// import Image from "next/image";
 import { usePageEdit } from "../context/PageEditProvider";
 
 export default function DraftHeroImage({
@@ -18,7 +18,7 @@ export default function DraftHeroImage({
   const id = heroMediaId || null;
 
   return (
-    <Image
+    <img
       src={url}
       alt={alt}
       imageid={id}

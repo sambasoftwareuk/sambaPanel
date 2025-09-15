@@ -9,13 +9,6 @@ import Image from "@tiptap/extension-image";
 import EditButton from "../_atoms/EditButton";
 import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
-import {
-  IconOnlyButton,
-  OutlinedButton,
-  PrimaryButton,
-} from "../_atoms/buttons";
-import Icon from "../_atoms/Icon";
-import { LineXIcon } from "../_atoms/Icons";
 import BodyEditorModal from "./BodyEditorModal";
 
 export default function BodyEditor({ className = "" }) {
@@ -25,6 +18,7 @@ export default function BodyEditor({ className = "" }) {
   const [error, setError] = useState("");
   const [mounted, setMounted] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
+  const [imageModalOpen, setImageModalOpen] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -73,58 +67,57 @@ export default function BodyEditor({ className = "" }) {
     }
   }, [editor, open]);
 
-  // Resmi sunucuya yükle ve editöre ekle
-  const handleImageFile = async (file) => {
-    if (!file.type.startsWith("image/")) {
-      alert("Lütfen sadece resim dosyası seçin");
-      return;
-    }
+  // Resim seçimi için modal açma fonksiyonu
+  const openImageModal = () => {
+    setImageModalOpen(true);
+  };
 
-    // Dosya boyutu kontrolü (5MB limit)
-    const maxSize = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSize) {
-      alert("Resim dosyası çok büyük. Maksimum 5MB olmalıdır.");
+  // Resim seçildiğinde editöre ekleme fonksiyonu
+  const handleImageSelect = (imageUrl) => {
+    if (editor && imageUrl) {
+      const imageHtml = `<img src="${imageUrl}" alt="Seçilen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;
+      const pos = editor.state.selection.from;
+      editor.chain().focus().insertContentAt(pos, imageHtml).run();
+    }
+    setImageModalOpen(false);
+  };
+
+  // Resim yükleme fonksiyonu (ImageEditor'dan kopyalandı)
+  const handleImageUpload = async (file) => {
+    if (!file.type.startsWith("image/")) {
+      alert("Sadece resim dosyaları kabul edilir");
       return;
     }
 
     try {
-      // FormData oluştur
       const formData = new FormData();
       formData.append("file", file);
 
-      // Sunucuya yükle
-      const response = await fetch("/api/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("Resim yüklenemedi");
+      if (!res.ok) {
+        throw new Error("Upload başarısız");
       }
 
-      const result = await response.json();
+      const data = await res.json();
 
-      // Media API'ye kaydet (gallery için) - duplicate kontrolü yapıyor
-      const mediaResponse = await fetch("/api/media", {
+      // Media API'ye kaydet
+      await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          url: result.url, 
-          alt_text: "Yüklenen resim" 
+        body: JSON.stringify({
+          url: data.url,
+          alt_text: "Yüklenen resim",
         }),
       });
 
-      if (!mediaResponse.ok) {
-        console.warn("Media kaydı başarısız, ama resim yüklendi");
-      }
-
-      // URL ile resmi editöre ekle
-      const imageHtml = `<img src="${result.url}" alt="Yüklenen resim" style="max-width: 100%; height: auto; max-height: 400px;" />`;
-      const pos = editor.state.selection.from;
-      editor.chain().focus().insertContentAt(pos, imageHtml).run();
-    } catch (error) {
-      console.error("Resim yükleme hatası:", error);
-      alert("Resim yüklenirken hata oluştu");
+      // Resmi editöre ekle
+      handleImageSelect(data.url);
+    } catch (e) {
+      alert("Resim yüklenirken hata oluştu: " + e.message);
     }
   };
 
@@ -132,12 +125,13 @@ export default function BodyEditor({ className = "" }) {
     if (!editor) return;
     setSaving(true);
     setError("");
+
     try {
       const html = editor.getHTML();
 
-      // Context'i güncelle (local state) - API call yok!
+      // Sadece context'i güncelle (basit ve temiz)
       setBodyHtml(html);
-      
+
       setOpen(false);
     } catch (e) {
       setError(e.message);
@@ -149,25 +143,43 @@ export default function BodyEditor({ className = "" }) {
   return (
     <>
       <div className="flex items-center gap-1">
-      <EditButton
-        onClick={() => setOpen(true)}
-        className={className}
-        size="small"
-      />
-        <XButton onClick={resetBody} />
-            </div>
-
-        <BodyEditorModal
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          editor={editor}
-          htmlContent={htmlContent}
-          setHtmlContent={setHtmlContent}
-          onImageUpload={handleImageFile}
-          onSave={save}
-          saving={saving}
-          error={error}
+        <EditButton
+          onClick={() => setOpen(true)}
+          className={className}
+          size="small"
         />
+        <XButton onClick={resetBody} />
+      </div>
+
+      <BodyEditorModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        editor={editor}
+        htmlContent={htmlContent}
+        setHtmlContent={setHtmlContent}
+        onImageUpload={handleImageUpload}
+        onSave={save}
+        saving={saving}
+        error={error}
+        onOpenImageModal={openImageModal}
+      />
+
+      {/* Resim seçimi modal'ı */}
+      <BodyEditorModal
+        isOpen={imageModalOpen}
+        onClose={() => setImageModalOpen(false)}
+        mode="image"
+        imageUrl=""
+        imageAlt=""
+        onImageUrlChange={() => {}}
+        onImageAltChange={() => {}}
+        onImageSelect={(id, url) => handleImageSelect(url)}
+        onImageUpload={handleImageUpload}
+        onSave={() => setImageModalOpen(false)}
+        onClearImage={() => setImageModalOpen(false)}
+        saving={false}
+        error=""
+      />
     </>
   );
 }

@@ -2,7 +2,11 @@
 
 import ToolbarButton from "../_atoms/ToolbarButton";
 
-export default function RichTextToolbar({ editor, onImageUpload }) {
+export default function RichTextToolbar({
+  editor,
+  onImageUpload,
+  onOpenImageModal,
+}) {
   if (!editor) return null;
 
   return (
@@ -143,7 +147,7 @@ export default function RichTextToolbar({ editor, onImageUpload }) {
       </ToolbarButton>
 
       {/* Images */}
-      <ToolbarButton
+      {/* <ToolbarButton
         title="Resim Ekle (URL)"
         onClick={() => {
           const url = prompt("Resim URL'si:");
@@ -155,21 +159,14 @@ export default function RichTextToolbar({ editor, onImageUpload }) {
         }}
       >
         🖼️
-      </ToolbarButton>
+      </ToolbarButton> */}
 
       <ToolbarButton
-        title="Bilgisayardan Resim Yükle"
+        title="Resim Ekle"
         onClick={() => {
-          const input = document.createElement("input");
-          input.type = "file";
-          input.accept = "image/*";
-          input.onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-              onImageUpload(file);
-            }
-          };
-          input.click();
+          if (onOpenImageModal) {
+            onOpenImageModal();
+          }
         }}
       >
         📷

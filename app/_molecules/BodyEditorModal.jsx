@@ -26,6 +26,7 @@ export default function BodyEditorModal({
   onImageAltChange = () => {},
   onImageSelect = () => {},
   onClearImage = () => {},
+  onOpenImageModal = () => {},
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -73,12 +74,11 @@ export default function BodyEditorModal({
             ? [
                 { id: "visual", label: "Görsel Editör" },
                 { id: "html", label: "HTML Kodu" },
-                { id: "gallery", label: "Resim Galerisi" },
               ]
             : [
                 { id: "gallery", label: "Galeri" },
                 { id: "upload", label: "Upload" },
-                { id: "url", label: "URL" },
+                // { id: "url", label: "URL" },
               ]
           ).map((tab) => (
             <button
@@ -100,25 +100,43 @@ export default function BodyEditorModal({
 
         {/* Toolbar */}
         {editor && activeTab === "visual" && (
-          <RichTextToolbar editor={editor} onImageUpload={onImageUpload} />
+          <RichTextToolbar
+            editor={editor}
+            onImageUpload={onImageUpload}
+            onOpenImageModal={onOpenImageModal}
+          />
         )}
 
         {/* Tab Content */}
         {activeTab === "gallery" ? (
           <ImageGallery
-            onImageSelect={(url) => {
+            onImageSelect={(id, url) => {
               if (mode === "body" && editor) {
                 const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
                 const pos = editor.state.selection.from;
                 editor.chain().focus().insertContentAt(pos, imageHtml).run();
               } else if (mode === "image") {
-                onImageSelect(url);
+                onImageSelect(id, url);
               }
             }}
           />
         ) : activeTab === "upload" ? (
           <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
-            <div className="p-4 text-center">
+            <div
+              className="p-4 text-center cursor-pointer hover:bg-gray-50"
+              onClick={() => {
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = "image/*";
+                input.onchange = (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    onImageUpload(file);
+                  }
+                };
+                input.click();
+              }}
+            >
               <p className="text-sm text-gray-600 mb-2">
                 Resmi buraya sürükleyin veya tıklayın
               </p>
@@ -126,13 +144,16 @@ export default function BodyEditorModal({
             </div>
           </DragDropZone>
         ) : activeTab === "url" ? (
-          <input
-            type="url"
-            value={imageUrl}
-            onChange={(e) => onImageUrlChange(e.target.value)}
-            placeholder="https://..."
-            className="w-full rounded border px-3 py-2 text-sm"
-          />
+          // <input
+          //   type="url"
+          //   value={imageUrl}
+          //   onChange={(e) => onImageUrlChange(e.target.value)}
+          //   placeholder="https://..."
+          //   className="w-full rounded border px-3 py-2 text-sm"
+          // />
+          <div className="p-4 text-center text-gray-500">
+            URL özelliği geçici olarak devre dışı
+          </div>
         ) : (
           <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
             {showHtml ? (

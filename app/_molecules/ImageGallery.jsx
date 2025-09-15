@@ -36,9 +36,9 @@ export default function ImageGallery({ onImageSelect, selectedUrl = "" }) {
           {gallery.map((item) => (
             <div
               key={item.id}
-              onClick={() => onImageSelect(item.url)}
+              onClick={() => onImageSelect(item.id, item.url)}
               className={`cursor-pointer rounded border-2 p-1 ${
-                selectedUrl === item.url ? "border-blue-500" : "border-gray-200"
+                selectedUrl === item.id ? "border-blue-500" : "border-gray-200"
               }`}
             >
               <img

@@ -10,6 +10,19 @@ export default function DragDropZone({
 }) {
   const [isDragOver, setIsDragOver] = useState(false);
 
+  const handleClick = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = acceptTypes.join(",");
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        onFileDrop(file);
+      }
+    };
+    input.click();
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);

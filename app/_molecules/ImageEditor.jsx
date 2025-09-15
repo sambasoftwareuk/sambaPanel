@@ -64,7 +64,6 @@ export default function ImageEditor({
     };
   }, [open, url]);
 
-
   const handleFileUpload = async (file) => {
     if (!file.type.startsWith("image/")) {
       setError("Sadece resim dosyaları kabul edilir");
@@ -135,7 +134,6 @@ export default function ImageEditor({
     setOpen(false);
   }
 
-
   return (
     <>
       <div className="flex items-center gap-1">
@@ -155,7 +153,7 @@ export default function ImageEditor({
         imageAlt={alt}
         onImageUrlChange={setUrl}
         onImageAltChange={setAlt}
-        onImageSelect={(selectedUrl) => {
+        onImageSelect={(id, selectedUrl) => {
           setUrl(selectedUrl);
           setPreviewOk(true);
         }}
