@@ -6,9 +6,7 @@ module.exports = {
         custom: "843.75px",
       }, // özel kırılım
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
-        serif: ["var(--font-merriweather)", "serif"],
+        roboto: ["var(--font-roboto)", "sans-serif"],
       },
       colors: {
         primary: "#2dbcbc", // Cam göbeği tonu
