@@ -71,7 +71,21 @@ export default function ImageGallery({
   }, [temporarilyDeleted.length]);
 
   return (
-    <div className="max-h-64 overflow-y-auto">
+    <div className="max-h-64 overflow-y-auto p-2">
+      {/* Geçici silinen resimler varsa bilgi göster */}
+      {temporarilyDeleted.length > 0 && (
+        <div className="mt-4 p-3 bg-primary300 border border-primary500 rounded flex justify-between mb-2">
+          <p className="text-sm text-secondary400">
+            {temporarilyDeleted.length} resim silinmek üzere işaretlendi
+          </p>
+          <button
+            onClick={resetTemporaryDeletes}
+            className="mt-2 px-3 py-1 bg-secondary400 text-white text-sm rounded hover:bg-gray-600"
+          >
+            İptal Et
+          </button>
+        </div>
+      )}
       {loading ? (
         <p className="text-sm text-gray-500 text-center py-4">
           Galeri yükleniyor...
@@ -119,20 +133,6 @@ export default function ImageGallery({
         </div>
       )}
 
-      {/* Geçici silinen resimler varsa bilgi göster */}
-      {temporarilyDeleted.length > 0 && (
-        <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded">
-          <p className="text-sm text-yellow-800">
-            {temporarilyDeleted.length} resim silinmek üzere işaretlendi
-          </p>
-          <button
-            onClick={resetTemporaryDeletes}
-            className="mt-2 px-3 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
-          >
-            İptal Et
-          </button>
-        </div>
-      )}
 
       {/* Silme onay modalı */}
       {deleteConfirm && (

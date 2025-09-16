@@ -25,17 +25,20 @@ export default function BodyEditorModal({
   onImageUrlChange = () => {},
   onImageAltChange = () => {},
   onImageSelect = () => {},
-  onClearImage = () => {},
-  onOpenImageModal = () => {},
+  // onClearImage = () => {},
   onDeleteImage = () => {},
   deletedImages = [],
-  onApplyImageDeletes = () => {}, // Resim silme işlemlerini uygula
+  onApplyImageDeletes = {},
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
     mode === "body" ? "visual" : "gallery"
   );
   const [galleryActions, setGalleryActions] = useState(null);
+
+  // ✅ Yeni state: toolbar’daki inline panel için
+  const [showGallery, setShowGallery] = useState(false);
+  const [inlineGalleryTab, setInlineGalleryTab] = useState("gallery");
 
   if (!isOpen) return null;
 
@@ -82,7 +85,6 @@ export default function BodyEditorModal({
             : [
                 { id: "gallery", label: "Galeri" },
                 { id: "upload", label: "Upload" },
-                // { id: "url", label: "URL" },
               ]
           ).map((tab) => (
             <button
@@ -107,22 +109,86 @@ export default function BodyEditorModal({
           <RichTextToolbar
             editor={editor}
             onImageUpload={onImageUpload}
-            onOpenImageModal={onOpenImageModal}
+            // ✅ Modal açmak yerine inline panel aç/kapa
+            onOpenImageModal={() => setShowGallery((prev) => !prev)}
           />
+        )}
+
+        {/* ✅ Inline Gallery + Upload Panel */}
+        {showGallery && activeTab === "visual" && (
+          <div className="border rounded-lg p-3 my-3 bg-gray-50">
+            {/* Küçük tablar */}
+            <div className="flex border-b mb-3">
+              <button
+                onClick={() => setInlineGalleryTab("gallery")}
+                className={`px-3 py-1 text-sm border-b-2 ${
+                  inlineGalleryTab === "gallery"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500"
+                }`}
+              >
+                Galeri
+              </button>
+              <button
+                onClick={() => setInlineGalleryTab("upload")}
+                className={`px-3 py-1 text-sm border-b-2 ${
+                  inlineGalleryTab === "upload"
+                    ? "border-blue-500 text-blue-600"
+                    : "border-transparent text-gray-500"
+                }`}
+              >
+                Upload
+              </button>
+            </div>
+
+            {/* İçerik */}
+            {inlineGalleryTab === "gallery" ? (
+              <ImageGallery
+                onImageSelect={(id, url) => {
+                  if (editor) {
+                    const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
+                    const pos = editor.state.selection.from;
+                    editor.chain().focus().insertContentAt(pos, imageHtml).run();
+                  }
+                  setShowGallery(false); // seçimden sonra panel kapanır
+                }}
+                onDeleteImage={onDeleteImage}
+                deletedImages={deletedImages}
+                onApply={setGalleryActions}
+              />
+            ) : (
+              <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
+                <div
+                  className="p-4 text-center cursor-pointer hover:bg-gray-50"
+                  onClick={() => {
+                    const input = document.createElement("input");
+                    input.type = "file";
+                    input.accept = "image/*";
+                    input.onchange = (e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        onImageUpload(file);
+                      }
+                    };
+                    input.click();
+                  }}
+                >
+                  <p className="text-sm text-gray-600 mb-2">
+                    Resmi buraya sürükleyin veya tıklayın
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    JPG, PNG, GIF desteklenir
+                  </p>
+                </div>
+              </DragDropZone>
+            )}
+          </div>
         )}
 
         {/* Tab Content */}
         {activeTab === "gallery" ? (
           <ImageGallery
-            onImageSelect={(id, url) => {
-              if (mode === "body" && editor) {
-                const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
-                const pos = editor.state.selection.from;
-                editor.chain().focus().insertContentAt(pos, imageHtml).run();
-              } else if (mode === "image") {
-                onImageSelect(id, url);
-              }
-            }}
+            onImageSelect={(id, url) => onImageSelect(id, url)}
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
@@ -151,13 +217,6 @@ export default function BodyEditorModal({
             </div>
           </DragDropZone>
         ) : activeTab === "url" ? (
-          // <input
-          //   type="url"
-          //   value={imageUrl}
-          //   onChange={(e) => onImageUrlChange(e.target.value)}
-          //   placeholder="https://..."
-          //   className="w-full rounded border px-3 py-2 text-sm"
-          // />
           <div className="p-4 text-center text-gray-500">
             URL özelliği geçici olarak devre dışı
           </div>
@@ -182,53 +241,22 @@ export default function BodyEditorModal({
           </DragDropZone>
         )}
 
-        {/* Image Mode: Alt Text */}
-        {mode === "image" && (
-          <div className="mb-4">
-            <label className="text-sm block mb-2">
-              Alt Metin (SEO)
-              <input
-                type="text"
-                value={imageAlt}
-                onChange={(e) => onImageAltChange(e.target.value)}
-                placeholder="Örn. Şirketimiz üretim tesisi"
-                className="mt-1 w-full rounded border px-3 py-2 text-sm"
-              />
-            </label>
-          </div>
-        )}
-
-        {/* Image Mode: Preview */}
-        {mode === "image" && imageUrl && (
-          <div className="mb-4">
-            <p className="text-sm text-gray-700 mb-2">Önizleme</p>
-            <div className="border rounded p-2 grid place-items-center min-h-[200px]">
-              <img
-                src={imageUrl}
-                alt={imageAlt || "Önizleme"}
-                className="max-h-48 max-w-full rounded object-cover"
-              />
-            </div>
-          </div>
-        )}
-
         {/* Error Message */}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 
         {/* Action Buttons */}
         <div className="mt-4 flex justify-between">
-          {mode === "image" && (
+          {/* {mode === "image" && (
             <OutlinedButton
               label="Görseli Kaldır"
               onClick={onClearImage}
               disabled={saving}
             />
-          )}
+          )} */}
           <div className="flex gap-2 ml-auto">
             <OutlinedButton
               label="Vazgeç"
               onClick={() => {
-                // Modal kapanırken geçici silmeleri temizle
                 if (galleryActions && galleryActions.resetTemporaryDeletes) {
                   galleryActions.resetTemporaryDeletes();
                 }
@@ -245,11 +273,9 @@ export default function BodyEditorModal({
                   : "Uygula"
               }
               onClick={() => {
-                // Önce gallery'deki geçici silmeleri uygula
                 if (galleryActions && galleryActions.applyDeletes) {
                   galleryActions.applyDeletes();
                 }
-                // Sonra normal save işlemini yap
                 onSave();
               }}
               disabled={saving || (mode === "body" && !editor)}
