@@ -27,11 +27,15 @@ export default function BodyEditorModal({
   onImageSelect = () => {},
   onClearImage = () => {},
   onOpenImageModal = () => {},
+  onDeleteImage = () => {},
+  deletedImages = [],
+  onApplyImageDeletes = () => {}, // Resim silme işlemlerini uygula
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
     mode === "body" ? "visual" : "gallery"
   );
+  const [galleryActions, setGalleryActions] = useState(null);
 
   if (!isOpen) return null;
 
@@ -119,6 +123,9 @@ export default function BodyEditorModal({
                 onImageSelect(id, url);
               }
             }}
+            onDeleteImage={onDeleteImage}
+            deletedImages={deletedImages}
+            onApply={setGalleryActions}
           />
         ) : activeTab === "upload" ? (
           <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
@@ -220,7 +227,13 @@ export default function BodyEditorModal({
           <div className="flex gap-2 ml-auto">
             <OutlinedButton
               label="Vazgeç"
-              onClick={onClose}
+              onClick={() => {
+                // Modal kapanırken geçici silmeleri temizle
+                if (galleryActions && galleryActions.resetTemporaryDeletes) {
+                  galleryActions.resetTemporaryDeletes();
+                }
+                onClose();
+              }}
               disabled={saving}
             />
             <PrimaryButton
@@ -231,7 +244,14 @@ export default function BodyEditorModal({
                   ? "Kaydet"
                   : "Uygula"
               }
-              onClick={onSave}
+              onClick={() => {
+                // Önce gallery'deki geçici silmeleri uygula
+                if (galleryActions && galleryActions.applyDeletes) {
+                  galleryActions.applyDeletes();
+                }
+                // Sonra normal save işlemini yap
+                onSave();
+              }}
               disabled={saving || (mode === "body" && !editor)}
               className="bg-black text-white disabled:opacity-60"
             />

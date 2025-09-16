@@ -19,6 +19,8 @@ export default function ImageEditor({
     heroMediaId,
     setHeroMediaId,
     resetHero,
+    setDeletedImages,
+    deletedImages,
   } = usePageEdit();
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(initialUrl);
@@ -162,6 +164,9 @@ export default function ImageEditor({
         onClearImage={clearImage}
         saving={uploading}
         error={error}
+        onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
+        deletedImages={deletedImages}
+        onApplyImageDeletes={() => {}}
       />
     </>
   );

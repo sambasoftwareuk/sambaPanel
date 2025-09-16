@@ -92,3 +92,31 @@ export async function POST(req) {
     );
   }
 }
+
+export async function DELETE(req) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ error: "ID gerekli" }, { status: 400 });
+    }
+
+    // Media kaydını sil
+    const result = await q(
+      `
+      DELETE FROM media WHERE id = ?
+    `,
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return NextResponse.json({ error: "Media bulunamadı" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, deleted: true });
+  } catch (e) {
+    console.error("Media deletion error:", e);
+    return NextResponse.json({ error: "Media silinemedi" }, { status: 500 });
+  }
+}
