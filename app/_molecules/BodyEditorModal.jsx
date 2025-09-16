@@ -8,6 +8,8 @@ import DragDropZone from "./DragDropZone";
 import ImageGallery from "./ImageGallery";
 import { PrimaryButton, OutlinedButton } from "../_atoms/buttons";
 import { Header2 } from "../_atoms/Headers";
+import InlineTabButton from "../_atoms/InlineTabButton";
+import FileUploadPanel from "../_atoms/FileUploadPanel";
 
 export default function BodyEditorModal({
   isOpen,
@@ -25,10 +27,8 @@ export default function BodyEditorModal({
   onImageUrlChange = () => {},
   onImageAltChange = () => {},
   onImageSelect = () => {},
-  // onClearImage = () => {},
   onDeleteImage = () => {},
   deletedImages = [],
-  onApplyImageDeletes = {},
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -87,20 +87,15 @@ export default function BodyEditorModal({
                 { id: "upload", label: "Upload" },
               ]
           ).map((tab) => (
-            <button
+            <InlineTabButton
               key={tab.id}
+              label={tab.label}
+              isActive={activeTab === tab.id}
               onClick={() => {
                 setActiveTab(tab.id);
                 setShowHtml(tab.id === "html");
               }}
-              className={`px-4 py-2 text-sm font-medium border-b-2 ${
-                activeTab === tab.id
-                  ? "border-blue-500 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              {tab.label}
-            </button>
+            />
           ))}
         </div>
 
@@ -148,7 +143,11 @@ export default function BodyEditorModal({
                   if (editor) {
                     const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
                     const pos = editor.state.selection.from;
-                    editor.chain().focus().insertContentAt(pos, imageHtml).run();
+                    editor
+                      .chain()
+                      .focus()
+                      .insertContentAt(pos, imageHtml)
+                      .run();
                   }
                   setShowGallery(false); // seçimden sonra panel kapanır
                 }}
@@ -157,30 +156,7 @@ export default function BodyEditorModal({
                 onApply={setGalleryActions}
               />
             ) : (
-              <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
-                <div
-                  className="p-4 text-center cursor-pointer hover:bg-gray-50"
-                  onClick={() => {
-                    const input = document.createElement("input");
-                    input.type = "file";
-                    input.accept = "image/*";
-                    input.onchange = (e) => {
-                      const file = e.target.files[0];
-                      if (file) {
-                        onImageUpload(file);
-                      }
-                    };
-                    input.click();
-                  }}
-                >
-                  <p className="text-sm text-gray-600 mb-2">
-                    Resmi buraya sürükleyin veya tıklayın
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    JPG, PNG, GIF desteklenir
-                  </p>
-                </div>
-              </DragDropZone>
+              <FileUploadPanel onFileDrop={onImageUpload} />
             )}
           </div>
         )}
@@ -194,28 +170,7 @@ export default function BodyEditorModal({
             onApply={setGalleryActions}
           />
         ) : activeTab === "upload" ? (
-          <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
-            <div
-              className="p-4 text-center cursor-pointer hover:bg-gray-50"
-              onClick={() => {
-                const input = document.createElement("input");
-                input.type = "file";
-                input.accept = "image/*";
-                input.onchange = (e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    onImageUpload(file);
-                  }
-                };
-                input.click();
-              }}
-            >
-              <p className="text-sm text-gray-600 mb-2">
-                Resmi buraya sürükleyin veya tıklayın
-              </p>
-              <p className="text-xs text-gray-500">JPG, PNG, GIF desteklenir</p>
-            </div>
-          </DragDropZone>
+          <FileUploadPanel onFileDrop={onImageUpload} />
         ) : activeTab === "url" ? (
           <div className="p-4 text-center text-gray-500">
             URL özelliği geçici olarak devre dışı
@@ -245,43 +200,30 @@ export default function BodyEditorModal({
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
 
         {/* Action Buttons */}
-        <div className="mt-4 flex justify-between">
-          {/* {mode === "image" && (
-            <OutlinedButton
-              label="Görseli Kaldır"
-              onClick={onClearImage}
-              disabled={saving}
-            />
-          )} */}
-          <div className="flex gap-2 ml-auto">
-            <OutlinedButton
-              label="Vazgeç"
-              onClick={() => {
-                if (galleryActions && galleryActions.resetTemporaryDeletes) {
-                  galleryActions.resetTemporaryDeletes();
-                }
-                onClose();
-              }}
-              disabled={saving}
-            />
-            <PrimaryButton
-              label={
-                saving
-                  ? "Kaydediliyor..."
-                  : mode === "body"
-                  ? "Kaydet"
-                  : "Uygula"
+        <div className="mt-4 flex justify-end gap-2">
+          <OutlinedButton
+            label="Vazgeç"
+            onClick={() => {
+              if (galleryActions && galleryActions.resetTemporaryDeletes) {
+                galleryActions.resetTemporaryDeletes();
               }
-              onClick={() => {
-                if (galleryActions && galleryActions.applyDeletes) {
-                  galleryActions.applyDeletes();
-                }
-                onSave();
-              }}
-              disabled={saving || (mode === "body" && !editor)}
-              className="bg-black text-white disabled:opacity-60"
-            />
-          </div>
+              onClose();
+            }}
+            disabled={saving}
+          />
+          <PrimaryButton
+            label={
+              saving ? "Kaydediliyor..." : mode === "body" ? "Kaydet" : "Uygula"
+            }
+            onClick={() => {
+              if (galleryActions && galleryActions.applyDeletes) {
+                galleryActions.applyDeletes();
+              }
+              onSave();
+            }}
+            disabled={saving || (mode === "body" && !editor)}
+            className="bg-black text-white disabled:opacity-60"
+          />
         </div>
       </div>
     </div>

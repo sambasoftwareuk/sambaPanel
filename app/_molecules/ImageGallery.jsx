@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import XButton from "../_atoms/XButton";
+import DeleteConfirmModal from "../_atoms/DeleteConfirmModal";
 
 export default function ImageGallery({
   onImageSelect,
@@ -133,33 +134,13 @@ export default function ImageGallery({
         </div>
       )}
 
-
-      {/* Silme onay modalı */}
-      {deleteConfirm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-sm mx-4">
-            <h3 className="text-lg font-semibold mb-4">Resmi Sil</h3>
-            <p className="text-gray-600 mb-6">
-              Bu resmi silmek istediğinizden emin misiniz? Bu işlem geri
-              alınamaz.
-            </p>
-            <div className="flex gap-3 justify-end">
-              <button
-                onClick={() => setDeleteConfirm(null)}
-                className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
-              >
-                İptal
-              </button>
-              <button
-                onClick={() => handleDelete(deleteConfirm)}
-                className="px-4 py-2 bg-red text-white rounded hover:bg-red-200"
-              >
-                Sil
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeleteConfirmModal
+        isOpen={!!deleteConfirm}
+        title="Resmi Sil"
+        message="Bu resmi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz."
+        onConfirm={() => handleDelete(deleteConfirm)}
+        onCancel={() => setDeleteConfirm(null)}
+      />
     </div>
   );
 }

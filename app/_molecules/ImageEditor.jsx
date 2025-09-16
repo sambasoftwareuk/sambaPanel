@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { usePageEdit } from "../context/PageEditProvider";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
@@ -128,14 +128,6 @@ export default function ImageEditor({
     }
   }
 
-  function clearImage() {
-    // Sadece context'i güncelle (local olarak)
-    setHeroUrl("");
-    setHeroAlt("");
-    setHeroMediaId(null);
-    setOpen(false);
-  }
-
   return (
     <>
       <div className="flex items-center gap-1">
@@ -161,12 +153,10 @@ export default function ImageEditor({
         }}
         onImageUpload={handleFileUpload}
         onSave={apply}
-        onClearImage={clearImage}
         saving={uploading}
         error={error}
         onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
         deletedImages={deletedImages}
-        onApplyImageDeletes={() => {}}
       />
     </>
   );

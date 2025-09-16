@@ -177,7 +177,6 @@ export default function BodyEditor({ className = "" }) {
         onOpenImageModal={openImageModal}
         onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
         deletedImages={deletedImages}
-        onApplyImageDeletes={() => {}} // Resim silme işlemleri zaten context'e ekleniyor
       />
 
       {/* Resim seçimi modal'ı */}
@@ -192,11 +191,9 @@ export default function BodyEditor({ className = "" }) {
         onImageSelect={(id, url) => handleImageSelect(url)}
         onImageUpload={handleImageUpload}
         onSave={() => setImageModalOpen(false)}
-        onClearImage={() => setImageModalOpen(false)}
         saving={false}
         error=""
         deletedImages={deletedImages}
-        onApplyImageDeletes={() => {}}
       />
     </>
   );
