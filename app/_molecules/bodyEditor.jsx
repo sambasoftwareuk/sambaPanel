@@ -128,6 +128,10 @@ export default function BodyEditor({ className = "" }) {
         const imageHtml = `<img src="${data.url}" alt="${altText}" style="max-width: 100%; height: auto; max-height: 400px;" />`;
         const pos = editor.state.selection.from;
         editor.chain().focus().insertContentAt(pos, imageHtml).run();
+
+        // Context'i de güncelle (Save All butonunu aktif etmek için)
+        const updatedHtml = editor.getHTML();
+        setBodyHtml(updatedHtml);
       }
     } catch (e) {
       alert("Resim yüklenirken hata oluştu: " + e.message);

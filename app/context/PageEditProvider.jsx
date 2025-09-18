@@ -82,7 +82,7 @@ export function PageEditProvider({
         body: JSON.stringify({
           title,
           content_html: bodyHtml,
-          hero_media_id: heroMediaId,
+          hero_media_id: typeof heroMediaId === "number" ? heroMediaId : null,
           locale,
         }),
       });
