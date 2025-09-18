@@ -102,16 +102,32 @@ export async function DELETE(req) {
       return NextResponse.json({ error: "ID gerekli" }, { status: 400 });
     }
 
-    // Media kaydını sil
-    const result = await q(
-      `
-      DELETE FROM media WHERE id = ?
-    `,
-      [id]
-    );
+    // Önce media kaydını bul (dosya yolu için)
+    const media = await q(`SELECT url FROM media WHERE id = ?`, [id]);
+
+    if (media.length === 0) {
+      return NextResponse.json({ error: "Media bulunamadı" }, { status: 404 });
+    }
+
+    // Database'den sil
+    const result = await q(`DELETE FROM media WHERE id = ?`, [id]);
 
     if (result.affectedRows === 0) {
-      return NextResponse.json({ error: "Media bulunamadı" }, { status: 404 });
+      return NextResponse.json({ error: "Media silinemedi" }, { status: 500 });
+    }
+
+    // Fiziksel dosyayı sil
+    try {
+      const fs = require("fs");
+      const path = require("path");
+      const filePath = path.join(process.cwd(), "public", media[0].url);
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    } catch (fileError) {
+      console.error("Dosya silinemedi:", fileError);
+      // Dosya silme hatası olsa bile database silindi, devam et
     }
 
     return NextResponse.json({ success: true, deleted: true });
