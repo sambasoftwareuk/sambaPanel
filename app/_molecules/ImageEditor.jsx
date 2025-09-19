@@ -21,7 +21,10 @@ export default function ImageEditor({
     resetHero,
     setDeletedImages,
     deletedImages,
+    pageId,
+    locale,
   } = usePageEdit();
+
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(initialUrl);
   const [alt, setAlt] = useState(initialAlt);
@@ -30,20 +33,21 @@ export default function ImageEditor({
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
 
-  // Modal açıldığında state'i güncelle
+  const [stagedFile, setStagedFile] = useState(null);
+  const [stagedPreview, setStagedPreview] = useState(null);
+
+  // Modal açılınca state güncelle
   useEffect(() => {
-    if (open) {
-      setUrl(heroUrl || initialUrl);
-      setAlt(heroAlt || initialAlt);
-      setError("");
-      setPreviewOk(true);
-    }
+    if (!open) return;
+    setUrl(heroUrl || initialUrl);
+    setAlt(heroAlt || initialAlt);
+    setPreviewOk(true);
+    setError("");
   }, [open, heroUrl, heroAlt, initialUrl, initialAlt]);
 
-  // URL kontrolü
+  // URL kontrol
   useEffect(() => {
     if (!open || !url) return;
-
     let cancelled = false;
     setChecking(true);
     const img = new Image();
@@ -60,73 +64,91 @@ export default function ImageEditor({
       }
     };
     img.src = url;
-
     return () => {
       cancelled = true;
     };
   }, [open, url]);
 
-  const handleFileUpload = async (file) => {
-    if (!file.type.startsWith("image/")) {
-      setError("Sadece resim dosyaları kabul edilir");
+  // Seçme / staging
+  const handleFileSelected = (file) => {
+    if (!file || !file.type.startsWith("image/")) {
+      setError("Sadece resim dosyaları");
       return;
     }
+    if (stagedPreview) URL.revokeObjectURL(stagedPreview);
 
-    setUploading(true);
+    const objUrl = URL.createObjectURL(file);
+    setStagedFile(file);
+    setStagedPreview(objUrl);
+    setUrl(objUrl);
+    setPreviewOk(true);
     setError("");
-
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        throw new Error("Upload başarısız");
-      }
-
-      const data = await res.json();
-      setUrl(data.url);
-      setPreviewOk(true);
-    } catch (e) {
-      setError(e.message || "Upload başarısız");
-    } finally {
-      setUploading(false);
-    }
   };
 
-  async function apply() {
+  const clearStaged = () => {
+    if (stagedPreview) URL.revokeObjectURL(stagedPreview);
+    setStagedFile(null);
+    setStagedPreview(null);
+    setUrl(heroUrl || initialUrl);
+  };
+
+  // Uygula → sadece context güncelle, upload yapılır
+  const apply = async () => {
     if (!url) {
       setError("Görsel URL gerekli");
       return;
     }
-
+    setUploading(true);
+    setError("");
     try {
+      let finalUrl = url;
+
+      if (stagedFile) {
+        const formData = new FormData();
+        formData.append("file", stagedFile);
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok) throw new Error("Upload başarısız");
+        const data = await res.json();
+        finalUrl = data.url;
+        if (stagedPreview) URL.revokeObjectURL(stagedPreview);
+        setStagedFile(null);
+        setStagedPreview(null);
+      }
+
+      // media kaydı
       const mediaRes = await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url, alt_text: alt }),
+        body: JSON.stringify({ url: finalUrl, alt_text: alt }),
       });
-
+      
       if (!mediaRes.ok) {
-        throw new Error("Media oluşturulamadı");
+        const errorText = await mediaRes.text();
+        throw new Error("Media oluşturulamadı: " + errorText);
       }
-
+      
       const newMedia = await mediaRes.json();
 
-      // Sadece context'i güncelle (local olarak)
-      setHeroUrl(url);
+      // context güncelle
+      setHeroUrl(finalUrl);
       setHeroAlt(alt);
       setHeroMediaId(newMedia.id);
+
+      // Database'e kaydedilmesi için kısa gecikme
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Context güncellemesi yeterli, Save All'da kaydedilecek
 
       setOpen(false);
     } catch (e) {
       setError(e.message || "Güncellenemedi");
+    } finally {
+      setUploading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -147,11 +169,12 @@ export default function ImageEditor({
         imageAlt={alt}
         onImageUrlChange={setUrl}
         onImageAltChange={setAlt}
+        onImageUpload={handleFileSelected}
         onImageSelect={(id, selectedUrl) => {
+          clearStaged();
           setUrl(selectedUrl);
           setPreviewOk(true);
         }}
-        onImageUpload={handleFileUpload}
         onSave={apply}
         saving={uploading}
         error={error}

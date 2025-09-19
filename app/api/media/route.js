@@ -33,49 +33,17 @@ export async function POST(req) {
       return NextResponse.json({ error: "URL gerekli" }, { status: 400 });
     }
 
-    // Sıralı numaralandırma için sayaç bul
-    const existingMediaCount = await q(
-      `
-      SELECT COUNT(*) as count FROM media WHERE id LIKE 'sambaImage%'
-    `
-    );
-    const counter = (existingMediaCount[0]?.count || 0) + 1;
-    const mediaId = `sambaImage${counter.toString().padStart(2, "0")}`;
+    // Unique ID oluştur (timestamp bazlı)
+    const mediaId = `sambaImage${Date.now()}`;
 
-    // Önce aynı URL'de kayıt var mı kontrol et
-    const existingMedia = await q(
-      `
-      SELECT id FROM media WHERE url = ? LIMIT 1
-    `,
-      [url]
-    );
-
-    if (existingMedia.length > 0) {
-      // Aynı URL varsa, mevcut kaydı güncelle
+    // Her zaman yeni kayıt oluştur (unique ID ile)
+    try {
       const result = await q(
-        `
-        UPDATE media 
-        SET alt_text = ?, updated_at = NOW()
-        WHERE url = ?
-      `,
-        [alt_text || null, url]
-      );
-
-      return NextResponse.json({
-        id: existingMedia[0].id,
-        url,
-        alt_text,
-        updated: true,
-      });
-    } else {
-      // Aynı URL yoksa, yeni kayıt oluştur (sıralı ID ile)
-      const result = await q(
-        `
-        INSERT INTO media (id, url, alt_text, created_at)
-        VALUES (?, ?, ?, NOW())
-      `,
+        `INSERT INTO media (id, url, alt_text, created_at) VALUES (?, ?, ?, NOW())`,
         [mediaId, url, alt_text || null]
       );
+
+      console.log("Media INSERT başarılı:", { mediaId, url });
 
       return NextResponse.json({
         id: mediaId,
@@ -83,6 +51,25 @@ export async function POST(req) {
         alt_text,
         created: true,
       });
+    } catch (insertError) {
+      console.error("Media INSERT hatası:", insertError);
+
+      // INSERT başarısız ise, mevcut kaydı bul ve döndür
+      const existingMedia = await q(
+        `SELECT id FROM media WHERE url = ? LIMIT 1`,
+        [url]
+      );
+      if (existingMedia.length > 0) {
+        console.log("Mevcut media bulundu:", existingMedia[0].id);
+        return NextResponse.json({
+          id: existingMedia[0].id,
+          url,
+          alt_text,
+          existing: true,
+        });
+      }
+
+      throw insertError;
     }
   } catch (e) {
     console.error("Media creation error:", e);

@@ -19,7 +19,7 @@ export function PageEditProvider({
   const [heroUrl, setHeroUrl] = useState(initialHeroUrl);
   const [heroAlt, setHeroAlt] = useState(initialHeroAlt);
   const [heroMediaId, setHeroMediaId] = useState(initialHeroMediaId);
-  const [deletedImages, setDeletedImages] = useState([]); // Silinen resimleri takip et
+  const [deletedImages, setDeletedImages] = useState([]);
   const [baseline, setBaseline] = useState({
     title: initialTitle,
     bodyHtml: initialBody,
@@ -27,19 +27,7 @@ export function PageEditProvider({
     heroAlt: initialHeroAlt,
     heroMediaId: initialHeroMediaId,
   });
-  const [saving, setSaving] = useState(false); // ✅ added saving state
-
-  function resetTitle() {
-    setTitle(baseline.title);
-  }
-  function resetBody() {
-    setBodyHtml(baseline.bodyHtml);
-  }
-  function resetHero() {
-    setHeroUrl(baseline.heroUrl);
-    setHeroAlt(baseline.heroAlt);
-    setHeroMediaId(baseline.heroMediaId);
-  }
+  const [saving, setSaving] = useState(false);
 
   const isDirty = useMemo(
     () =>
@@ -63,45 +51,46 @@ export function PageEditProvider({
 
   async function handleSave() {
     if (!isDirty) return;
-    setSaving(true); // start saving
+    setSaving(true);
     try {
-      // Önce silinen resimleri kontrol et ve hero image ise temizle
-      if (deletedImages.length > 0) {
-        for (const image of deletedImages) {
-          // Eğer silinen resim bu sayfanın hero image'ı ise, hero_media_id'yi null yap
-          if (heroMediaId === image.id) {
-            setHeroMediaId(null);
-          }
-        }
+      // Silinen resimleri kontrol et
+      for (const img of deletedImages) {
+        if (heroMediaId === img.id) setHeroMediaId(null);
       }
 
-      // Sonra sayfa verilerini kaydet
+      // API’ye gönder
+      console.log("Save All'da gönderilen heroMediaId:", heroMediaId);
+
+      // Database'de bu ID var mı kontrol et
+      const checkRes = await fetch(`/api/media?id=${heroMediaId}`);
+      console.log("Media ID database'de var mı?", checkRes.status, checkRes.ok);
       const res = await fetch(`/api/pages/${pageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
           content_html: bodyHtml,
-          hero_media_id: typeof heroMediaId === "number" ? heroMediaId : null,
+          hero_media_id: heroMediaId,
           locale,
         }),
       });
-      if (!res.ok) throw new Error("API error");
 
-      // Sayfa kaydedildikten sonra silinen resimleri API'den sil
-      if (deletedImages.length > 0) {
-        for (const image of deletedImages) {
-          try {
-            await fetch(`/api/media?id=${image.id}`, {
-              method: "DELETE",
-            });
-          } catch (e) {
-            console.error("Resim silinemedi:", e);
-          }
-        }
-        setDeletedImages([]); // Silinen resimleri temizle
+      if (!res.ok) {
+        const errorData = await res.text();
+        console.log("Pages API Error:", errorData);
+        throw new Error("API error: " + errorData);
       }
 
+      // Silinen resimleri API’den temizle
+      for (const img of deletedImages) {
+        try {
+          await fetch(`/api/media?id=${img.id}`, { method: "DELETE" });
+        } catch (e) {
+          console.error("Resim silinemedi:", e);
+        }
+      }
+
+      setDeletedImages([]);
       markSaved();
     } catch (err) {
       console.error("Save failed:", err);
@@ -109,6 +98,14 @@ export function PageEditProvider({
       setSaving(false);
     }
   }
+
+  const resetTitle = () => setTitle(baseline.title);
+  const resetBody = () => setBodyHtml(baseline.bodyHtml);
+  const resetHero = () => {
+    setHeroUrl(baseline.heroUrl);
+    setHeroAlt(baseline.heroAlt);
+    setHeroMediaId(baseline.heroMediaId);
+  };
 
   return (
     <PageEditContext.Provider
@@ -128,10 +125,11 @@ export function PageEditProvider({
         handleSave,
         deletedImages,
         setDeletedImages,
-
         resetTitle,
         resetBody,
         resetHero,
+        pageId,
+        locale,
       }}
     >
       {children}
