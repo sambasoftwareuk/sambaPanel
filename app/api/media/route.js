@@ -43,8 +43,6 @@ export async function POST(req) {
         [mediaId, url, alt_text || null]
       );
 
-      console.log("Media INSERT başarılı:", { mediaId, url });
-
       return NextResponse.json({
         id: mediaId,
         url,
@@ -60,7 +58,6 @@ export async function POST(req) {
         [url]
       );
       if (existingMedia.length > 0) {
-        console.log("Mevcut media bulundu:", existingMedia[0].id);
         return NextResponse.json({
           id: existingMedia[0].id,
           url,

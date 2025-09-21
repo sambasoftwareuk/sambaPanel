@@ -58,12 +58,7 @@ export function PageEditProvider({
         if (heroMediaId === img.id) setHeroMediaId(null);
       }
 
-      // API’ye gönder
-      console.log("Save All'da gönderilen heroMediaId:", heroMediaId);
-
-      // Database'de bu ID var mı kontrol et
-      const checkRes = await fetch(`/api/media?id=${heroMediaId}`);
-      console.log("Media ID database'de var mı?", checkRes.status, checkRes.ok);
+      // API'ye gönder
       const res = await fetch(`/api/pages/${pageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -75,11 +70,7 @@ export function PageEditProvider({
         }),
       });
 
-      if (!res.ok) {
-        const errorData = await res.text();
-        console.log("Pages API Error:", errorData);
-        throw new Error("API error: " + errorData);
-      }
+      if (!res.ok) throw new Error("API error");
 
       // Silinen resimleri API’den temizle
       for (const img of deletedImages) {

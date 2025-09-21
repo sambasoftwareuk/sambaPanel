@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { usePageEdit } from "../context/PageEditProvider";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
@@ -35,6 +35,7 @@ export default function ImageEditor({
 
   const [stagedFile, setStagedFile] = useState(null);
   const [stagedPreview, setStagedPreview] = useState(null);
+  const abortControllerRef = useRef(null);
 
   // Modal açılınca state güncelle
   useEffect(() => {
@@ -69,12 +70,34 @@ export default function ImageEditor({
     };
   }, [open, url]);
 
+  // Modal kapanınca upload iptal et
+  useEffect(() => {
+    if (!open && abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+  }, [open]);
+
+  // Component unmount olduğunda cleanup
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
+
   // Seçme / staging
   const handleFileSelected = (file) => {
     if (!file || !file.type.startsWith("image/")) {
       setError("Sadece resim dosyaları");
       return;
     }
+
+    // Eski upload varsa iptal et
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
     if (stagedPreview) URL.revokeObjectURL(stagedPreview);
 
     const objUrl = URL.createObjectURL(file);
@@ -104,11 +127,16 @@ export default function ImageEditor({
       let finalUrl = url;
 
       if (stagedFile) {
+        // Yeni controller oluştur
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
         const formData = new FormData();
         formData.append("file", stagedFile);
         const res = await fetch("/api/upload", {
           method: "POST",
           body: formData,
+          signal: controller.signal, // Upload iptal edilebilir
         });
         if (!res.ok) throw new Error("Upload başarısız");
         const data = await res.json();
@@ -116,6 +144,7 @@ export default function ImageEditor({
         if (stagedPreview) URL.revokeObjectURL(stagedPreview);
         setStagedFile(null);
         setStagedPreview(null);
+        abortControllerRef.current = null; // Controller temizle
       }
 
       // media kaydı
@@ -124,12 +153,12 @@ export default function ImageEditor({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: finalUrl, alt_text: alt }),
       });
-      
+
       if (!mediaRes.ok) {
         const errorText = await mediaRes.text();
         throw new Error("Media oluşturulamadı: " + errorText);
       }
-      
+
       const newMedia = await mediaRes.json();
 
       // context güncelle
@@ -144,9 +173,13 @@ export default function ImageEditor({
 
       setOpen(false);
     } catch (e) {
+      if (e.name === "AbortError") {
+        return; // Hata olarak sayma
+      }
       setError(e.message || "Güncellenemedi");
     } finally {
       setUploading(false);
+      abortControllerRef.current = null; // Controller temizle
     }
   };
 
