@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Icon from "../_atoms/Icon";
@@ -24,6 +25,8 @@ import { LogoImage } from "../_atoms/images";
 import Logo from "../constants/logo.json";
 
 const HamburgerMenu = () => {
+  const pathname = usePathname();
+
   const [isOpen, setIsOpen] = useState(false);
   const iconMap = {
     Cart,
@@ -80,6 +83,10 @@ const HamburgerMenu = () => {
                   const IconComponent = item.iconName
                     ? iconMap[item.iconName]
                     : null;
+                  const isParentActive =
+                    pathname === item.href ||
+                    (item.dropdown &&
+                      item.dropdown.some((d) => pathname.startsWith(d.href)));
 
                   return (
                     <React.Fragment key={index}>
@@ -96,14 +103,16 @@ const HamburgerMenu = () => {
                             <span>{item.label}</span>
                           </div>
                         }
-                        links={item.dropdown || []}
+                        href={item.href} // ✅ for non-dropdown items
+                        links={item.dropdown || []} // ✅ for dropdown items
                         linkColor="secondary"
+                        linkUnderline="always"
                         hoverBg="hover:bg-primary50 active:bg-primary50"
                         showArrowOnlyIfDropdown={true}
+                        onLinkClick={() => setIsOpen(false)} // ✅ close menu on click
+                        isActive={isParentActive}
+                        activePath={pathname}
                       />
-                      {index !== navLinks.length - 1 && (
-                        <hr className="border-b-1 border-gray-200 my-3" />
-                      )}
                     </React.Fragment>
                   );
                 })}

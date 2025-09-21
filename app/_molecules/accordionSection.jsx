@@ -1,63 +1,85 @@
 "use client";
-import { useState } from "react";
-import { SambaLinks } from "../_atoms/SambaLinks";
+import React, { useState } from "react";
 import { DownArrowIcon, UpArrowIcon } from "../_atoms/Icons";
+
+import Link from "next/link";
 import Icon from "../_atoms/Icon";
 
-export const AccordionSection = ({
+export function AccordionSection({
   title,
+  href,
   links = [],
-  linkColor = "white",
-  linkUnderline = "hover",
-  hoverBg = "",
+  linkColor,
+  linkUnderline,
+  hoverBg,
   className = "",
-  showArrowOnlyIfDropdown = false, // NEW PROP
-}) => {
-  const [open, setOpen] = useState(false);
-  const hasDropdown = links.length > 0;
-
-  const shouldShowArrow = showArrowOnlyIfDropdown ? hasDropdown : true;
+  showArrowOnlyIfDropdown = false,
+  onLinkClick,
+  isActive = false,
+  activePath = "",
+}) {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className={className}>
-      <button
-        className="w-full text-left py-2 font-semibold text-[16px] flex justify-between items-center"
-        onClick={() => hasDropdown && setOpen((prev) => !prev)}
+    <div>
+      {/* Parent link */}
+      <div
+        className={`flex justify-between items-center px-2 py-2 cursor-pointer rounded-lg 
+          ${hoverBg}
+          ${isActive ? "font-semibold text-primary500" : ""}
+        `}
+        onClick={() => {
+          if (!links.length && href) onLinkClick?.();
+          if (links.length) setIsOpen(!isOpen);
+        }}
       >
-        {title}
-        {shouldShowArrow && (
-          <span>
-            {open ? (
+        {href ? (
+          <Link href={href} onClick={onLinkClick} className="flex-1">
+            {title}
+          </Link>
+        ) : (
+          <span className="flex-1">{title}</span>
+        )}
+
+        {showArrowOnlyIfDropdown && links.length > 0 && (
+          <span className="ml-2 transform transition-transform duration-200">
+            {isOpen ? (
               <Icon variant={UpArrowIcon} size={24} />
             ) : (
               <Icon variant={DownArrowIcon} size={24} />
             )}
           </span>
         )}
-      </button>
+      </div>
 
-      {hasDropdown && open && (
-        <ul className="space-y-1 text-[16px]">
-          {links.map((item, index) => {
-            const isObject = typeof item === "object" && item !== null;
-            const label = isObject ? item.label : item;
-            const href = isObject ? item.href : "#";
-
+      {/* Dropdown links */}
+      {isOpen && links.length > 0 && (
+        <div className="ml-6 mt-2 space-y-2">
+          {links.map((link, i) => {
+            const isChildActive = activePath === link.href;
             return (
-              <li key={href || index}>
-                <SambaLinks
-                  href={href}
-                  underline={linkUnderline}
-                  color={linkColor}
-                  hoverBg={hoverBg}
-                >
-                  {label}
-                </SambaLinks>
-              </li>
+              <Link
+                key={i}
+                href={link.href}
+                onClick={onLinkClick}
+                className={`block px-2 py-1 
+                  
+                  ${
+                    isChildActive
+                      ? "font-semibold text-primary500 underline"
+                      : ""
+                  }
+                `}
+              >
+                {link.label}
+                {linkUnderline === "always" && (
+                  <hr className="border-b-1 border-gray-200 my-1" />
+                )}
+              </Link>
             );
           })}
-        </ul>
+        </div>
       )}
     </div>
   );
-};
+}
