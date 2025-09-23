@@ -3,6 +3,7 @@ import { CardImage } from "../_atoms/images";
 import { PrimaryButton } from "../_atoms/buttons";
 
 const ProductCardWithImage = ({
+  altText,
   title,
   imageLink,
   layout = "vertical",
@@ -27,7 +28,7 @@ const ProductCardWithImage = ({
   const Image = (
     <div className="overflow-hidden rounded-md my-5">
       <div className="transition-transform duration-300 ease-in-out group-hover:scale-105">
-        <CardImage imageLink={imageLink} imageAlt={title} />
+        <CardImage imageLink={imageLink} imageAlt={altText} />
       </div>
     </div>
   );

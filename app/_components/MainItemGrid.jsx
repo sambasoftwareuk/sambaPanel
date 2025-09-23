@@ -12,14 +12,17 @@ const MainItemGrid = ({
 }) => {
   return (
     <div className="w-full max-w-7xl mx-auto mt-6 p-4">
-      {title && <Header1 className="text-center">{title}</Header1>}
+      {title && <Header1 className="text-center">
+      {console.log("json: ", items)}
+      {title}</Header1>}
       <div className={`grid ${gridClassName} gap-8 items-center`}>
         {items?.map((item) => (
           <Link key={item.slug} href={`/${baseHref}/${item.slug}`}>
             <ProductCardWithImage
               key={item.id}
-              title={item.title}
-              imageLink={item.image}
+              title={item.name}
+              imageLink={item.hero_url}
+              altText={item.hero_alt || item.name}
               buttonLabel="DETAYLAR"
               variant={1}
               aspectRatio="aspect-[16/16]"

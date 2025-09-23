@@ -3,12 +3,16 @@ import sliderData from "./mocks/sliderData.json";
 import ProductBanner from "./_molecules/productBanner";
 import SliderComponent from "./_components/sliderComponent.jsx";
 import bannerProducts from "./mocks/bannerProducts.json";
-import mainProducts from "./constants/bigCardProducts.json";
+// import mainProducts from "./constants/bigCardProducts.json"; //(static data)
 import CarouselSlider from "./_components/CarouselSlider.jsx";
 import products from "./mocks/spareParts.json";
 import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import blogData from "./mocks/blogData.json";
+import { getProductGroups } from "@/lib/repos/page";
+
+const locale = "tr-TR";
+const mainProducts = await getProductGroups({ locale, onlyHomepage: true });
 
 export default function Home() {
   const recentBlogs = blogData
@@ -25,7 +29,7 @@ export default function Home() {
       <ProductBanner bannerProducts={bannerProducts} />
 
       <MainItemGrid
-        items={mainProducts.filter((item) => item.showOnMainPage)}
+        items={mainProducts}
         title="Ürünlerimiz"
         baseHref="urunler"
       />

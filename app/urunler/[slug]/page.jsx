@@ -1,28 +1,38 @@
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
-import products from "../../constants/bigCardProducts.json";
-import sideMenuData from "../../mocks/sideMenuData.json";
+// import products from "../../constants/bigCardProducts.json";
+// import sideMenuData from "../../mocks/sideMenuData.json";
 import { getMetadataForPath } from "@/app/utils/metadataHelper";
+import { getSingleProduct } from "@/lib/repos/page";
+import {
+  getSideMenuForPath,
+} from "../../../lib/repos/sideMenu";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const path = `/urunler/${slug}`;
   return getMetadataForPath(path);
 }
+
 export default async function ProductDetailPage({ params }) {
   const { slug } = await params;
-  const product = products.find((p) => p.slug === slug);
-  const productMenu = sideMenuData.filter(
-    (section) => section.title === "Ürünlerimiz"
-  );
+  const locale = "tr-TR";
+  const path = `/urunler`;
+  const sideMenu = await getSideMenuForPath(path, locale);
+
+  function toArray(x) {
+    return x == null ? [] : Array.isArray(x) ? x : [x];
+  }
+  const arraySideMenu = toArray(sideMenu);
+  const product = await getSingleProduct(slug, locale);
 
   return (
     <DetailPageTemplate
-      title={product?.title}
-      description={product?.description}
-      image={product?.image}
-      menu={productMenu}
+      title={product?.name}
+      description={product?.content_html}
+      image={product?.hero_url}
+      menu={arraySideMenu}
       activeHref={`/urunler/${product?.slug}`}
-      otherItems={products.filter((p) => p.slug !== slug)}
+      // otherItems={product.filter((p) => p.slug !== slug)}
       otherItemsTitle="Diğer Ürünler"
       baseHref="urunler"
       notFoundText="Ürün bulunamadı."
