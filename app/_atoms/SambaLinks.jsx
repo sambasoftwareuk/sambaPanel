@@ -24,10 +24,13 @@ export function SambaLinks({
     none: "",
   };
 
-  const computedClassName = `transition-colors cursor-pointer ${
-    baseColor[color] || ""
-  } ${underlineStyle[underline] || ""}     ${hoverBg}
-  ${className}`;
+  const computedClassName = `
+    block w-full transition-colors cursor-pointer
+    ${baseColor[color] || ""}
+    ${underlineStyle[underline] || ""}
+    ${hoverBg}
+    ${className}
+  `;
 
   return (
     <Link href={href} {...props} className={computedClassName}>
