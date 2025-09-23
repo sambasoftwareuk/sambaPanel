@@ -78,7 +78,7 @@ const HamburgerMenu = () => {
               </Link>
             </div>
             <div className="flex flex-col space-y-2 mt-10 ">
-              <div className="border-b border-gray-200 pb-2 mb-2">
+              <div className="pb-2 mb-2">
                 {navLinks.map((item, index) => {
                   const IconComponent = item.iconName
                     ? iconMap[item.iconName]

@@ -34,7 +34,7 @@ export function AccordionSection({
         }}
       >
         {href ? (
-          <Link href={href} onClick={onLinkClick} className="flex-1">
+          <Link href={href} onClick={onLinkClick} className="flex-1 ">
             {title}
           </Link>
         ) : (
@@ -42,7 +42,7 @@ export function AccordionSection({
         )}
 
         {showArrowOnlyIfDropdown && links.length > 0 && (
-          <span className="ml-2 transform transition-transform duration-200">
+          <span className="ml-2 pl-2 border-l-2 border-gray-300 transform transition-transform duration-200">
             {isOpen ? (
               <Icon variant={UpArrowIcon} size={24} />
             ) : (
@@ -51,6 +51,7 @@ export function AccordionSection({
           </span>
         )}
       </div>
+      <hr className="border-b-1 border-gray-200 my-1" />
 
       {/* Dropdown links */}
       {isOpen && links.length > 0 && (
@@ -62,19 +63,13 @@ export function AccordionSection({
                 key={i}
                 href={link.href}
                 onClick={onLinkClick}
-                className={`block px-2 py-1 
-                  
-                  ${
-                    isChildActive
-                      ? "font-semibold text-primary500 underline"
-                      : ""
-                  }
-                `}
+                className={`block px-2 py-1 ${hoverBg} ${
+                  isChildActive ? "font-semibold text-primary500 underline" : ""
+                } ${
+                  linkUnderline === "always" ? "border-b border-gray-200" : ""
+                }`}
               >
                 {link.label}
-                {linkUnderline === "always" && (
-                  <hr className="border-b-1 border-gray-200 my-1" />
-                )}
               </Link>
             );
           })}
