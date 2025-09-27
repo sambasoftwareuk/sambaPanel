@@ -28,6 +28,7 @@ export default function ImageEditor({
   const [open, setOpen] = useState(false);
   const [url, setUrl] = useState(initialUrl);
   const [alt, setAlt] = useState(initialAlt);
+  const [stagedMediaId, setStagedMediaId] = useState(null);
   const [previewOk, setPreviewOk] = useState(true);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
@@ -147,7 +148,19 @@ export default function ImageEditor({
         abortControllerRef.current = null; // Controller temizle
       }
 
-      // media kaydı
+      // context güncelle (sadece preview için)
+      setHeroUrl(finalUrl);
+      setHeroAlt(alt);
+
+      // Media ID'yi staging'de tut (Uygula butonunda kullanılacak)
+      // setStagedMediaId(newMedia.id); // Bu satırı kaldır - media kaydı yapmıyoruz
+
+      // Database'e kaydedilmesi için kısa gecikme
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
+      // Context güncellemesi yeterli, Save All'da kaydedilecek
+
+      // Media kaydı yap (Uygula butonunda)
       const mediaRes = await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -161,15 +174,8 @@ export default function ImageEditor({
 
       const newMedia = await mediaRes.json();
 
-      // context güncelle
-      setHeroUrl(finalUrl);
-      setHeroAlt(alt);
+      // Staged media ID'yi hero_media_id olarak set et
       setHeroMediaId(newMedia.id);
-
-      // Database'e kaydedilmesi için kısa gecikme
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      // Context güncellemesi yeterli, Save All'da kaydedilecek
 
       setOpen(false);
     } catch (e) {

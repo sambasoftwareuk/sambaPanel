@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useMemo } from "react";
+import { createContext, useContext, useState, useMemo, useRef } from "react";
 
 const PageEditContext = createContext(null);
 
@@ -20,34 +20,38 @@ export function PageEditProvider({
   const [heroAlt, setHeroAlt] = useState(initialHeroAlt);
   const [heroMediaId, setHeroMediaId] = useState(initialHeroMediaId);
   const [deletedImages, setDeletedImages] = useState([]);
-  const [baseline, setBaseline] = useState({
+  const [saving, setSaving] = useState(false);
+
+  // Baseline'ı useRef ile sakla (render tetiklemez)
+  const baselineRef = useRef({
     title: initialTitle,
     bodyHtml: initialBody,
     heroUrl: initialHeroUrl,
     heroAlt: initialHeroAlt,
     heroMediaId: initialHeroMediaId,
   });
-  const [saving, setSaving] = useState(false);
 
-  const isDirty = useMemo(
-    () =>
-      title !== baseline.title ||
-      bodyHtml !== baseline.bodyHtml ||
-      heroUrl !== baseline.heroUrl ||
-      heroAlt !== baseline.heroAlt ||
-      heroMediaId !== baseline.heroMediaId ||
-      deletedImages.length > 0,
-    [title, bodyHtml, heroUrl, heroAlt, heroMediaId, baseline, deletedImages]
-  );
+  const isDirty = useMemo(() => {
+    const base = baselineRef.current;
+    return (
+      title !== base.title ||
+      bodyHtml !== base.bodyHtml ||
+      heroUrl !== base.heroUrl ||
+      heroAlt !== base.heroAlt ||
+      heroMediaId !== base.heroMediaId ||
+      deletedImages.length > 0
+    );
+  }, [title, bodyHtml, heroUrl, heroAlt, heroMediaId, deletedImages]);
 
-  const markSaved = () =>
-    setBaseline({
+  const markSaved = () => {
+    baselineRef.current = {
       title,
       bodyHtml,
       heroUrl,
       heroAlt,
       heroMediaId,
-    });
+    };
+  };
 
   async function handleSave() {
     if (!isDirty) return;
@@ -82,7 +86,7 @@ export function PageEditProvider({
       }
 
       setDeletedImages([]);
-      markSaved();
+      baselineRef.current = { title, bodyHtml, heroUrl, heroAlt, heroMediaId }; // mark as saved
     } catch (err) {
       console.error("Save failed:", err);
     } finally {
@@ -90,12 +94,12 @@ export function PageEditProvider({
     }
   }
 
-  const resetTitle = () => setTitle(baseline.title);
-  const resetBody = () => setBodyHtml(baseline.bodyHtml);
+  const resetTitle = () => setTitle(baselineRef.current.title);
+  const resetBody = () => setBodyHtml(baselineRef.current.bodyHtml);
   const resetHero = () => {
-    setHeroUrl(baseline.heroUrl);
-    setHeroAlt(baseline.heroAlt);
-    setHeroMediaId(baseline.heroMediaId);
+    setHeroUrl(baselineRef.current.heroUrl);
+    setHeroAlt(baselineRef.current.heroAlt);
+    setHeroMediaId(baselineRef.current.heroMediaId);
   };
 
   return (

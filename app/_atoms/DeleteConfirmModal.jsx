@@ -1,3 +1,5 @@
+import { OutlinedButton, PrimaryButton } from "./buttons";
+
 export default function DeleteConfirmModal({
   isOpen,
   title = "Öğeyi Sil",
@@ -15,18 +17,16 @@ export default function DeleteConfirmModal({
         <h3 className="text-lg font-semibold mb-4">{title}</h3>
         <p className="text-gray-600 mb-6">{message}</p>
         <div className="flex gap-3 justify-end">
-          <button
+          <OutlinedButton
+            label={cancelLabel}
             onClick={onCancel}
-            className="px-4 py-2 text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
-          >
-            {cancelLabel}
-          </button>
-          <button
+            className="text-gray-600 border-gray-300 hover:bg-gray-50"
+          />
+          <PrimaryButton
+            label={confirmLabel}
             onClick={onConfirm}
-            className="px-4 py-2 bg-red text-white rounded hover:bg-red-200"
-          >
-            {confirmLabel}
-          </button>
+            className="bg-red-600 hover:bg-red-700 border-red-600"
+          />
         </div>
       </div>
     </div>

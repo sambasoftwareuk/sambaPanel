@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-// import Image from "next/image";
+import Image from "next/image";
 import { usePageEdit } from "../context/PageEditProvider";
 
 export default function DraftHeroImage({
@@ -24,13 +24,13 @@ export default function DraftHeroImage({
   );
 
   return (
-    <img
+    <Image
       src={url}
       alt={alt}
-      imageid={id}
       width={width}
       height={height}
       className={className}
+      data-imageid={id}
     />
   );
 }

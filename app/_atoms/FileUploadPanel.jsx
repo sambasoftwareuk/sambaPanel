@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import DragDropZone from "../_molecules/DragDropZone";
 
 export default function FileUploadPanel({
@@ -7,19 +8,11 @@ export default function FileUploadPanel({
   subtitle = "JPG, PNG, GIF desteklenir",
   disabled = false,
 }) {
+  const inputRef = useRef(null);
+
   const handleClick = () => {
     if (disabled) return;
-
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = acceptTypes.join(",");
-    input.onchange = (e) => {
-      const file = e.target.files[0];
-      if (file && onFileDrop) {
-        onFileDrop(file);
-      }
-    };
-    input.click();
+    inputRef.current?.click();
   };
 
   return (
@@ -30,6 +23,12 @@ export default function FileUploadPanel({
         }`}
         onClick={handleClick}
       >
+        <input
+          type="file"
+          ref={inputRef}
+          onChange={(e) => onFileDrop(e.target.files[0])}
+          className="hidden"
+        />
         <p className="text-sm text-gray-600 mb-2">{title}</p>
         <p className="text-xs text-gray-500">{subtitle}</p>
       </div>

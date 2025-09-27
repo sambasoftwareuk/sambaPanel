@@ -33,10 +33,25 @@ export async function POST(req) {
       return NextResponse.json({ error: "URL gerekli" }, { status: 400 });
     }
 
-    // Unique ID oluştur (timestamp bazlı)
+    // Önce mevcut kaydı kontrol et
+    const existingMedia = await q(
+      `SELECT id, url, alt_text FROM media WHERE url = ? LIMIT 1`,
+      [url]
+    );
+
+    if (existingMedia.length > 0) {
+      // Mevcut kayıt varsa onu döndür
+      return NextResponse.json({
+        id: existingMedia[0].id,
+        url: existingMedia[0].url,
+        alt_text: existingMedia[0].alt_text,
+        existing: true,
+      });
+    }
+
+    // Mevcut kayıt yoksa yeni oluştur
     const mediaId = `sambaImage${Date.now()}`;
 
-    // Her zaman yeni kayıt oluştur (unique ID ile)
     try {
       const result = await q(
         `INSERT INTO media (id, url, alt_text, created_at) VALUES (?, ?, ?, NOW())`,
@@ -51,21 +66,6 @@ export async function POST(req) {
       });
     } catch (insertError) {
       console.error("Media INSERT hatası:", insertError);
-
-      // INSERT başarısız ise, mevcut kaydı bul ve döndür
-      const existingMedia = await q(
-        `SELECT id FROM media WHERE url = ? LIMIT 1`,
-        [url]
-      );
-      if (existingMedia.length > 0) {
-        return NextResponse.json({
-          id: existingMedia[0].id,
-          url,
-          alt_text,
-          existing: true,
-        });
-      }
-
       throw insertError;
     }
   } catch (e) {

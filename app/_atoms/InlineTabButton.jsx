@@ -1,3 +1,5 @@
+import { BaseButton } from "./buttons";
+
 export default function InlineTabButton({
   label,
   isActive = false,
@@ -5,7 +7,7 @@ export default function InlineTabButton({
   disabled = false,
 }) {
   return (
-    <button
+    <BaseButton
       onClick={onClick}
       disabled={disabled}
       className={`px-3 py-1 text-sm rounded transition-colors ${
@@ -15,6 +17,6 @@ export default function InlineTabButton({
       } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     >
       {label}
-    </button>
+    </BaseButton>
   );
 }
