@@ -8,7 +8,6 @@ import { updatePageLocale } from "@/lib/repos/page";
 
 export async function PATCH(request, ctx) {
   const { userId, sessionId } = getAuth(request);
-  console.log("PATCH getAuth =>", { userId, sessionId });
 
   if (!userId) {
     return NextResponse.json(

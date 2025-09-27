@@ -5,7 +5,6 @@ import ContactForm from "../_molecules/contactForm";
 
 const ContactFormWrapper = ({ kvkkLink, className }) => {
   const handleFormSubmit = (formData) => {
-    console.log("Form submitted:", formData);
     // Do API call here (fetch or axios)
   };
 
