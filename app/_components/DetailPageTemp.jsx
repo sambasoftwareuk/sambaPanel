@@ -4,6 +4,7 @@ import { Header1 } from "@/app/_atoms/Headers";
 import { MobileSideMenu, SideMenu } from "@/app/_molecules/sideMenu";
 import Breadcrumb from "@/app/_molecules/breadCrumb";
 import MainItemGrid from "@/app/_components/MainItemGrid";
+import { sanitizeHtmlContent } from "../utils/cleanHTML";
 
 const DetailPageTemplate = ({
   title,
@@ -19,6 +20,8 @@ const DetailPageTemplate = ({
   if (!title) {
     return <div className="p-6 text-red-500">{notFoundText}</div>;
   }
+
+  const safeHtml = sanitizeHtmlContent(description);
   return (
     <div className="max-w-7xl mx-auto p-6">
       <div className="text-center">
@@ -30,7 +33,7 @@ const DetailPageTemplate = ({
         <MobileSideMenu menu={menu} activeHref={activeHref} />
         <div
           className="prose prose-lg w-full lg:w-1/2 max-w-2xl text-justify"
-          dangerouslySetInnerHTML={{ __html: description }}
+          dangerouslySetInnerHTML={{ __html: safeHtml }}
         />
         <div>
           <Image

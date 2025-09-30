@@ -23,7 +23,7 @@ export default async function ServicesDetailPage({ params }) {
   if (!serviceFromServer) {
     return <div className="p-6 text-red-500">Hizmet bulunamadı.</div>;
   }
-
+  
   return (
     <DetailPageTemplate
       title={serviceFromServer?.name}
@@ -31,7 +31,7 @@ export default async function ServicesDetailPage({ params }) {
       //buradaki image şuan tek link olarak hero_url olarak geliyor anca bunun bir liste olaması ve service_media'dan gelmesi lazım. Hem burası hem de getSingleService fonksiyonu düzenlenmeli 
       image={serviceFromServer?.hero_url}
       menu={serviceMenu}
-      activeHref={`/hizmetler/${serviceFromServer?.slug}`}
+      activeHref={`/hizmetler/${serviceFromServer?.slug_i18n}`}
 
       //Aşağıdaki bölümü ayarlamamız lazım
       // otherItems={serviceFromServer?.filter((s) => s.slug !== slug)}
