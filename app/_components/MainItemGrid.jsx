@@ -19,7 +19,7 @@ const MainItemGrid = ({
             <ProductCardWithImage
               key={item.id}
               title={item.title}
-              imageLink={item.image}
+              imageLink={item.hero_url}
               buttonLabel="DETAYLAR"
               variant={1}
               aspectRatio="aspect-[16/16]"
