@@ -36,87 +36,69 @@ const DetailPageTemplate = ({
   const safeHtml = sanitizeHtmlContent(description);
   return (
     <div className="max-w-7xl mx-auto p-6">
-      <div className="text-center">
-        <Breadcrumb />
-      </div>
-      <Header1 className="text-center my-5">{title}</Header1>
-      <div className="flex flex-col lg:flex-row justify-between gap-8">
-        <SideMenu menu={menu} activeHref={activeHref} />
-        <MobileSideMenu menu={menu} activeHref={activeHref} />
-        <div
-          className="prose prose-lg w-full lg:w-1/2 max-w-2xl text-justify"
-          dangerouslySetInnerHTML={{ __html: safeHtml }}
-        />
-        <div>
-          <Image
-            src={image}
-            alt={title}
-            width={300}
-            height={300}
-            className="rounded-lg shadow-lg object-contain"
-          />
-    <PageEditProvider
-      initialTitle={title}
-      initialBody={description || "<p></p>"}
-      initialHeroUrl={image || "/placeholder.jpg"}
-      initialHeroAlt={title}
-      pageId={pageId}
-      locale={locale}
-    >
-      <div className="max-w-7xl mx-auto p-6">
-        <div className="text-center">
-          <Breadcrumb />
-          <NavigationGuard />
-        </div>
-        <div className="flex items-center justify-center gap-8">
-          <TitleDisplay initialTitle={title} />
-          <SignedIn>
-            <TitleEditor pageId={pageId} locale={locale} />
-          </SignedIn>
-        </div>
-        <div className="flex flex-col lg:flex-row justify-between gap-8 ">
-          <SideMenu menu={menu} activeHref={activeHref} />
-          {/* <MobileSideMenu menu={menu} activeHref={activeHref} /> */}
+      <PageEditProvider
+        initialTitle={title}
+        initialBody={description || "<p></p>"}
+        initialHeroUrl={image || "/placeholder.jpg"}
+        initialHeroAlt={title}
+        pageId={pageId}
+        locale={locale}
+      >
+        <div className="max-w-7xl mx-auto p-6">
+          <div className="text-center">
+            <Breadcrumb />
+            <NavigationGuard />
+          </div>
+          <div className="flex items-center justify-center gap-8">
+            <TitleDisplay initialTitle={title} />
+            <SignedIn>
+              <TitleEditor pageId={pageId} locale={locale} />
+            </SignedIn>
+          </div>
+          <div className="flex flex-col lg:flex-row justify-between gap-8 ">
+            <SideMenu menu={menu} activeHref={activeHref} />
+            {/* <MobileSideMenu menu={menu} activeHref={activeHref} /> */}
 
-          <div className="flex items-start gap-2 mt-4">
-            <div className="flex flex-col gap-6">
-              <BodyDisplay initialHtml={description} />
+            <div className="flex items-start gap-2 mt-4">
+              <div className="flex flex-col gap-6">
+                <BodyDisplay initialHtml={description} />
+                <SignedIn>
+                  {/* <SaveAllButton pageId={page.id} locale={page.locale} /> */}
+                  <PrimaryButton
+                    label="Save All"
+                    className="w-1/6 min-w-[120px] px-4 "
+                  />
+                </SignedIn>
+              </div>
               <SignedIn>
-                {/* <SaveAllButton pageId={page.id} locale={page.locale} /> */}
-                <PrimaryButton
-                  label="Save All"
-                  className="w-1/6 min-w-[120px] px-4 "
-                />
+                <BodyEditor pageId={pageId} locale={locale} />
               </SignedIn>
             </div>
-            <SignedIn>
-              <BodyEditor pageId={pageId} locale={locale} />
-            </SignedIn>
+
+            <div>
+              <DraftHeroImage
+                initialUrl={image}
+                initialAlt={title}
+                width={320}
+                height={320}
+                className="rounded-lg object-cover w-80 h-80"
+              />
+              <SignedIn>
+                <ImageEditor initialUrl={image} initialAlt={title} />
+              </SignedIn>
+            </div>
           </div>
 
-          <div>
-            <DraftHeroImage
-              initialUrl={image}
-              initialAlt={title}
-              width={320}
-              height={320}
-              className="rounded-lg object-cover w-80 h-80"
-            />
-            <SignedIn>
-              <ImageEditor initialUrl={image} initialAlt={title} />
-            </SignedIn>
-          </div>
+          <Header1 className="text-center my-8">{otherItemsTitle}</Header1>
+          <MainItemGrid
+            items={otherItems}
+            baseHref={baseHref}
+            gridClassName="grid-cols-1 md:grid-cols-3"
+            cardProps={{ button: false, variant: 2 }}
+          />
         </div>
-
-        <Header1 className="text-center my-8">{otherItemsTitle}</Header1>
-        <MainItemGrid
-          items={otherItems}
-          baseHref={baseHref}
-          gridClassName="grid-cols-1 md:grid-cols-3"
-          cardProps={{ button: false, variant: 2 }}
-        />
-      </div>
-    </PageEditProvider>
+      </PageEditProvider>
+    </div>
   );
 };
 
