@@ -1,5 +1,4 @@
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
-import services from "../../mocks/services.json";
 import sideMenuData from "../../mocks/sideMenuData.json";
 import { getMetadataForPath } from "@/app/utils/metadataHelper";
 import { getSingleService } from "@/lib/repos/services";
@@ -36,10 +35,6 @@ export default async function ServicesDetailPage({ params }) {
       // otherItems={serviceFromServer?.filter((s) => s.slug !== slug)}
       otherItemsTitle="Diğer Hizmetler"
       baseHref="hizmetler"
-      notFoundText="Hizmet bulunamadı."
-      locale="tr-TR"
-      pageId={service.id}
-      // heroMediaId={service.hero_media_id}
-    />
+      notFoundText="Hizmet bulunamadı."    />
   );
 }
