@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EditorContent } from "@tiptap/react";
 import RichTextToolbar from "./RichTextToolbar";
 import HtmlEditor from "./HtmlEditor";
@@ -10,6 +10,7 @@ import { PrimaryButton, OutlinedButton } from "../_atoms/buttons";
 import { Header2 } from "../_atoms/Headers";
 import InlineTabButton from "../_atoms/InlineTabButton";
 import FileUploadPanel from "../_atoms/FileUploadPanel";
+import UploadModal from "./UploadModal";
 
 export default function BodyEditorModal({
   isOpen,
@@ -29,6 +30,7 @@ export default function BodyEditorModal({
   onImageSelect = () => {},
   onDeleteImage = () => {},
   deletedImages = [],
+  onUploadComplete = () => {},
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -36,9 +38,24 @@ export default function BodyEditorModal({
   );
   const [galleryActions, setGalleryActions] = useState(null);
 
-  // ✅ Yeni state: toolbar’daki inline panel için
+  // ✅ Yeni state: toolbar'daki inline panel için
   const [showGallery, setShowGallery] = useState(false);
   const [inlineGalleryTab, setInlineGalleryTab] = useState("gallery");
+  const [showUploadModal, setShowUploadModal] = useState(false);
+
+  // Upload sekmesine basınca direkt modal aç
+  useEffect(() => {
+    if (activeTab === "upload" && mode === "image") {
+      setShowUploadModal(true);
+    }
+  }, [activeTab, mode]);
+
+  // Inline gallery upload sekmesine basınca direkt modal aç
+  useEffect(() => {
+    if (inlineGalleryTab === "upload" && showGallery) {
+      setShowUploadModal(true);
+    }
+  }, [inlineGalleryTab, showGallery]);
 
   if (!isOpen) return null;
 
@@ -156,7 +173,9 @@ export default function BodyEditorModal({
                 onApply={setGalleryActions}
               />
             ) : (
-              <FileUploadPanel onFileDrop={onImageUpload} />
+              <div className="p-4 text-center text-gray-500">
+                Upload modal açılıyor...
+              </div>
             )}
           </div>
         )}
@@ -170,7 +189,9 @@ export default function BodyEditorModal({
             onApply={setGalleryActions}
           />
         ) : activeTab === "upload" ? (
-          <FileUploadPanel onFileDrop={onImageUpload} />
+          <div className="p-4 text-center text-gray-500">
+            Upload modal açılıyor...
+          </div>
         ) : activeTab === "url" ? (
           <div className="p-4 text-center text-gray-500">
             URL özelliği geçici olarak devre dışı
@@ -226,6 +247,21 @@ export default function BodyEditorModal({
           />
         </div>
       </div>
+
+      {/* Upload Modal */}
+      <UploadModal
+        isOpen={showUploadModal}
+        onClose={() => {
+          setShowUploadModal(false);
+          setActiveTab("gallery"); // Upload modal kapanınca galeri sekmesine geç
+        }}
+        onUploadComplete={() => {
+          onUploadComplete?.();
+          setShowUploadModal(false);
+          setActiveTab("gallery"); // Upload sonrası galeri sekmesine geç
+          setShowGallery(false); // Inline gallery'yi de kapat
+        }}
+      />
     </div>
   );
 }
