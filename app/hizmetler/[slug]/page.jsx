@@ -20,7 +20,8 @@ export default async function ServicesDetailPage({ params }) {
   if (!service) {
     return <div className="p-6 text-red-500">Hizmet bulunamadı.</div>;
   }
-
+  {
+  }
   return (
     <DetailPageTemplate
       title={service?.title}
@@ -32,6 +33,9 @@ export default async function ServicesDetailPage({ params }) {
       otherItemsTitle="Diğer Hizmetler"
       baseHref="hizmetler"
       notFoundText="Hizmet bulunamadı."
+      locale="tr-TR"
+      pageId={service.id}
+      // heroMediaId={service.hero_media_id}
     />
   );
 }
