@@ -23,7 +23,6 @@ export default async function ServicesDetailPage({ params }) {
   if (!serviceFromServer) {
     return <div className="p-6 text-red-500">Hizmet bulunamadı.</div>;
   }
-  
   return (
     <DetailPageTemplate
       title={serviceFromServer?.name}
@@ -38,6 +37,9 @@ export default async function ServicesDetailPage({ params }) {
       otherItemsTitle="Diğer Hizmetler"
       baseHref="hizmetler"
       notFoundText="Hizmet bulunamadı."
+      locale="tr-TR"
+      pageId={service.id}
+      // heroMediaId={service.hero_media_id}
     />
   );
 }
