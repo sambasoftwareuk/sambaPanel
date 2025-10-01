@@ -51,7 +51,7 @@ export const MobileSideMenu = ({ menu, activeHref }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <aside className="w-full bg-white border rounded p-0 md:hidden">
+    <aside className="w-full bg-white border rounded p-0 md:hidden my-4">
       {menu.map((section, idx) => (
         <div key={idx} className="border-b relative">
           <button

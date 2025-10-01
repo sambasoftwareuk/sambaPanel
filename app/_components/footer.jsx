@@ -8,8 +8,6 @@ import FooterBlogList from "./FooterBlogList";
 export function Footer() {
   return (
     <footer className="text-white text-[16px]">
-      
-
       <FooterBlogList />
       <div className="border-t border-black w-full" />
 

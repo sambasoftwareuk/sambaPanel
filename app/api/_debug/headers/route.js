@@ -1,26 +1,31 @@
-export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import { NextResponse } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
-import { q, tx } from '@/lib/db';
-import sanitizeHtml from 'sanitize-html';
-import { makeSlug } from '@/lib/slug';
+import { NextResponse } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
+import { q, tx } from "@/lib/db";
+import sanitizeHtml from "sanitize-html";
+import { makeSlug } from "@/lib/slug";
 
 export async function PATCH(request, { params }) {
   const { userId, sessionId } = getAuth(request); // <-- auth'u request'ten oku
   // geçici log
-  console.log('PATCH getAuth =>', { userId, sessionId });
 
   if (!userId) {
-    return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401, headers: { 'Cache-Control': 'no-store' }});
+    return NextResponse.json(
+      { ok: false, error: "Unauthorized" },
+      { status: 401, headers: { "Cache-Control": "no-store" } }
+    );
   }
 
   const id = Number(params.id);
   const body = await request.json();
-  const locale = body.locale || 'tr-TR';
-  const safeHtml = body.content_html !== undefined ? sanitizeHtml(body.content_html || '') : undefined;
+  const locale = body.locale || "tr-TR";
+  const safeHtml =
+    body.content_html !== undefined
+      ? sanitizeHtml(body.content_html || "")
+      : undefined;
   const newSlug = body.slug_i18n ? makeSlug(body.slug_i18n, locale) : undefined;
 
   await tx(async (conn) => {
@@ -58,7 +63,8 @@ export async function PATCH(request, { params }) {
           body.meta_title ?? null,
           body.meta_description ?? null,
           body.meta_robots ?? null,
-          id, locale
+          id,
+          locale,
         ]
       );
     } else {
@@ -67,17 +73,22 @@ export async function PATCH(request, { params }) {
                                    meta_title, meta_description, meta_robots)
          VALUES (?,?,?,?,?,?,?,?,?)`,
         [
-          id, locale, newSlug || makeSlug(body.title || 'sayfa', locale),
-          body.title || 'Başlık',
+          id,
+          locale,
+          newSlug || makeSlug(body.title || "sayfa", locale),
+          body.title || "Başlık",
           body.summary || null,
           safeHtml ?? null,
           body.meta_title || null,
           body.meta_description || null,
-          body.meta_robots || null
+          body.meta_robots || null,
         ]
       );
     }
   });
 
-  return NextResponse.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' }});
+  return NextResponse.json(
+    { ok: true },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
