@@ -8,7 +8,7 @@ import {
   OutlinedButton,
   PrimaryButton,
   OutlinedButtonWithIcon,
-} from "../_atoms/buttons";
+} from "../_atoms/Buttons";
 import { Header1, Header2, Header3 } from "../_atoms/Headers";
 import Icon from "../_atoms/Icon";
 import {
@@ -27,18 +27,18 @@ import {
   LogoImage,
   ProfileImage,
   SliderImage,
-} from "../_atoms/images";
+} from "../_atoms/Images";
 import {
   InputBasic,
   InputBasicWithIcon,
   InputWithClickableIcon,
   InputWithIconStart,
-} from "../_atoms/inputs";
-import { LabelPrimary, LabelSecondary } from "../_atoms/labels";
+} from "../_atoms/Inputs";
+import { LabelPrimary, LabelSecondary } from "../_atoms/Labels";
 import { SambaLinks } from "../_atoms/SambaLinks";
-import { ShowMoreButton } from "../_atoms/showMoreButton";
-import { Checkbox } from "../_atoms/checkbox";
-import Breadcrumb from "../_molecules/breadCrumb";
+import { ShowMoreButton } from "../_atoms/Buttons";
+import { Checkbox } from "../_atoms/Checkbox";
+import Breadcrumb from "../_molecules/BreadCrumb";
 
 const page = () => {
   const [showAll, setShowAll] = useState(false);

@@ -1,9 +1,9 @@
 "use client";
 
 import { Header1 } from "@/app/_atoms/Headers";
-import { CardImage, ZoomableImage } from "@/app/_atoms/images";
-import Modal from "@/app/_molecules/modal";
-import { SambaSlider } from "@/app/_molecules/slider";
+import { CardImage, ZoomableImage } from "@/app/_atoms/Images";
+import Modal from "@/app/_molecules/Modal";
+import { SambaSlider } from "@/app/_molecules/Slider";
 import { useState } from "react";
 
 const images = ["/4.jpg", "/5.jpg", "/6.jpg", "/7.jpg", "/8.jpg", "/9.jpg"];

@@ -1,5 +1,5 @@
 import BlogComponent from "../_components/BlogComponent";
-import Breadcrumb from "../_molecules/breadCrumb";
+import Breadcrumb from "../_molecules/BreadCrumb";
 import blogData from "../mocks/blogData.json";
 import { getMetadataForPath } from "../utils/metadataHelper";
 

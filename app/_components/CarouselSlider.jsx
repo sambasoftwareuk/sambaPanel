@@ -1,7 +1,7 @@
 "use client"
 import React from "react";
-import { SambaSlider } from "../_molecules/slider";
-import ProductCardWithImage from "../_molecules/productCardWithImage";
+import { SambaSlider } from "../_molecules/Slider";
+import ProductCardWithImage from "../_molecules/ProductCardWithImage";
 import { Header1 } from "../_atoms/Headers";
 import { useWindowSize } from "../utils/useWindowSize";
 

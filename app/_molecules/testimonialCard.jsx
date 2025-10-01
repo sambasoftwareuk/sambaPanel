@@ -1,6 +1,6 @@
 import React from "react";
 import { SambaLinks } from "../_atoms/SambaLinks";
-import { ProfileImage } from "../_atoms/images";
+import { ProfileImage } from "../_atoms/Images";
 import { ChevronRight } from "../_atoms/Icons";
 
 export const TestimonialCard = ({

@@ -1,5 +1,5 @@
 import React from "react";
-import { CardImage } from "../_atoms/images";
+import { CardImage } from "../_atoms/Images";
 import { ChevronRight } from "../_atoms/Icons";
 import { SambaLinks } from "../_atoms/SambaLinks";
 

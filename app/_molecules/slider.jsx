@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { ChevronLeft, ChevronRight } from "../_atoms/Icons";
 import Icon from "../_atoms/Icon";
-import { DirectionButton } from "../_atoms/buttons";
+import { DirectionButton } from "../_atoms/Buttons";
 
 export const SambaSlider = ({
   children,

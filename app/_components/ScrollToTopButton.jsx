@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { LineUpArrow } from "../_atoms/Icons";
-import { OutlinedButtonWithIcon } from "../_atoms/buttons";
+import { OutlinedButtonWithIcon } from "../_atoms/Buttons";
 
 export default function ScrollToTopButton() {
   const [visible, setVisible] = useState(true);

@@ -1,6 +1,6 @@
 import React from "react";
 import MainItemGrid from "../_components/MainItemGrid";
-import Breadcrumb from "../_molecules/breadCrumb";
+import Breadcrumb from "../_molecules/BreadCrumb";
 import spareParts from "../mocks/spareParts.json";
 import { getMetadataForPath } from "../utils/metadataHelper";
 

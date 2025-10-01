@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header3 } from '../_atoms/Headers'
-import { LogoImage } from '../_atoms/images'
+import { LogoImage } from '../_atoms/Images'
 
 const ReferenceComponent = ({ referanceImages }) => {
   return (

@@ -1,7 +1,7 @@
 import services from "./mocks/services.json";
 import sliderData from "./mocks/sliderData.json";
 import ProductBanner from "./_molecules/productBanner";
-import SliderComponent from "./_components/sliderComponent.jsx";
+import SliderComponent from "./_components/SliderComponent.jsx";
 import bannerProducts from "./mocks/bannerProducts.json";
 // import mainProducts from "./constants/bigCardProducts.json"; //(static data)
 import CarouselSlider from "./_components/CarouselSlider.jsx";

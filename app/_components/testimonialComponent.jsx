@@ -1,5 +1,5 @@
 import React from "react";
-import { TestimonialCard } from "../_molecules/testimonialCard";
+import { TestimonialCard } from "../_molecules/TestimonialCard";
 import { Header2 } from "../_atoms/Headers";
 import testimonialData from "../mocks/testimonial.json";
 const TestimonialComponent = ({ testimonialData }) => {

@@ -1,6 +1,6 @@
 import services from "../mocks/services.json";
 import MainItemGrid from "../_components/MainItemGrid";
-import Breadcrumb from "../_molecules/breadCrumb";
+import Breadcrumb from "../_molecules/BreadCrumb";
 import { getMetadataForPath } from "../utils/metadataHelper";
 import { getServicesForListing } from "@/lib/repos/services";
 

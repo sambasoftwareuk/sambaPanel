@@ -3,7 +3,7 @@ import { usePageEdit } from "../context/PageEditProvider";
 import { useState, useEffect } from "react";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
-import { OutlinedButton, PrimaryButton } from "../_atoms/buttons";
+import { OutlinedButton, PrimaryButton } from "../_atoms/Buttons";
 
 export default function TitleEditor({ className = "" }) {
   const { title, setTitle, resetTitle } = usePageEdit();

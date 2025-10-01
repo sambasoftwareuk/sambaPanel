@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { PrimaryButton } from "../_atoms/buttons";
+import { PrimaryButton } from "../_atoms/Buttons";
 import { Header1, Header2 } from "../_atoms/Headers";
 import { useRouter } from "next/navigation";
 

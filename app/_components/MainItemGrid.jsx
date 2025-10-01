@@ -1,5 +1,5 @@
 import React from "react";
-import ProductCardWithImage from "../_molecules/productCardWithImage";
+import ProductCardWithImage from "../_molecules/ProductCardWithImage";
 import { Header1 } from "../_atoms/Headers";
 import Link from "next/link";
 

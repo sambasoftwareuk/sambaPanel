@@ -1,6 +1,6 @@
 import React from "react";
 import { Header2 } from "../_atoms/Headers";
-import { CardWithIcon } from "../_molecules/cardWithIcon";
+import { CardWithIcon } from "../_molecules/CardWithIcon";
 import Image from "next/image";
 import { Certificate } from "../_atoms/Icons";
 import goalsData from "../mocks/goals.json";

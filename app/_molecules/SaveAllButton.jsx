@@ -1,6 +1,6 @@
 "use client";
 
-import { PrimaryButton } from "../_atoms/buttons";
+import { PrimaryButton } from "../_atoms/Buttons";
 import { usePageEdit } from "../context/PageEditProvider";
 
 export default function SaveAllButton() {

@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import { Header1 } from "@/app/_atoms/Headers";
-import { MobileSideMenu, SideMenu } from "@/app/_molecules/sideMenu";
-import Breadcrumb from "@/app/_molecules/breadCrumb";
+import { MobileSideMenu, SideMenu } from "@/app/_molecules/SideMenu";
+import Breadcrumb from "@/app/_molecules/BreadCrumb";
 import MainItemGrid from "@/app/_components/MainItemGrid";
 import { sanitizeHtmlContent } from "../utils/cleanHTML";
 import { PageEditProvider } from "../context/PageEditProvider";
@@ -10,10 +10,10 @@ import TitleDisplay from "../_molecules/TitleDisplay";
 import { SignedIn } from "@clerk/nextjs";
 import TitleEditor from "../_molecules/TitleEditor";
 import BodyDisplay from "../_molecules/BodyDisplay";
-import BodyEditor from "../_molecules/bodyEditor";
+import BodyEditor from "../_molecules/BodyEditor";
 import DraftHeroImage from "../_molecules/DraftHeroImage";
 import ImageEditor from "../_molecules/ImageEditor";
-import { PrimaryButton } from "../_atoms/buttons";
+import { PrimaryButton } from "../_atoms/Buttons";
 import { NavigationGuard } from "../_molecules/NavigationGuard";
 
 const DetailPageTemplate = ({

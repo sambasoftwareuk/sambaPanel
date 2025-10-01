@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { CourseTagButton } from "../_atoms/buttons";
-import { SambaSlider } from "../_molecules/slider";
+import { CourseTagButton } from "../_atoms/Buttons";
+import { SambaSlider } from "../_molecules/Slider";
 import links from "../mocks/courses.json";
-import TabMenu from "../_molecules/tabMenu";
-import CourseCard from "../_molecules/courseCard";
+import TabMenu from "../_molecules/TabMenu";
+import CourseCard from "../_molecules/CourseCard";
 
 const SkillsSection = ({ courses }) => {
   const { tabs, tagMap } = links;

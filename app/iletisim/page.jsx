@@ -1,5 +1,5 @@
 import React from "react";
-import Breadcrumb from "../_molecules/breadCrumb";
+import Breadcrumb from "../_molecules/BreadCrumb";
 import ContactCard from "../_molecules/contactCard";
 import { Header1, Header3 } from "../_atoms/Headers";
 import contactData from "../mocks/contactData.json";

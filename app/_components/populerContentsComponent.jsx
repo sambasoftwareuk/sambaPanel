@@ -1,5 +1,5 @@
 import React from 'react'
-import CourseCard from '../_molecules/courseCard'
+import CourseCard from '../_molecules/CourseCard'
 import { Header2 } from '../_atoms/Headers'
 
 const PopularContentsComponent = ( { courses } ) => {
