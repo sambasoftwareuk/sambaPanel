@@ -1,9 +1,9 @@
 import blogData from "@/app/mocks/blogData.json";
 import { Header1 } from "@/app/_atoms/Headers";
-import Breadcrumb from "@/app/_molecules/breadCrumb";
+import Breadcrumb from "@/app/_molecules/BreadCrumb";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { MobileSideMenu, SideMenu } from "@/app/_molecules/sideMenu";
+import { MobileSideMenu, SideMenu } from "@/app/_molecules/SideMenu";
 import sideMenuData from "../../mocks/sideMenuData.json";
 
 export default function BlogDetailPage({ params }) {

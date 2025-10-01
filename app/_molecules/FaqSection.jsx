@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import faqs from "../mocks/faqSection";
-import { AccordionSection } from "./accordionSection";
-import { ShowMoreButton } from "../_atoms/showMoreButton";
+import { AccordionSection } from "./AccordionSection";
+import { ShowMoreButton } from "../_atoms/Buttons";
 
 export const FAQSection = () => {
   const [showAll, setShowAll] = useState(false);

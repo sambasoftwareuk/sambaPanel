@@ -1,6 +1,6 @@
 import React from "react";
-import { CardImage } from "../_atoms/images";
-import { PrimaryButton } from "../_atoms/buttons";
+import { CardImage } from "../_atoms/Images";
+import { PrimaryButton } from "../_atoms/Buttons";
 
 const ProductCardWithImage = ({
   altText,

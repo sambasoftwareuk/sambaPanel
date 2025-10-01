@@ -1,6 +1,6 @@
-import { SambaSlider } from "../_molecules/slider";
-import { SliderImage } from "../_atoms/images";
-import SliderCard from "../_molecules/sliderCard";
+import { SambaSlider } from "../_molecules/Slider";
+import { SliderImage } from "../_atoms/Images";
+import SliderCard from "../_molecules/SliderCard";
 
 const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
   return (

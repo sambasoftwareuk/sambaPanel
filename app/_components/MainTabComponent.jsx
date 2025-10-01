@@ -1,8 +1,8 @@
 import React from 'react'
-import { OutlinedButton } from '../_atoms/buttons'
-import TabMenu from '../_molecules/tabMenu'
+import { OutlinedButton } from '../_atoms/Buttons'
+import TabMenu from '../_molecules/TabMenu'
 import { Header1 } from '../_atoms/Headers'
-import { AccordionSection } from '../_molecules/accordionSection'
+import { AccordionSection } from '../_molecules/AccordionSection'
 
 const MainTabComponent = ({tabs}) => {
   return (

@@ -3,7 +3,7 @@ import Link from "next/link";
 import navLinks from "../constants/navLinks";
 import blogPosts from "../mocks/blogData.json";
 import { Header2, Header3 } from "../_atoms/Headers";
-import { LogoImage } from "../_atoms/images";
+import { LogoImage } from "../_atoms/Images";
 import Logo from "../constants/logo.json";
 import CompanyAddress from "./CompanyAddress";
 

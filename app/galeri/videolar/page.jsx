@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { Header1 } from "../../_atoms/Headers";
-import VideoCard from "../../_molecules/videoCard";
-import Modal from "../../_molecules/modal";
-import { SambaSlider } from "../../_molecules/slider";
+import VideoCard from "../../_molecules/VideoCard";
+import Modal from "../../_molecules/Modal";
+import { SambaSlider } from "../../_molecules/Slider";
 import galleryVideos from "../../mocks/galleryVideos.json";
 
 const Videos = () => {

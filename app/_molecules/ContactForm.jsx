@@ -1,9 +1,9 @@
 'use client';
 import React, { useState } from 'react';
 import { Header2 } from '../_atoms/Headers';
-import { InputBasic } from '../_atoms/inputs';
-import { Checkbox } from '../_atoms/checkbox';
-import { PrimaryButton } from '../_atoms/buttons';
+import { InputBasic } from '../_atoms/Inputs';
+import { Checkbox } from '../_atoms/Checkbox';
+import { PrimaryButton } from '../_atoms/Buttons';
 
 const ContactForm = ({ 
   title = "Bize Ulaşın",

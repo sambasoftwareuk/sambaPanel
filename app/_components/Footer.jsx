@@ -2,7 +2,7 @@ import { SambaLinks } from "../_atoms/SambaLinks";
 import Icon from "../_atoms/Icon";
 import { Globe } from "../_atoms/Icons";
 import footerData from "../mocks/footerData";
-import { AccordionSection } from "../_molecules/accordionSection";
+import { AccordionSection } from "../_molecules/AccordionSection";
 import FooterBlogList from "./FooterBlogList";
 
 export function Footer() {

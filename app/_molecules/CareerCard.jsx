@@ -1,7 +1,7 @@
 import { Header3 } from "../_atoms/Headers";
-import { LabelTertiary } from "../_atoms/labels.jsx";
+import { LabelTertiary } from "../_atoms/Labels.jsx";
 import { StarFilled } from "../_atoms/Icons";
-import { CardImage } from "../_atoms/images";
+import { CardImage } from "../_atoms/Images";
 
 export const CareerCard = ({
   title,

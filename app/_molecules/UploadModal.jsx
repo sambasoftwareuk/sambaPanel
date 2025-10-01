@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import DragDropZone from "./DragDropZone";
-import { PrimaryButton, OutlinedButton } from "../_atoms/buttons";
+import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }) {

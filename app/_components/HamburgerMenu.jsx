@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import Icon from "../_atoms/Icon";
-import { IconOnlyButton } from "../_atoms/buttons";
+import { IconOnlyButton } from "../_atoms/Buttons";
 import navLinks from "../constants/navLinks";
 import {
   Cart,
@@ -20,8 +20,8 @@ import {
   Blog,
   socialIcons,
 } from "../_atoms/Icons";
-import { AccordionSection } from "../_molecules/accordionSection";
-import { LogoImage } from "../_atoms/images";
+import { AccordionSection } from "../_molecules/AccordionSection";
+import { LogoImage } from "../_atoms/Images";
 import Logo from "../constants/logo.json";
 
 const HamburgerMenu = () => {

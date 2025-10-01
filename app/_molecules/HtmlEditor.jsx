@@ -1,6 +1,6 @@
 "use client";
 
-import { PrimaryButton, OutlinedButton } from "../_atoms/buttons";
+import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 
 export default function HtmlEditor({
   htmlContent,

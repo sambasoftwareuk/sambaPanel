@@ -1,7 +1,7 @@
 import React from "react";
-import DesktopNavbar from "./desktopNavbar";
-import HamburgerMenu from "./hamburgerMenu";
-import AnnouncementBand from "./announcementBand";
+import DesktopNavbar from "./DesktopNavbar";
+import HamburgerMenu from "./HamburgerMenu";
+import AnnouncementBand from "./AnnouncementBand";
 
 const Navbar = () => {
   return (

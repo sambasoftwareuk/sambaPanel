@@ -1,9 +1,9 @@
 "use client";
 
 import { Header1 } from "../_atoms/Headers";
-import { CardImage, ZoomableImage } from "../_atoms/images";
-import Modal from "../_molecules/modal";
-import { SambaSlider } from "../_molecules/slider";
+import { CardImage, ZoomableImage } from "../_atoms/Images";
+import Modal from "../_molecules/Modal";
+import { SambaSlider } from "../_molecules/Slider";
 import { useState } from "react";
 
 const GalleryComponent = ({ title = "Galeri", images = [] }) => {

@@ -1,5 +1,5 @@
 
-import SliderComponent from '../_components/sliderComponent'
+import SliderComponent from '../_components/SliderComponent'
 import images from '../mocks/images.json'
 import sliderData from '../mocks/sliderData.json'
 

@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import Icon from "../_atoms/Icon";
-import { IconOnlyButton } from "../_atoms/buttons";
+import { IconOnlyButton } from "../_atoms/Buttons";
 import { Home, TurkishFlag, UKFlag } from "../_atoms/Icons";
 import navLinks from "../constants/navLinks";
-import { LogoImage } from "../_atoms/images";
+import { LogoImage } from "../_atoms/Images";
 import Logo from "../constants/logo.json";
 import { UserButton } from "@clerk/nextjs";
 

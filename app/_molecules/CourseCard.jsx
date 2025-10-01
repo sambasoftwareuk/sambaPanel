@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { CardImage } from "../_atoms/images";
-import { PrimaryButton } from "../_atoms/buttons";
+import { CardImage } from "../_atoms/Images";
+import { PrimaryButton } from "../_atoms/Buttons";
 import { Star } from "../_atoms/Icons";
 
 const CourseCard = ({

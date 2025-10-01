@@ -1,8 +1,8 @@
 import React from "react";
 import references from "../mocks/references.json";
-import ProductCardWithImage from "../_molecules/productCardWithImage";
+import ProductCardWithImage from "../_molecules/ProductCardWithImage";
 import { Header1 } from "../_atoms/Headers";
-import Breadcrumb from "../_molecules/breadCrumb";
+import Breadcrumb from "../_molecules/BreadCrumb";
 import { getMetadataForPath } from "../utils/metadataHelper";
 
 export async function generateMetadata() {

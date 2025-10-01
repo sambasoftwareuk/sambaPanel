@@ -1,5 +1,5 @@
 import React from "react";
-import Breadcrumb from "../_molecules/breadCrumb";
+import Breadcrumb from "../_molecules/BreadCrumb";
 import { SignedIn } from "@clerk/nextjs";
 import TitleDisplay from "../_molecules/TitleDisplay";
 import BodyDisplay from "../_molecules/BodyDisplay";

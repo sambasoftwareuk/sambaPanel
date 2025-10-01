@@ -1,5 +1,5 @@
 import { Header1} from "../_atoms/Headers";
-import BlogCard from "../_molecules/blogCard";
+import BlogCard from "../_molecules/BlogCard";
 
 const BlogCardList = ({ blogData }) => (
     <div className="w-full flex flex-col items-center mt-8">

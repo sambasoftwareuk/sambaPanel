@@ -1,4 +1,4 @@
-import { OutlinedButton, PrimaryButton } from "./buttons";
+import { OutlinedButton, PrimaryButton } from "./Buttons";
 
 export default function DeleteConfirmModal({
   isOpen,

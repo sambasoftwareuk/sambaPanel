@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { TabButton } from "../_atoms/buttons";
+import { TabButton } from "../_atoms/Buttons";
 import Icon from "../_atoms/Icon";
 import { DownArrowIcon, UpArrowIcon } from "../_atoms/Icons";
 

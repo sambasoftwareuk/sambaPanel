@@ -1,4 +1,4 @@
-import { BaseButton } from "./buttons";
+import { BaseButton } from "./Buttons";
 
 export default function InlineTabButton({
   label,

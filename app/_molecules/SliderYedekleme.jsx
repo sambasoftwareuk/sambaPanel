@@ -1,4 +1,4 @@
- export const SambaSlider = ({
+ export const SliderYedekleme = ({
    size = "sm",
    children,
    variant,

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { CardImage } from "../_atoms/images";
+import { CardImage } from "../_atoms/Images";
 import { Play } from "../_atoms/Icons";
 
 const VideoCard = ({
