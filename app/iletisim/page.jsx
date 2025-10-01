@@ -1,6 +1,6 @@
 import React from "react";
 import Breadcrumb from "../_molecules/BreadCrumb";
-import ContactCard from "../_molecules/contactCard";
+import ContactCard from "../_molecules/ContactCard";
 import { Header1, Header3 } from "../_atoms/Headers";
 import contactData from "../mocks/contactData.json";
 import ContactFormWrapper from "../_components/ContactFormWrapper";

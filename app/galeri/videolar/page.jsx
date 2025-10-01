@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Header1 } from "../../_atoms/Headers";
-import VideoCard from "../../_molecules/videoCard";
+import VideoCard from "../../_molecules/VideoCard";
 import Modal from "../../_molecules/Modal";
 import { SambaSlider } from "../../_molecules/Slider";
 import galleryVideos from "../../mocks/galleryVideos.json";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import ContactForm from "../_molecules/contactForm";
+import ContactForm from "../_molecules/ContactForm";
 
 const ContactFormWrapper = ({ kvkkLink, className }) => {
   const handleFormSubmit = (formData) => {
