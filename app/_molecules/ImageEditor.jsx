@@ -5,6 +5,7 @@ import { usePageEdit } from "../context/PageEditProvider";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
+import UploadModal from "./UploadModal";
 
 export default function ImageEditor({
   initialUrl = "/5.jpg",
@@ -36,6 +37,8 @@ export default function ImageEditor({
 
   const [stagedFile, setStagedFile] = useState(null);
   const [stagedPreview, setStagedPreview] = useState(null);
+  const [uploadComplete, setUploadComplete] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
   const abortControllerRef = useRef(null);
 
   // Modal açılınca state güncelle
@@ -45,6 +48,8 @@ export default function ImageEditor({
     setAlt(heroAlt || initialAlt);
     setPreviewOk(true);
     setError("");
+    setUploadComplete(false);
+    setShowUploadModal(false);
   }, [open, heroUrl, heroAlt, initialUrl, initialAlt]);
 
   // URL kontrol
@@ -219,6 +224,17 @@ export default function ImageEditor({
         error={error}
         onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
         deletedImages={deletedImages}
+        onUploadComplete={() => setUploadComplete(true)}
+      />
+
+      {/* Upload Modal */}
+      <UploadModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+        onUploadComplete={() => {
+          setUploadComplete(true);
+          setShowUploadModal(false);
+        }}
       />
     </>
   );
