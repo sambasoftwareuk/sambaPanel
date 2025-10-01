@@ -5,7 +5,7 @@ import { SambaLinks } from "../_atoms/SambaLinks";
 
 export const SideMenu = ({ menu, activeHref }) => (
   <aside className="w-64 bg-white  p-0 hidden md:block">
-    {menu.map((section, idx) => (
+    {menu?.map((section, idx) => (
       <div key={idx} className="mb-0">
         <div
           className={`font-bold px-4 py-3 ${

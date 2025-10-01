@@ -1,12 +1,16 @@
 import React from "react";
-import products from "../constants/bigCardProducts.json";
+// import products from "../constants/bigCardProducts.json"; (static data)
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/breadCrumb";
 import { getMetadataForPath } from "../utils/metadataHelper";
+import { getProductGroups } from "@/lib/repos/page";
 
 export async function generateMetadata() {
   return getMetadataForPath("/urunler");
 }
+
+const locale = "tr-TR";
+const products = await getProductGroups({ locale });
 
 const ProductPage = () => {
   return (

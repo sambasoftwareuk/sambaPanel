@@ -53,7 +53,7 @@ export const CardImage = ({
       >
         <Image
           src={src}
-          alt={`slider-image-${imageAlt ? imageAlt : randomImageAlt}`}
+          alt={`${imageAlt ? imageAlt : randomImageAlt}`}
           fill
           className="object-contain"
         />
