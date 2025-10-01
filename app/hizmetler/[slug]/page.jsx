@@ -24,6 +24,7 @@ export default async function ServicesDetailPage({ params }) {
   }
   return (
     <DetailPageTemplate
+      pageId={serviceFromServer?.id}
       title={serviceFromServer?.name}
       description={serviceFromServer?.content_html}
       //buradaki image şuan tek link olarak hero_url olarak geliyor anca bunun bir liste olaması ve service_media'dan gelmesi lazım. Hem burası hem de getSingleService fonksiyonu düzenlenmeli 

@@ -38,7 +38,7 @@ const DetailPageTemplate = ({
     <div className="max-w-7xl mx-auto p-6">
       <PageEditProvider
         initialTitle={title}
-        initialBody={description || "<p></p>"}
+        initialBody={safeHtml || "<p></p>"}
         initialHeroUrl={image || "/placeholder.jpg"}
         initialHeroAlt={title}
         pageId={pageId}
@@ -61,7 +61,7 @@ const DetailPageTemplate = ({
 
             <div className="flex items-start gap-2 mt-4">
               <div className="flex flex-col gap-6">
-                <BodyDisplay initialHtml={description} />
+                <BodyDisplay initialHtml={safeHtml} />
                 <SignedIn>
                   {/* <SaveAllButton pageId={page.id} locale={page.locale} /> */}
                   <PrimaryButton
