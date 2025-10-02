@@ -7,6 +7,7 @@ import { Header2 } from "../_atoms/Headers";
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [filePreviews, setFilePreviews] = useState([]); // Blob URL'leri tutmak için
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef(null);
 
@@ -21,7 +22,14 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
       return;
     }
 
+    // Her dosya için blob URL oluştur
+    const newPreviews = imageFiles.map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+
     setSelectedFiles((prev) => [...prev, ...imageFiles]);
+    setFilePreviews((prev) => [...prev, ...newPreviews]);
   };
 
   const handleClick = () => {
@@ -29,7 +37,14 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
   };
 
   const removeFile = (index) => {
+    // Kaldırılan dosyanın blob URL'ini temizle
+    const previewToRemove = filePreviews[index];
+    if (previewToRemove) {
+      URL.revokeObjectURL(previewToRemove.url);
+    }
+
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+    setFilePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleUpload = async () => {
@@ -81,7 +96,10 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
   };
 
   const handleClose = () => {
+    // Tüm blob URL'leri temizle
+    filePreviews.forEach(({ url }) => URL.revokeObjectURL(url));
     setSelectedFiles([]);
+    setFilePreviews([]);
     onClose();
   };
 
@@ -128,11 +146,11 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
               Seçilen Resimler ({selectedFiles.length})
             </h4>
             <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
-              {selectedFiles.map((file, index) => (
+              {filePreviews.map((preview, index) => (
                 <div key={index} className="relative">
                   <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
+                    src={preview.url}
+                    alt={preview.file.name}
                     className="w-full h-20 object-cover rounded border"
                   />
                   <button
@@ -142,7 +160,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
                     ×
                   </button>
                   <p className="text-xs text-gray-600 truncate mt-1">
-                    {file.name}
+                    {preview.file.name}
                   </p>
                 </div>
               ))}
