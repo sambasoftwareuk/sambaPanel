@@ -35,7 +35,7 @@ const DetailPageTemplate = ({
 
   const safeHtml = sanitizeHtmlContent(description);
   return (
-    <div className="max-w-7xl mx-auto p-6">
+    <div className="bg-black">
       <PageEditProvider
         initialTitle={title}
         initialBody={safeHtml || "<p></p>"}
@@ -44,20 +44,21 @@ const DetailPageTemplate = ({
         pageId={pageId}
         locale={locale}
       >
-        <div className="max-w-7xl mx-auto p-6">
-          <div className="text-center">
+        <div className="min-h-screen bg-gray-50">
+          <div className="container mx-auto px-4 py-8">
             <Breadcrumb />
             <NavigationGuard />
           </div>
-          <div className="flex items-center justify-center gap-8">
+          <div className="flex-1">
             <TitleDisplay initialTitle={title} />
             <SignedIn>
               <TitleEditor pageId={pageId} locale={locale} />
             </SignedIn>
           </div>
-          <div className="flex flex-col lg:flex-row justify-between gap-8 ">
-            <SideMenu menu={menu} activeHref={activeHref} />
-            {/* <MobileSideMenu menu={menu} activeHref={activeHref} /> */}
+          
+            <div className="flex flex-col lg:flex-row justify-between gap-8 ">
+              {menu && <SideMenu menu={menu} activeHref={activeHref} />}
+          
 
             <div className="flex items-start gap-2 mt-4">
               <div className="flex flex-col gap-6">
