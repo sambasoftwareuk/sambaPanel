@@ -3,9 +3,7 @@ import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 // import sideMenuData from "../../mocks/sideMenuData.json";
 import { getMetadataForPath } from "@/app/utils/metadataHelper";
 import { getSingleProduct } from "@/lib/repos/page";
-import {
-  getSideMenuForPath,
-} from "../../../lib/repos/sideMenu";
+import { getSideMenuForPath } from "../../../lib/repos/sideMenu";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -27,9 +25,8 @@ export default async function ProductDetailPage({ params }) {
 
   return (
     <DetailPageTemplate
-      title={product?.name}
-      description={product?.content_html}
-      image={product?.hero_url}
+      page={product}
+      locale={locale}
       menu={arraySideMenu}
       activeHref={`/urunler/${product?.slug}`}
       // otherItems={product.filter((p) => p.slug !== slug)}

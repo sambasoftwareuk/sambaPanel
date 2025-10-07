@@ -3,6 +3,8 @@
 import { useMemo } from "react";
 import Image from "next/image";
 import { usePageEdit } from "../context/PageEditProvider";
+import ImageEditor from "./ImageEditor";
+import { SignedIn } from "@clerk/nextjs";
 
 export default function DraftHeroImage({
   initialUrl = "/5.jpg",
@@ -24,13 +26,18 @@ export default function DraftHeroImage({
   );
 
   return (
-    <Image
-      src={url}
-      alt={alt}
-      width={width}
-      height={height}
-      className={className}
-      data-imageid={id}
-    />
+    <div className="w-80 shrink-0">
+      <Image
+        src={url}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        data-imageid={id}
+      />
+      <SignedIn>
+        <ImageEditor initialUrl={initialUrl} initialAlt={initialAlt} />
+      </SignedIn>
+    </div>
   );
 }
