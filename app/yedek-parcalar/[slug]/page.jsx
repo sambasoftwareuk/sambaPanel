@@ -21,7 +21,7 @@ export default async function SparePartDetailPage({ params }) {
 
   return (
     <DetailPageTemplate
-      title={sparePart?.title}
+      page={sparePart}
       description={sparePart?.description}
       image={sparePart?.image}
       menu={sparePartMenu}

@@ -12,6 +12,7 @@ export function PageEditProvider({
   initialHeroMediaId,
   pageId,
   locale,
+  baseHref,
   children,
 }) {
   const [title, setTitle] = useState(initialTitle);
@@ -61,8 +62,11 @@ export function PageEditProvider({
       for (const img of deletedImages) {
         if (heroMediaId === img.id) setHeroMediaId(null);
       }
-
       // API'ye gönder
+
+      console.log(pageId);
+      // const res = await fetch(
+      // `api/${baseHref == "hakkimizda" ? "pages" : ""}/${pageId}`,
       const res = await fetch(`/api/pages/${pageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -125,6 +129,7 @@ export function PageEditProvider({
         resetHero,
         pageId,
         locale,
+        baseHref,
       }}
     >
       {children}
