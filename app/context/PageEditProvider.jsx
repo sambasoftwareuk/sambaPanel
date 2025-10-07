@@ -64,7 +64,6 @@ export function PageEditProvider({
       }
       // API'ye gönder
 
-      console.log(pageId);
       // const res = await fetch(
       // `api/${baseHref == "hakkimizda" ? "pages" : ""}/${pageId}`,
       const res = await fetch(`/api/pages/${pageId}`, {

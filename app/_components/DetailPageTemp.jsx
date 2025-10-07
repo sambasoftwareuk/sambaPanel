@@ -59,7 +59,7 @@ const DetailPageTemplate = ({
               initialHeroUrl={page.hero_url || image || "/placeholder.jpg"}
               initialHeroAlt={page.hero_alt || page.title || title}
               initialHeroMediaId={page.hero_media_id}
-              pageId={page.id || page.id}
+              pageId={page.id || pageId}
               locale={page.locale || locale}
               baseHref={page.slug}
             >
@@ -68,21 +68,21 @@ const DetailPageTemplate = ({
                 <div className="flex-1">
                   {/* Title */}
                   <TitleDisplay
-                    pageId={page.id || page.id}
+                    pageId={page.id || pageId}
                     locale={page.locale || locale}
                   />
 
                   {/* Body */}
                   <BodyDisplay
                     initialHtml={page.content_html || safeHtml || description}
-                    pageId={page.id || page.id}
+                    pageId={page.id || pageId}
                     locale={page.locale || locale}
                   />
 
                   {/* Save all button */}
                   <SaveAllButton
                     baseHref={baseHref}
-                    pageId={page.id || page.id}
+                    pageId={page.id || pageId}
                     locale={page.locale || locale}
                   />
                 </div>
