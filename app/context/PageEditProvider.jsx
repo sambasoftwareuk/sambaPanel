@@ -10,6 +10,7 @@ export function PageEditProvider({
   initialHeroUrl,
   initialHeroAlt,
   initialHeroMediaId,
+  initialSideMenu,
   pageId,
   locale,
   baseHref,
@@ -22,6 +23,9 @@ export function PageEditProvider({
   const [heroMediaId, setHeroMediaId] = useState(initialHeroMediaId);
   const [deletedImages, setDeletedImages] = useState([]);
   const [saving, setSaving] = useState(false);
+  const [sideMenu, setSideMenu] = useState(initialSideMenu);
+  const [sideMenuDirty, setSideMenuDirty] = useState(false);
+  const [sideMenuSaving, setSideMenuSaving] = useState(false);
 
   // Baseline'ı useRef ile sakla (render tetiklemez)
   const baselineRef = useRef({
@@ -40,9 +44,34 @@ export function PageEditProvider({
       heroUrl !== base.heroUrl ||
       heroAlt !== base.heroAlt ||
       heroMediaId !== base.heroMediaId ||
+      sideMenuDirty ||
       deletedImages.length > 0
     );
-  }, [title, bodyHtml, heroUrl, heroAlt, heroMediaId, deletedImages]);
+  }, [
+    title,
+    bodyHtml,
+    heroUrl,
+    heroAlt,
+    heroMediaId,
+    sideMenuDirty,
+    deletedImages,
+  ]);
+
+  const updateSideMenuTitle = (sectionIndex, newTitle) => {
+    setSideMenu((prev) => {
+      if (!prev) return prev;
+      return prev.map((section, idx) =>
+        idx === sectionIndex
+          ? {
+              ...section,
+              title: newTitle,
+              menu_key: baseHref || "urunler", // baseHref'i kullan
+            }
+          : section
+      );
+    });
+    setSideMenuDirty(true);
+  };
 
   const markSaved = () => {
     baselineRef.current = {
@@ -52,7 +81,42 @@ export function PageEditProvider({
       heroAlt,
       heroMediaId,
     };
+    setDeletedImages([]);
+    setSideMenuDirty(false);
   };
+
+  const resetSideMenu = () => {
+    setSideMenu(initialSideMenu);
+    setSideMenuDirty(false);
+  };
+
+  // SideMenu için ayrı save fonksiyonu
+  async function handleSideMenuSave() {
+    if (!sideMenuDirty) return;
+    setSideMenuSaving(true);
+    try {
+      const res = await fetch(`/api/side-menu`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          side_menu: sideMenu,
+          locale,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error("SideMenu API hatası:", res.status, errorText);
+        throw new Error(`SideMenu API error: ${res.status} - ${errorText}`);
+      }
+
+      setSideMenuDirty(false);
+    } catch (err) {
+      console.error("SideMenu save failed:", err);
+    } finally {
+      setSideMenuSaving(false);
+    }
+  }
 
   async function handleSave() {
     if (!isDirty) return;
@@ -63,18 +127,22 @@ export function PageEditProvider({
         if (heroMediaId === img.id) setHeroMediaId(null);
       }
       // API'ye gönder
+      const requestBody = {
+        title,
+        content_html: bodyHtml,
+        hero_media_id: heroMediaId,
+        locale,
+      };
 
-      // const res = await fetch(
-      // `api/${baseHref == "hakkimizda" ? "pages" : ""}/${pageId}`,
+      // Sadece sideMenu değiştiyse ekle
+      if (sideMenuDirty) {
+        requestBody.side_menu = sideMenu;
+      }
+
       const res = await fetch(`/api/pages/${pageId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          content_html: bodyHtml,
-          hero_media_id: heroMediaId,
-          locale,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!res.ok) throw new Error("API error");
@@ -90,6 +158,7 @@ export function PageEditProvider({
 
       setDeletedImages([]);
       baselineRef.current = { title, bodyHtml, heroUrl, heroAlt, heroMediaId }; // mark as saved
+      setSideMenuDirty(false);
     } catch (err) {
       console.error("Save failed:", err);
     } finally {
@@ -126,6 +195,12 @@ export function PageEditProvider({
         resetTitle,
         resetBody,
         resetHero,
+        sideMenu,
+        updateSideMenuTitle,
+        sideMenuDirty,
+        handleSideMenuSave,
+        sideMenuSaving,
+        resetSideMenu,
         pageId,
         locale,
         baseHref,

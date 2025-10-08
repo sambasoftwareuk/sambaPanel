@@ -1,7 +1,7 @@
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
-import sideMenuData from "../../mocks/sideMenuData.json";
 import { getMetadataForPath } from "@/app/utils/metadataHelper";
 import { getSingleService } from "@/lib/repos/services";
+import { getSideMenuForPath } from "../../../lib/repos/sideMenu";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -11,12 +11,16 @@ export async function generateMetadata({ params }) {
 
 export default async function ServicesDetailPage({ params }) {
   const { slug } = await params;
+  const locale = "tr-TR";
+  const path = `/hizmetler`;
+  const sideMenu = await getSideMenuForPath(path, locale);
 
-  const serviceFromServer = await getSingleService(slug, "tr-TR");
+  function toArray(x) {
+    return x == null ? [] : Array.isArray(x) ? x : [x];
+  }
+  const arraySideMenu = toArray(sideMenu);
 
-  const serviceMenu = sideMenuData.filter(
-    (section) => section.title === "Hizmetlerimiz"
-  );
+  const serviceFromServer = await getSingleService(slug, locale);
 
   if (!serviceFromServer) {
     return <div className="p-6 text-red-500">Hizmet bulunamadı.</div>;
@@ -29,7 +33,7 @@ export default async function ServicesDetailPage({ params }) {
       description={serviceFromServer?.content_html}
       //buradaki image şuan tek link olarak hero_url olarak geliyor anca bunun bir liste olaması ve service_media'dan gelmesi lazım. Hem burası hem de getSingleService fonksiyonu düzenlenmeli
       image={serviceFromServer?.hero_url}
-      menu={serviceMenu}
+      menu={arraySideMenu}
       activeHref={`/hizmetler/${serviceFromServer?.slug_i18n}`}
       //Aşağıdaki bölümü ayarlamamız lazım
       // otherItems={serviceFromServer?.filter((s) => s.slug !== slug)}

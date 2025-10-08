@@ -28,7 +28,7 @@ export default async function ProductDetailPage({ params }) {
       page={product}
       locale={locale}
       menu={arraySideMenu}
-      activeHref={`/urunler/${product?.slug}`}
+      activeHref={`/urunler/${product?.slug_i18n}`}
       // otherItems={product.filter((p) => p.slug !== slug)}
       otherItemsTitle="Diğer Ürünler"
       baseHref="urunler"
