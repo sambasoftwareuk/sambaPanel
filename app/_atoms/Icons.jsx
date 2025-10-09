@@ -507,3 +507,17 @@ export const EditIcon = ({ style, className = "" }) => (
     <path d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
   </svg>
 );
+
+export const RefreshIcon = ({ style, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="24px"
+    width="24px"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    style={style}
+    className={className}
+  >
+    <path d="M17.65 6.35A8 8 0 0 0 12 4V1L7 6l5 5V7a5 5 0 1 1-4.9 6h-2A7 7 0 1 0 17.65 6.35z" />
+  </svg>
+);

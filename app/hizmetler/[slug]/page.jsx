@@ -21,6 +21,7 @@ export default async function ServicesDetailPage({ params }) {
   if (!serviceFromServer) {
     return <div className="p-6 text-red-500">Hizmet bulunamadı.</div>;
   }
+
   return (
     <DetailPageTemplate
       pageId={serviceFromServer?.id}
