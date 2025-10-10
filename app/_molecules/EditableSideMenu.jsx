@@ -1,47 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SambaLinks } from "../_atoms/SambaLinks";
 import { SignedIn } from "@clerk/nextjs";
 import EditButton from "../_atoms/EditButton";
 import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { usePageEdit } from "../context/PageEditProvider";
+import { SideMenuTitleEditor } from "./SideMenuTitleEditor";
 
-// TitleEditor Modal Component
-function SideMenuTitleEditor({ sectionIndex, currentTitle, onSave, onCancel }) {
-  const [draftTitle, setDraftTitle] = useState(currentTitle);
-
-  useEffect(() => {
-    setDraftTitle(currentTitle);
-  }, [currentTitle]);
-
-  const handleSave = () => {
-    onSave(sectionIndex, draftTitle);
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
-      <div className="w-full max-w-md rounded-xl bg-white p-4 shadow-lg">
-        <h2 className="mb-3 text-lg font-semibold">Başlığı Düzenle</h2>
-        <input
-          value={draftTitle}
-          onChange={(e) => setDraftTitle(e.target.value)}
-          className="w-full rounded border px-3 py-2"
-          placeholder="Başlık"
-          autoFocus
-        />
-        <div className="mt-4 flex justify-end gap-2">
-          <OutlinedButton label="Vazgeç" onClick={onCancel} />
-          <PrimaryButton
-            label="Kaydet"
-            onClick={handleSave}
-            className="bg-black text-white"
-          />
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export const EditableSideMenu = ({ menu, activeHref }) => {
   const {
@@ -70,10 +36,17 @@ export const EditableSideMenu = ({ menu, activeHref }) => {
   const cancelEdit = () => {
     setEditingSection(null);
   };
+  if (!displayMenu || displayMenu.length === 0) {
+    return (
+      <div className="w-64 bg-white p-4 hidden md:block">
+        <p className="text-gray-500 text-center">Menü bulunamadı</p>
+      </div>
+    );
+  }
 
   return (
     <aside className="w-64 bg-white p-0 hidden md:block">
-      {displayMenu?.map((section, idx) => (
+      { displayMenu?.map((section, idx) => (
         <div key={idx} className="mb-0">
           <div
             className={`font-bold px-4 py-3 ${

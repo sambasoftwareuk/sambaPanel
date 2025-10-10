@@ -90,26 +90,26 @@ export function PageEditProvider({
     setSideMenuDirty(false);
   };
 
+  // Helper function for API call
+  const patchSideMenu = async (sideMenu, locale) => {
+    const res = await fetch(`/api/side-menu`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ side_menu: sideMenu, locale }),
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(`SideMenu API error: ${res.status} - ${errorText}`);
+    }
+  };
+
   // SideMenu için ayrı save fonksiyonu
   async function handleSideMenuSave() {
     if (!sideMenuDirty) return;
     setSideMenuSaving(true);
     try {
-      const res = await fetch(`/api/side-menu`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          side_menu: sideMenu,
-          locale,
-        }),
-      });
-
-      if (!res.ok) {
-        const errorText = await res.text();
-        console.error("SideMenu API hatası:", res.status, errorText);
-        throw new Error(`SideMenu API error: ${res.status} - ${errorText}`);
-      }
-
+      await patchSideMenu(sideMenu, locale);
       setSideMenuDirty(false);
     } catch (err) {
       console.error("SideMenu save failed:", err);
