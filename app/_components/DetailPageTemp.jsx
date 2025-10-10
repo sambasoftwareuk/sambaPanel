@@ -1,6 +1,7 @@
 import React from "react";
 import { Header1 } from "@/app/_atoms/Headers";
 import { SideMenu } from "@/app/_molecules/SideMenu";
+import { EditableSideMenu } from "@/app/_molecules/EditableSideMenu";
 import Breadcrumb from "@/app/_molecules/BreadCrumb";
 import MainItemGrid from "@/app/_components/MainItemGrid";
 import { sanitizeHtmlContent } from "../utils/cleanHTML";
@@ -36,32 +37,33 @@ const DetailPageTemplate = ({
         <div className=" flex justify-center">
           <Breadcrumb />
         </div>
-        {/* Whole page layout: sidebar + content */}
-        <div className={menu ? "flex gap-8 max-w-7xl mx-auto " : ""}>
-          {/* LEFT: Side Menu */}
-          {menu && (
-            <aside className="w-60 flex-shrink-0 mt-8">
-              <SideMenu menu={menu} activeHref={activeHref} />
-            </aside>
-          )}
+        {/* ✅ Wrap entire content area inside provider */}
+        <PageEditProvider
+          initialTitle={displayTitle}
+          initialBody={
+            page?.content_html ||
+            sanitizeHtmlContent(description || "") ||
+            "<p></p>"
+          }
+          //TODO json data iptal olunca burayi guncelleyelim!!
+          initialHeroUrl={page?.hero_url || image || "/placeholder.jpg"}
+          initialHeroAlt={page?.hero_alt || page?.title || title}
+          initialHeroMediaId={page?.hero_media_id}
+          initialSideMenu={menu}
+          pageId={page?.id || pageId}
+          locale={page?.locale || locale}
+          baseHref={baseHref}
+        >
+          {/* Whole page layout: sidebar + content */}
+          <div className={menu ? "flex gap-8 max-w-7xl mx-auto " : ""}>
+            {/* LEFT: Side Menu */}
+            {menu && (
+              <aside className="w-60 flex-shrink-0 mt-8">
+                <EditableSideMenu menu={menu} activeHref={activeHref} />
+              </aside>
+            )}
 
-          <div className="mt-8">
-            {/* ✅ Wrap entire content area inside provider */}
-            <PageEditProvider
-              initialTitle={displayTitle}
-              initialBody={
-                page?.content_html ||
-                sanitizeHtmlContent(description || "") ||
-                "<p></p>"
-              }
-              //TODO json data iptal olunca burayi guncelleyelim!!
-              initialHeroUrl={page?.hero_url || image || "/placeholder.jpg"}
-              initialHeroAlt={page?.hero_alt || page?.title || title}
-              initialHeroMediaId={page?.hero_media_id}
-              pageId={page?.id || pageId}
-              locale={page?.locale || locale}
-              baseHref={page?.slug}
-            >
+            <div className="mt-8">
               <NavigationGuard />
               <div className="bg-white rounded-lg shadow-md p-8 max-w-5xl mx-auto flex gap-8">
                 <div className="flex-1">
@@ -73,7 +75,7 @@ const DetailPageTemplate = ({
 
                   {/* Body */}
                   <BodyDisplay
-                    initialHtml={page?.content_html || safeHtml || description}
+                    initialHtml={page?.content_html || description}
                     pageId={page?.id || pageId}
                     locale={page?.locale || locale}
                   />
@@ -108,9 +110,9 @@ const DetailPageTemplate = ({
                   />
                 </>
               )}
-            </PageEditProvider>
+            </div>
           </div>
-        </div>
+        </PageEditProvider>
       </div>
     </div>
   );
