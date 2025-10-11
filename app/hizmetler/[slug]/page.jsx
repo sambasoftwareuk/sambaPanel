@@ -8,7 +8,6 @@ export async function generateMetadata({ params }) {
   const path = `/hizmetler/${slug}`;
   return getMetadataForPath(path);
 }
-
 export default async function ServicesDetailPage({ params }) {
   const { slug } = await params;
 
