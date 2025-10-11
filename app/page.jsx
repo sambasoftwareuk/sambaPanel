@@ -18,7 +18,6 @@ export default function Home() {
   const recentBlogs = blogData
     .sort((a, b) => new Date(b.date) - new Date(a.date))
     .slice(0, 4);
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <SliderComponent
