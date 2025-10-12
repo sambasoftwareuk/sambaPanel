@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 import DragDropZone from "./DragDropZone";
 import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
+import XButton from "../_atoms/XButton";
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -22,8 +24,9 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
       return;
     }
 
-    // Her dosya için blob URL oluştur
+    // Her dosya için blob URL ve benzersiz ID oluştur
     const newPreviews = imageFiles.map((file) => ({
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       file,
       url: URL.createObjectURL(file),
     }));
@@ -36,15 +39,16 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
     inputRef.current?.click();
   };
 
-  const removeFile = (index) => {
+  const removeFile = (id) => {
     // Kaldırılan dosyanın blob URL'ini temizle
-    const previewToRemove = filePreviews[index];
+    const previewToRemove = filePreviews.find((p) => p.id === id);
     if (previewToRemove) {
       URL.revokeObjectURL(previewToRemove.url);
+      const indexToRemove = filePreviews.indexOf(previewToRemove);
+      setSelectedFiles((prev) => prev.filter((_, i) => i !== indexToRemove));
     }
 
-    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
-    setFilePreviews((prev) => prev.filter((_, i) => i !== index));
+    setFilePreviews((prev) => prev.filter((p) => p.id !== id));
   };
 
   const handleUpload = async () => {
@@ -146,24 +150,34 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
               Seçilen Resimler ({selectedFiles.length})
             </h4>
             <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
-              {filePreviews.map((preview, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={preview.url}
-                    alt={preview.file.name}
-                    className="w-full h-20 object-cover rounded border"
-                  />
-                  <button
-                    onClick={() => removeFile(index)}
-                    className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                  >
-                    ×
-                  </button>
-                  <p className="text-xs text-gray-600 truncate mt-1">
-                    {preview.file.name}
-                  </p>
+              {filePreviews?.map((preview) => (
+                  <div key={preview.id} className="relative">
+                    <div className="relative w-full h-20 rounded border overflow-hidden">
+                      <Image
+                        src={preview.url}
+                        alt={preview.file.name}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="absolute -top-1 -right-1">
+                      <XButton
+                        onClick={() => removeFile(preview.id)}
+                        title="Resmi kaldır"
+                      />
+                    </div>
+                    <p className="text-xs text-gray-600 truncate mt-1">
+                      {preview.file.name}
+                    </p>
+                  </div>
+                ))
+               ?? (
+                <div className="col-span-2 text-center text-gray-500 text-sm py-4">
+                  Resim bulunamadı
                 </div>
-              ))}
+              )
+            }
             </div>
           </div>
         )}
