@@ -137,7 +137,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
               accept="image/*"
             />
             <p className="text-sm text-gray-600 mb-2">
-              Resim yüklemek için tıklayın
+              Resim yüklemek için tıklayın ya da sürükleyip birakin
             </p>
             <p className="text-xs text-gray-500">JPG, PNG, GIF desteklenir</p>
           </div>
