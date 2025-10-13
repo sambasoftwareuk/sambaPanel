@@ -1,5 +1,4 @@
 import services from "./mocks/services.json";
-import sliderData from "./mocks/sliderData.json";
 import ProductBanner from "./_molecules/ProductBanner";
 import SliderComponent from "./_components/SliderComponent.jsx";
 import bannerProducts from "./mocks/bannerProducts.json";
@@ -9,10 +8,12 @@ import products from "./mocks/spareParts.json";
 import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import blogData from "./mocks/blogData.json";
-import { getProductGroups } from "@/lib/repos/page";
+import { getHomeData } from "@/lib/repos/home";
 
 const locale = "tr-TR";
-const mainProducts = await getProductGroups({ locale, onlyHomepage: true });
+const data = await getHomeData(locale, { latestBlog: 8 });
+
+// console.log("Home Data:", data);
 
 export default function Home() {
   const recentBlogs = blogData
@@ -23,30 +24,30 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen">
       <SliderComponent
         size={"lg"}
-        sliderData={sliderData}
+        sliderData={data?.slider}
         orientation={"split-horizontal"}
       />
-      <ProductBanner bannerProducts={bannerProducts} />
+      <ProductBanner bannerProducts={data?.featuredItems} />
 
       <MainItemGrid
-        items={mainProducts}
+        items={data?.featuredCollections}
         title="Ürünlerimiz"
         baseHref="urunler"
       />
       <CarouselSlider
-        data={products}
+        data={data?.spareCarousel}
         title="Yedek Parçalar"
         isAutoSlide={true}
         isInfinite={true}
       />
       <CarouselSlider
-        data={services}
+        data={data?.serviceCarousel}
         title="Hizmetlerimiz"
         isAutoSlide={true}
         isInfinite={true}
       />
       <BlogComponent
-        blogData={recentBlogs}
+        blogData={data?.latestPosts}
         title="Son Blog Yazıları"
         maxItems={4}
         showViewAllButton={true}

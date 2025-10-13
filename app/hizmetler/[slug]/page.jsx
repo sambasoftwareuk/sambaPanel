@@ -1,7 +1,7 @@
-import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 import { getMetadataForPath } from "@/app/utils/metadataHelper";
-import { getSingleService } from "@/lib/repos/services";
-import { getSideMenuForPath } from "../../../lib/repos/sideMenu";
+import { getSingleService } from "@/lib/repos/-services";
+import { getSideMenuForPath } from "../../../lib/repos/-sideMenu";
+import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

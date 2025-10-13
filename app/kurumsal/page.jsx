@@ -1,13 +1,19 @@
-import { getKurumsalPage } from "@/lib/repos/page";
+import { notFound } from "next/navigation";
+import { getCorporatePage } from "@/lib/repos/pages";
 import DetailPageTemplate from "../_components/DetailPageTemp";
 
-export default async function KurumsalPage() {
-  const locale = "tr-TR";
-  const page = await getKurumsalPage(locale);
+
+export default async function KurumsalPage({ params: { locale} }) {
+  const data = await getCorporatePage(locale); // repo fonksiyonu
+  
+  if (!data) return notFound();
+
 
   return (
     <DetailPageTemplate
-      page={page}
+      page={data}
+      pageId={data?.id}
+      // menu={data?.sideMenu}
       locale={locale}
       notFoundText="Kurumsal sayfası bulunamadı."
     />

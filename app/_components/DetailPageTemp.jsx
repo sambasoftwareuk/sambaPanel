@@ -41,7 +41,7 @@ const DetailPageTemplate = ({
         <PageEditProvider
           initialTitle={displayTitle}
           initialBody={
-            page?.content_html ||
+            page?.body_html ||
             sanitizeHtmlContent(description || "") ||
             "<p></p>"
           }

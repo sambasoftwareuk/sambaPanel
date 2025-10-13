@@ -3,7 +3,7 @@ import React from "react";
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import { getMetadataForPath } from "../utils/metadataHelper";
-import { getProductGroups } from "@/lib/repos/page";
+import { getProductGroups } from "@/lib/repos/-page";
 
 export async function generateMetadata() {
   return getMetadataForPath("/urunler");
