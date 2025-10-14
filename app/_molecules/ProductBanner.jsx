@@ -12,7 +12,6 @@ const ProductBanner = ({ bannerProducts }) => {
             href={`/urunler/${product?.id}`}
             className="cursor-pointer"
           >
-            {console.log(product)}
             
             <div className="flex items-center justify-center max-w-64 gap-0 md:w-full md:gap-2">
               <div className="max-w-24 md:max-w-full">

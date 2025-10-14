@@ -6,7 +6,7 @@ import { Header1 } from "../_atoms/Headers";
 import { useWindowSize } from "../utils/useWindowSize";
 
 const CarouselSlider = ({ data, itemsPerSlide = 4, title, isAutoSlide, isInfinite }) => {
- 
+  
   const { width } = useWindowSize();
 
   const getResponsiveItems = () => {

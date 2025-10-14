@@ -13,7 +13,6 @@ import { getHomeData } from "@/lib/repos/home";
 const locale = "tr-TR";
 const data = await getHomeData(locale, { latestBlog: 8 });
 
-// console.log("Home Data:", data);
 
 export default function Home() {
   const recentBlogs = blogData
@@ -34,6 +33,7 @@ export default function Home() {
         title="Ürünlerimiz"
         baseHref="urunler"
       />
+      
       <CarouselSlider
         data={data?.spareCarousel}
         title="Yedek Parçalar"

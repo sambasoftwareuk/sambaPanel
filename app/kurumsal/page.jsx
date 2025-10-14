@@ -4,7 +4,9 @@ import DetailPageTemplate from "../_components/DetailPageTemp";
 
 
 export default async function KurumsalPage({ params: { locale} }) {
-  const data = await getCorporatePage(locale); // repo fonksiyonu
+  const data = await getCorporatePage("tr-TR"); // repo fonksiyonu
+  
+  console.log(data);
   
   if (!data) return notFound();
 
