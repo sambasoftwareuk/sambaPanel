@@ -12,7 +12,8 @@ import blogData from "./mocks/blogData.json";
 import { getProductGroups } from "@/lib/repos/page";
 
 const locale = "tr-TR";
-const mainProducts = await getProductGroups({ locale, onlyHomepage: true });
+// const mainProducts = await getProductGroups({ locale, onlyHomepage: true });
+const mainProducts = []; // Geçici: database bağlantı sorunu
 
 export default function Home() {
   const recentBlogs = blogData

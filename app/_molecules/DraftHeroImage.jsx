@@ -16,14 +16,17 @@ export default function DraftHeroImage({
   const { heroUrl, heroAlt, heroMediaId } = usePageEdit();
 
   // Context'ten gelen değerleri kullan, yoksa initial değerleri kullan (memoized)
-  const { url, alt, id } = useMemo(
-    () => ({
-      url: heroUrl ?? initialUrl,
+  const { url, alt, id } = useMemo(() => {
+    const rawUrl = heroUrl ?? initialUrl;
+    // URL'nin başında / yoksa ekle
+    const finalUrl = rawUrl && !rawUrl.startsWith("/") ? `/${rawUrl}` : rawUrl;
+
+    return {
+      url: finalUrl,
       alt: heroAlt ?? initialAlt,
       id: heroMediaId ?? null,
-    }),
-    [heroUrl, heroAlt, heroMediaId, initialUrl, initialAlt]
-  );
+    };
+  }, [heroUrl, heroAlt, heroMediaId, initialUrl, initialAlt]);
 
   return (
     <div className="w-80 shrink-0">
