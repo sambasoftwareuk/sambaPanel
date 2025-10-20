@@ -15,6 +15,7 @@ export function PageEditProvider({
   locale,
   baseHref,
   children,
+  pageSlug,
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [bodyHtml, setBodyHtml] = useState(initialBody);
@@ -132,6 +133,7 @@ export function PageEditProvider({
         content_html: bodyHtml,
         hero_media_id: heroMediaId,
         locale,
+        slug: pageSlug,
       };
 
       // Sadece sideMenu değiştiyse ekle
@@ -139,7 +141,7 @@ export function PageEditProvider({
         requestBody.side_menu = sideMenu;
       }
 
-      const res = await fetch(`/api/pages/${pageId}`, {
+      const res = await fetch("/api/corporate", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
