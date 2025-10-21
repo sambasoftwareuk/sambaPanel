@@ -141,11 +141,14 @@ export function PageEditProvider({
         requestBody.side_menu = sideMenu;
       }
 
-      const res = await fetch("/api/corporate", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      });
+      const res = await fetch(
+        `/api/${pageSlug === "kurumsal" ? "corporate" : ""}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody),
+        }
+      );
 
       if (!res.ok) throw new Error("API error");
 
