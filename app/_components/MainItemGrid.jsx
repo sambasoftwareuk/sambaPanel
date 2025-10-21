@@ -10,11 +10,9 @@ const MainItemGrid = ({
   gridClassName = "grid-cols-1 md:grid-cols-2",
   cardProps = {},
 }) => {
-  
   return (
     <div className="w-full max-w-7xl mx-auto mt-6 p-4">
-      {title && <Header1 className="text-center">
-      {title}</Header1>}
+      {title && <Header1 className="text-center">{title}</Header1>}
       <div className={`grid ${gridClassName} gap-8 items-center`}>
         {items?.map((item) => (
           <Link key={item?.id} href={`/${baseHref}/${item?.slug}`}>
