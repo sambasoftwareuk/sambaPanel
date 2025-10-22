@@ -149,7 +149,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
             <h4 className="text-sm font-medium text-gray-700 mb-2">
               Seçilen Resimler ({selectedFiles.length})
             </h4>
-            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+            <div className="grid grid-cols-3 gap-2 max-h-40 overflow-y-auto p-2">
               {filePreviews?.map((preview) => (
                   <div key={preview.id} className="relative">
                     <div className="relative w-full h-20 rounded border overflow-hidden">
@@ -158,7 +158,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
                         alt={preview.file.name}
                         fill
                         unoptimized
-                        className="object-cover"
+                        className="object-contain rounded"
                       />
                     </div>
                     <div className="absolute -top-1 -right-1">
