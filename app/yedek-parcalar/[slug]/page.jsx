@@ -2,7 +2,7 @@ import React from "react";
 import spareParts from "../../mocks/spareParts.json";
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 import { getMetadataForPath } from "@/app/utils/metadataHelper";
-import { getSideMenuForPath } from "../../../lib/repos/sideMenu";
+import { getSideMenuForPath } from "../../../lib/repos/-sideMenu";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

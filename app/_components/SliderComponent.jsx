@@ -10,16 +10,16 @@ const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
       itemsPerSlide={1}
       isInfinite={true}
     >
-      {sliderData.map((content, index) => {
-        const { imageLink, title, subtitle, body, primaryLabel, primaryLabelLink, secondaryLabel, secondaryLabelLink } =
+      {sliderData.map((content, id) => {
+        const { url, title, subtitle, body, primaryLabel, primaryLabelLink, secondaryLabel, secondaryLabelLink } =
           content;
-        const hasImage = !!imageLink;
+        const hasImage = !!url;
         const hasCard =
           title || subtitle || body || primaryLabel || secondaryLabel;
 
         return (
           <div
-  key={index}
+  key={id}
   className={
     orientation === "split-horizontal"
       ? "relative w-full h-full md:flex"
@@ -36,7 +36,7 @@ const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
             : ""
         }`}
     >
-      <SliderImage imageLink={`/${imageLink}`} size={size} orientation={orientation} />
+      <SliderImage imageLink={`/${url}`} size={size} orientation={orientation} />
     </div>
   )}
 

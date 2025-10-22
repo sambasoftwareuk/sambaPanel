@@ -15,11 +15,11 @@ const MainItemGrid = ({
       {title && <Header1 className="text-center">{title}</Header1>}
       <div className={`grid ${gridClassName} gap-8 items-center`}>
         {items?.map((item) => (
-          <Link key={item.slug} href={`/${baseHref}/${item.slug}`}>
+          <Link key={item?.id} href={`/${baseHref}/${item?.slug}`}>
             <ProductCardWithImage
-              key={item.id}
-              title={item.name}
-              imageLink={item.hero_url}
+              key={item?.id}
+              title={item?.title}
+              imageLink={`/${item.hero_url}`}
               altText={item.hero_alt || item.name}
               buttonLabel="DETAYLAR"
               variant={1}

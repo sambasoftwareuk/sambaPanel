@@ -34,10 +34,10 @@ const CarouselSlider = ({ data, itemsPerSlide = 4, title, isAutoSlide, isInfinit
         isInfinite={isInfinite}
       >
         {data.map((product) => (
-          <div key={product.id} className="px-2">
+          <div key={product?.id} className="px-2">
             <ProductCardWithImage
-              title={product.title}
-              imageLink={product.image}
+              title={product?.title}
+              imageLink={product?.image_url ? `/${product?.image_url}` : "/generic-image.png"}
               variant={3}
               button={false}
             />

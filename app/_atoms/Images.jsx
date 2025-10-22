@@ -51,8 +51,9 @@ export const CardImage = ({
       <div
         className={`relative w-full  overflow-hidden rounded-t-m ${aspectRatio}`}
       >
+         
         <Image
-          src={src}
+          src={`${imageLink ? imageLink : "/generic-image.png"}`}
           alt={`${imageAlt ? imageAlt : randomImageAlt}`}
           fill
           className="object-contain"

@@ -25,6 +25,7 @@ const DetailPageTemplate = ({
   notFoundText,
   page,
   pageId,
+  pageSlug,
   locale = "tr-TR",
 }) => {
   if (!page) {
@@ -46,12 +47,15 @@ const DetailPageTemplate = ({
             "<p></p>"
           }
           //TODO json data iptal olunca burayi guncelleyelim!!
-          initialHeroUrl={page?.hero_url || image || "/placeholder.jpg"}
+          initialHeroUrl={
+            page?.hero_url ? `/${page.hero_url}` : image || "/5.jpg"
+          }
           initialHeroAlt={page?.hero_alt || page?.title || title}
           initialHeroMediaId={page?.hero_media_id}
           initialSideMenu={menu}
           pageId={page?.id || pageId}
           locale={page?.locale || locale}
+          pageSlug={pageSlug}
           baseHref={baseHref}
         >
           {/* Whole page layout: sidebar + content */}
@@ -90,7 +94,9 @@ const DetailPageTemplate = ({
 
                 {/* Right-side image */}
                 <DraftHeroImage
-                  initialUrl={page?.hero_url || image || "/5.jpg"}
+                  initialUrl={
+                    page?.hero_url ? `/${page.hero_url}` : image || "/5.jpg"
+                  }
                   initialAlt={page?.hero_alt || page?.title || title}
                   width={320}
                   height={320}
