@@ -209,6 +209,7 @@ export function PageEditProvider({
         pageId,
         locale,
         baseHref,
+        pageSlug
       }}
     >
       {children}

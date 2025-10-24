@@ -3,11 +3,13 @@
 import { useState, useEffect } from "react";
 import XButton from "../_atoms/XButton";
 import DeleteConfirmModal from "../_atoms/DeleteConfirmModal";
+import { getMediaByScope } from "@/lib/repos/gallery";
 
 export default function ImageGallery({
   onImageSelect,
   selectedUrl = "",
   onDeleteImage,
+  pageSlug,
   deletedImages = [], // Context'ten silinen resimleri al
   onApply, // Gallery fonksiyonlarını parent'a bildir
 }) {
@@ -15,14 +17,12 @@ export default function ImageGallery({
   const [loading, setLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [temporarilyDeleted, setTemporarilyDeleted] = useState([]); // Geçici silinen resimler
-
   // Gallery yükle
   const loadGallery = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/media?limit=50");
-      const data = await res.json();
-      setGallery(data.media || []);
+      const res = await getMediaByScope(pageSlug);
+      setGallery(res.items || []);
     } catch (e) {
       console.error("Galeri yüklenemedi:", e);
     } finally {

@@ -91,7 +91,7 @@ const DetailPageTemplate = ({
                     locale={page?.locale || locale}
                   />
                 </div>
-
+                         
                 {/* Right-side image */}
                 <DraftHeroImage
                   initialUrl={

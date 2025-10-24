@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { usePageEdit } from "../context/PageEditProvider";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
@@ -24,6 +24,8 @@ export default function ImageEditor({
     deletedImages,
     pageId,
     locale,
+    pageSlug
+    
   } = usePageEdit();
 
   const [open, setOpen] = useState(false);
@@ -34,13 +36,12 @@ export default function ImageEditor({
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
-
   const [stagedFile, setStagedFile] = useState(null);
   const [stagedPreview, setStagedPreview] = useState(null);
   const [uploadComplete, setUploadComplete] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const abortControllerRef = useRef(null);
-
+   console.log("pageslug:", pageSlug);
   // Modal açılınca state güncelle
   useEffect(() => {
     if (!open) return;
@@ -121,78 +122,94 @@ export default function ImageEditor({
     setUrl(heroUrl || initialUrl);
   };
 
-  // Uygula → sadece context güncelle, upload yapılır
-  const apply = async () => {
-    if (!url) {
-      setError("Görsel URL gerekli");
-      return;
-    }
-    setUploading(true);
-    setError("");
-    try {
-      let finalUrl = url;
+  
+const scopeFromPage = (slug) => {
+  // Sayfaya göre scope eşlemesi — ihtiyacına göre genişletebilirsin
+  if (!slug) return 'gallery';
+  if (slug === 'kurumsal' || slug === 'about-us' || slug === 'corporate') return 'kurumsal';
+  if (slug.startsWith('urun') || slug.startsWith('products')) return 'product';
+  if (slug.startsWith('hizmet') || slug.startsWith('services')) return 'service';
+  if (slug.startsWith('yedek') || slug.includes('spare')) return 'spare';
+  if (slug.startsWith('iletisim') || slug.startsWith('contact')) return 'contact';
+  return 'gallery';
+};
 
-      if (stagedFile) {
-        // Yeni controller oluştur
-        const controller = new AbortController();
-        abortControllerRef.current = controller;
+const computedScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
 
-        const formData = new FormData();
-        formData.append("file", stagedFile);
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-          signal: controller.signal, // Upload iptal edilebilir
-        });
-        if (!res.ok) throw new Error("Upload başarısız");
-        const data = await res.json();
-        finalUrl = data.url;
-        if (stagedPreview) URL.revokeObjectURL(stagedPreview);
-        setStagedFile(null);
-        setStagedPreview(null);
-        abortControllerRef.current = null; // Controller temizle
-      }
+const apply = async () => {
+  if (!url) {
+    setError("Görsel URL gerekli");
+    return;
+  }
+  setUploading(true);
+  setError("");
+  try {
+    const scope = computedScope;
+    let finalUrl = url;
+    let mime = stagedFile?.type || 'image/png';
 
-      // context güncelle (sadece preview için)
-      setHeroUrl(finalUrl);
-      setHeroAlt(alt);
+   
+    
 
-      // Media ID'yi staging'de tut (Uygula butonunda kullanılacak)
-      // setStagedMediaId(newMedia.id); // Bu satırı kaldır - media kaydı yapmıyoruz
 
-      // Database'e kaydedilmesi için kısa gecikme
-      await new Promise((resolve) => setTimeout(resolve, 500));
+    // 1) Dosya seçildiyse önce storage’a yükle → /api/upload
+    if (stagedFile) {
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
 
-      // Context güncellemesi yeterli, Save All'da kaydedilecek
+      const formData = new FormData();
+      formData.append("file", stagedFile);
 
-      // Media kaydı yap (Uygula butonunda)
-      const mediaRes = await fetch("/api/media", {
+      const res = await fetch("/api/upload", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: finalUrl, alt_text: alt }),
+        body: formData,
+        signal: controller.signal,
       });
-
-      if (!mediaRes.ok) {
-        const errorText = await mediaRes.text();
-        throw new Error("Media oluşturulamadı: " + errorText);
+      if (!res.ok) {
+        const t = await res.text();
+        throw new Error("Upload başarısız: " + res.status + " - " + t);
       }
-
-      const newMedia = await mediaRes.json();
-
-      // Staged media ID'yi hero_media_id olarak set et
-      setHeroMediaId(newMedia.id);
-
-      setOpen(false);
-    } catch (e) {
-      if (e.name === "AbortError") {
-        return; // Hata olarak sayma
-      }
-      setError(e.message || "Güncellenemedi");
-    } finally {
-      setUploading(false);
-      abortControllerRef.current = null; // Controller temizle
+      const data = await res.json();
+      finalUrl = data.url;              // storage URL
+      if (stagedPreview) URL.revokeObjectURL(stagedPreview);
+      setStagedFile(null);
+      setStagedPreview(null);
+      abortControllerRef.current = null;
     }
-  };
+
+    // 2) Önizleme için context’i güncelle
+    setHeroUrl(finalUrl);
+    setHeroAlt(alt);
+
+    // 3) Media kaydı + scope ataması → /api/media (POST)
+    const mediaRes = await fetch("/api/media", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        url: finalUrl,
+        alt_text: alt || null,
+        mime_type: mime,
+        scopes: [scope],             // 🔑 kurumsal sayfadaysan ['corporate']
+      }),
+    });
+    if (!mediaRes.ok) {
+      const errorText = await mediaRes.text();
+      throw new Error("Media oluşturulamadı: " + errorText);
+    }
+    const created = await mediaRes.json(); // { message, media: { id, url, ... } }
+
+    // 4) Page context → hero_media_id’yi bağla (Save All PATCH’inde DB’ye yazılacak)
+    setHeroMediaId(created.media.id);
+
+    setOpen(false);
+  } catch (e) {
+    if (e.name !== "AbortError") setError(e.message || "Güncellenemedi");
+  } finally {
+    setUploading(false);
+    abortControllerRef.current = null;
+  }
+};
+
 
   return (
     <>
@@ -204,11 +221,13 @@ export default function ImageEditor({
         />
         <XButton onClick={resetHero} />
       </div>
+      
 
       <BodyEditorModal
         isOpen={open}
         onClose={() => setOpen(false)}
         mode="image"
+        pageSlug={pageSlug}
         imageUrl={url}
         imageAlt={alt}
         onImageUrlChange={setUrl}
@@ -228,9 +247,12 @@ export default function ImageEditor({
       />
 
       {/* Upload Modal */}
+      
+      
       <UploadModal
         isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
+        scope={computedScope}
         onUploadComplete={() => {
           setUploadComplete(true);
           setShowUploadModal(false);

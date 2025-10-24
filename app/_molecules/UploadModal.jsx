@@ -7,11 +7,14 @@ import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
 import XButton from "../_atoms/XButton";
 
-export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
+export default function UploadModal({ isOpen, onClose, onUploadComplete, scope }  ) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]); // Blob URL'leri tutmak için
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef(null);
+
+  
+
 
   const handleFileSelect = (files) => {
     const fileArray = Array.from(files);
@@ -53,6 +56,14 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
+    console.log("scope2:", scope);
+
+    // if (!scope) {
+    //   // Scope zorunlu değil demiştin; ama senin ihtiyacında gerekli.
+    //   // İstersen bunu uyarı yerine sessizce scopes göndermeyebilirsin.
+    //   alert("scope eksik.");
+    //   return;
+    // }
 
     setUploading(true);
     try {
@@ -75,6 +86,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
         const uploadData = await uploadRes.json();
 
+        
         // Media kaydı yap
         const mediaRes = await fetch("/api/media", {
           method: "POST",
@@ -82,6 +94,8 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
           body: JSON.stringify({
             url: uploadData.url,
             alt_text: file.name,
+            mime_type: uploadData?.mime_type || file.type || null,
+            scopes: ["kurumsal"],
           }),
         });
 
