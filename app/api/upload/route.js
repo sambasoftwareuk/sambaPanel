@@ -62,7 +62,7 @@ export async function POST(request) {
           .digest("hex");
 
         if (existingHash === fileHash) {
-          const imageUrl = `uploads/${existingFile}`;
+          const imageUrl = `/uploads/${existingFile}`;
           log("filetype:", file.type);
           return NextResponse.json({
             success: true,
@@ -93,7 +93,7 @@ export async function POST(request) {
     await writeFile(filePath, buffer);
 
     // URL'i döndür
-    const imageUrl = `uploads/${fileName}`;
+    const imageUrl = `/uploads/${fileName}`;
 
     return NextResponse.json({
       success: true,
