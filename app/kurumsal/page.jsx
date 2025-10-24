@@ -1,6 +1,11 @@
 import { notFound } from "next/navigation";
 import { getCorporatePage } from "@/lib/repos/pages";
 import DetailPageTemplate from "../_components/DetailPageTemp";
+import { getMetaData } from "../utils/metadataHelper";
+
+export async function generateMetadata() {
+  return await getMetaData("kurumsal");
+}
 
 export default async function KurumsalPage() {
   const data = await getCorporatePage("tr-TR"); // repo fonksiyonu

@@ -19,7 +19,7 @@ const MainItemGrid = ({
             <ProductCardWithImage
               key={item?.id}
               title={item?.title}
-              imageLink={`/${item.hero_url}`}
+              imageLink={`${item.hero_url}`}
               altText={item.hero_alt || item.name}
               buttonLabel="DETAYLAR"
               variant={1}

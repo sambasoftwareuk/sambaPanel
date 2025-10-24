@@ -48,7 +48,7 @@ const DetailPageTemplate = ({
           }
           //TODO json data iptal olunca burayi guncelleyelim!!
           initialHeroUrl={
-            page?.hero_url ? `/${page.hero_url}` : image || "/5.jpg"
+            page?.hero_url ? `${page.hero_url}` : image || "/5.jpg"
           }
           initialHeroAlt={page?.hero_alt || page?.title || title}
           initialHeroMediaId={page?.hero_media_id}

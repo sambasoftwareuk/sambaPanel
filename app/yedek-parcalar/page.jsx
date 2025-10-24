@@ -2,10 +2,10 @@ import React from "react";
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import spareParts from "../mocks/spareParts.json";
-import { getMetadataForPath } from "../utils/metadataHelper";
+import { getMetaData } from "../utils/metadataHelper";
 
 export async function generateMetadata() {
-  return getMetadataForPath("/yedek-parcalar");
+  return getMetaData("/yedek-parcalar");
 }
 
 const SparePartsPage = () => {

@@ -4,15 +4,10 @@ import ContactCard from "../_molecules/ContactCard";
 import { Header1, Header3 } from "../_atoms/Headers";
 import contactData from "../mocks/contactData.json";
 import ContactFormWrapper from "../_components/ContactFormWrapper";
-import { getMetadataForPath } from "../utils/metadataHelper";
+import { getMetaData } from "../utils/metadataHelper";
 
 export async function generateMetadata() {
-  const meta = getMetadataForPath("/iletisim");
-
-  return {
-    title: meta.title,
-    description: meta.description,
-  };
+  return await getMetaData("/iletisim");
 }
 
 const ContactPage = () => {
