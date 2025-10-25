@@ -111,7 +111,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
-      <div className="w-full max-w-4xl max-h-[90vh] rounded-xl bg-white p-4 shadow-lg overflow-y-auto">
+      <div className="w-full max-w-4xl h-5/6 rounded-xl bg-white p-4 shadow-lg">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <Header2 className="text-lg font-semibold">Resim Yükle</Header2>
@@ -145,20 +145,20 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
         {/* Seçilen resimler */}
         {selectedFiles.length > 0 && (
-          <div className="mt-4">
+          <div className="mt-4 h-4/6">
             <h4 className="text-sm font-medium text-gray-700 mb-2">
               Seçilen Resimler ({selectedFiles.length})
             </h4>
-            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+            <div className="grid grid-cols-3 gap-2 h-5/6 overflow-y-auto p-2">
               {filePreviews?.map((preview) => (
                   <div key={preview.id} className="relative">
-                    <div className="relative w-full h-20 rounded border overflow-hidden">
+                    <div className="relative w-full h-32 rounded border overflow-hidden">
                       <Image
                         src={preview.url}
                         alt={preview.file.name}
                         fill
                         unoptimized
-                        className="object-cover"
+                        className="object-contain rounded"
                       />
                     </div>
                     <div className="absolute -top-1 -right-1">
@@ -183,7 +183,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
         )}
 
         {/* Action Buttons */}
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="flex justify-end gap-2 mt-4">
           <OutlinedButton
             label="Vazgeç"
             onClick={handleClose}
