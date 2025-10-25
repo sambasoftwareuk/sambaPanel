@@ -6,12 +6,16 @@ import DragDropZone from "./DragDropZone";
 import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
 import XButton from "../_atoms/XButton";
+import { usePageEdit } from "../context/PageEditProvider";
 
-export default function UploadModal({ isOpen, onClose, onUploadComplete, scope }  ) {
+export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]); // Blob URL'leri tutmak için
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef(null);
+  const { mediaScope } = usePageEdit();
+
+  
 
   
 
@@ -56,14 +60,14 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete, scope }
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
-    console.log("scope2:", scope);
+   
 
-    // if (!scope) {
-    //   // Scope zorunlu değil demiştin; ama senin ihtiyacında gerekli.
-    //   // İstersen bunu uyarı yerine sessizce scopes göndermeyebilirsin.
-    //   alert("scope eksik.");
-    //   return;
-    // }
+     if (!mediaScope) {
+       // Scope zorunlu değil demiştin; ama senin ihtiyacında gerekli.
+       // İstersen bunu uyarı yerine sessizce scopes göndermeyebilirsin.
+       alert("scope eksik.");
+       return;
+     }
 
     setUploading(true);
     try {
@@ -89,15 +93,15 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete, scope }
         
         // Media kaydı yap
         const mediaRes = await fetch("/api/media", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url: uploadData.url,
-            alt_text: file.name,
-            mime_type: uploadData?.mime_type || file.type || null,
-            scopes: ["kurumsal"],
-          }),
-        });
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      url: uploadData.url,
+      alt_text: file.name,
+      mime_type: uploadData?.mime_type || file.type || null,
+      scopes: [mediaScope],                 // ← hard-coded "kurumsal" yerine bu
+    }),
+  });
 
         if (!mediaRes.ok) throw new Error("Media kaydı başarısız");
       }

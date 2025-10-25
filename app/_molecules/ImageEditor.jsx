@@ -41,7 +41,6 @@ export default function ImageEditor({
   const [uploadComplete, setUploadComplete] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const abortControllerRef = useRef(null);
-   console.log("pageslug:", pageSlug);
   // Modal açılınca state güncelle
   useEffect(() => {
     if (!open) return;
@@ -134,6 +133,8 @@ const scopeFromPage = (slug) => {
   return 'gallery';
 };
 
+
+
 const computedScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
 
 const apply = async () => {
@@ -210,6 +211,18 @@ const apply = async () => {
   }
 };
 
+console.log('slug before modal:', pageSlug);
+console.log('scope before modal:', computedScope);
+
+// modal açılınca da:
+useEffect(() => {
+  if (open) {
+    console.log('slug at open:', pageSlug);
+    console.log('scope at open:', computedScope);
+  }
+}, [open, pageSlug, computedScope]);
+
+
 
   return (
     <>
@@ -248,11 +261,13 @@ const apply = async () => {
 
       {/* Upload Modal */}
       
+
       
       <UploadModal
+        key={computedScope}
         isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
-        scope={computedScope}
+        mediaScope={computedScope}
         onUploadComplete={() => {
           setUploadComplete(true);
           setShowUploadModal(false);
