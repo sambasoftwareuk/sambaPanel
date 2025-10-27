@@ -1,14 +1,14 @@
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 // import products from "../../constants/bigCardProducts.json";
 // import sideMenuData from "../../mocks/sideMenuData.json";
-import { getMetadataForPath } from "@/app/utils/metadataHelper";
+import { getMetaData } from "@/app/utils/metadataHelper";
 import { getSingleProduct } from "@/lib/repos/-page";
 import { getSideMenuForPath } from "../../../lib/repos/-sideMenu";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const path = `/urunler/${slug}`;
-  return getMetadataForPath(path);
+  return getMetaData(path);
 }
 
 export default async function ProductDetailPage({ params }) {

@@ -1,15 +1,10 @@
 import BlogComponent from "../_components/BlogComponent";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import blogData from "../mocks/blogData.json";
-import { getMetadataForPath } from "../utils/metadataHelper";
+import { getMetaData } from "../utils/metadataHelper";
 
 export async function generateMetadata() {
-  const meta = getMetadataForPath("/blog");
-
-  return {
-    title: meta.title,
-    description: meta.description,
-  };
+  return await getMetaData("/blog");
 }
 
 const Blog = () => {
