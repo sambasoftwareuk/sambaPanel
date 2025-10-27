@@ -12,7 +12,7 @@ export default async function KurumsalPage() {
   const CORPORATE_SLUG = "kurumsal";
 
   if (!data) return notFound();
-
+  
   return (
     <DetailPageTemplate
       page={data}

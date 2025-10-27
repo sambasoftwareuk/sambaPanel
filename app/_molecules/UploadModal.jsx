@@ -6,12 +6,19 @@ import DragDropZone from "./DragDropZone";
 import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
 import XButton from "../_atoms/XButton";
+import { usePageEdit } from "../context/PageEditProvider";
 
-export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
+export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]); // Blob URL'leri tutmak için
   const [uploading, setUploading] = useState(false);
   const inputRef = useRef(null);
+  const { mediaScope } = usePageEdit();
+
+  
+
+  
+
 
   const handleFileSelect = (files) => {
     const fileArray = Array.from(files);
@@ -53,6 +60,14 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
+   
+
+     if (!mediaScope) {
+       // Scope zorunlu değil demiştin; ama senin ihtiyacında gerekli.
+       // İstersen bunu uyarı yerine sessizce scopes göndermeyebilirsin.
+       alert("scope eksik.");
+       return;
+     }
 
     setUploading(true);
     try {
@@ -75,15 +90,18 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
         const uploadData = await uploadRes.json();
 
+        
         // Media kaydı yap
         const mediaRes = await fetch("/api/media", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url: uploadData.url,
-            alt_text: file.name,
-          }),
-        });
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      url: uploadData.url,
+      alt_text: file.name,
+      mime_type: uploadData?.mime_type || file.type || null,
+      scopes: [mediaScope],                 // ← hard-coded "kurumsal" yerine bu
+    }),
+  });
 
         if (!mediaRes.ok) throw new Error("Media kaydı başarısız");
       }
@@ -111,7 +129,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4">
-      <div className="w-full max-w-4xl max-h-[90vh] rounded-xl bg-white p-4 shadow-lg overflow-y-auto">
+      <div className="w-full max-w-4xl h-5/6 rounded-xl bg-white p-4 shadow-lg">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <Header2 className="text-lg font-semibold">Resim Yükle</Header2>
@@ -145,20 +163,20 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
 
         {/* Seçilen resimler */}
         {selectedFiles.length > 0 && (
-          <div className="mt-4">
+          <div className="mt-4 h-4/6">
             <h4 className="text-sm font-medium text-gray-700 mb-2">
               Seçilen Resimler ({selectedFiles.length})
             </h4>
-            <div className="grid grid-cols-2 gap-2 max-h-40 overflow-y-auto">
+            <div className="grid grid-cols-3 gap-2 h-5/6 overflow-y-auto p-2">
               {filePreviews?.map((preview) => (
                   <div key={preview.id} className="relative">
-                    <div className="relative w-full h-20 rounded border overflow-hidden">
+                    <div className="relative w-full h-32 rounded border overflow-hidden">
                       <Image
                         src={preview.url}
                         alt={preview.file.name}
                         fill
                         unoptimized
-                        className="object-cover"
+                        className="object-contain rounded"
                       />
                     </div>
                     <div className="absolute -top-1 -right-1">
@@ -183,7 +201,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
         )}
 
         {/* Action Buttons */}
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="flex justify-end gap-2 mt-4">
           <OutlinedButton
             label="Vazgeç"
             onClick={handleClose}

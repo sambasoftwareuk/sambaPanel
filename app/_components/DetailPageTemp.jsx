@@ -91,11 +91,11 @@ const DetailPageTemplate = ({
                     locale={page?.locale || locale}
                   />
                 </div>
-
+                         
                 {/* Right-side image */}
                 <DraftHeroImage
                   initialUrl={
-                    page?.hero_url ? `/${page.hero_url}` : image || "/5.jpg"
+                    page?.hero_url ? `${page.hero_url}` : image || "/5.jpg"
                   }
                   initialAlt={page?.hero_alt || page?.title || title}
                   width={320}

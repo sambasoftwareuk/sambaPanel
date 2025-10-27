@@ -43,14 +43,10 @@ const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
             ? "absolute inset-0 md:relative md:w-6/12 md:h-full bg-primary50"
             : ""
         }`}
-              >
-                <SliderImage
-                  imageLink={`${url}`}
-                  size={size}
-                  orientation={orientation}
-                />
-              </div>
-            )}
+    >
+      <SliderImage imageLink={`${url}`} size={size} orientation={orientation} />
+    </div>
+  )}
 
             {/* Kart */}
             {hasCard && (

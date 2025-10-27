@@ -250,7 +250,6 @@ export async function PATCH(req) {
     side_menu, // opsiyonel
     slug,
   } = body || {};
-  console.log();
 
   if (!locale) return bad("locale is required");
 

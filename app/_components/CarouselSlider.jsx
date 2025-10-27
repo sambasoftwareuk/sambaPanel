@@ -39,11 +39,7 @@ const CarouselSlider = ({
           <div key={product?.id} className="px-2">
             <ProductCardWithImage
               title={product?.title}
-              imageLink={
-                product?.image_url
-                  ? `${product?.image_url}`
-                  : "/generic-image.png"
-              }
+              imageLink={product?.image_url ? `${product?.image_url}` : "/generic-image.png"}
               variant={3}
               button={false}
             />
