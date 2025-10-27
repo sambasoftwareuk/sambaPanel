@@ -31,6 +31,7 @@ export default function BodyEditorModal({
   onDeleteImage = () => {},
   deletedImages = [],
   onUploadComplete = () => {},
+  pageSlug
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -171,6 +172,7 @@ export default function BodyEditorModal({
                 onDeleteImage={onDeleteImage}
                 deletedImages={deletedImages}
                 onApply={setGalleryActions}
+                pageSlug={pageSlug}
               />
             ) : (
               <div className="p-4 text-center text-gray-500">
@@ -187,6 +189,7 @@ export default function BodyEditorModal({
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
+            pageSlug={pageSlug}
           />
         ) : activeTab === "upload" ? (
           <div className="p-4 text-center text-gray-500">

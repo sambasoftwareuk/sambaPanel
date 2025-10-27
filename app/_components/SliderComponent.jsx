@@ -36,7 +36,7 @@ const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
             : ""
         }`}
     >
-      <SliderImage imageLink={`/${url}`} size={size} orientation={orientation} />
+      <SliderImage imageLink={`${url}`} size={size} orientation={orientation} />
     </div>
   )}
 

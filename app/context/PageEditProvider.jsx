@@ -4,6 +4,17 @@ import { createContext, useContext, useState, useMemo, useRef } from "react";
 
 const PageEditContext = createContext(null);
 
+// 👉 İSTER AYRI DOSYAYA KOY (lib/scope.js) İSTER ŞİMDİLİK BURADA DURSUN
+function scopeFromPage(slug) {
+  if (!slug) return "gallery";
+  if (slug === "kurumsal" || slug === "about-us" || slug === "corporate") return "kurumsal";
+  if (slug.startsWith("urun") || slug.startsWith("products")) return "product";
+  if (slug.startsWith("hizmet") || slug.startsWith("services")) return "service";
+  if (slug.startsWith("yedek") || slug.includes("spare")) return "spare";
+  if (slug.startsWith("iletisim") || slug.startsWith("contact")) return "contact";
+  return "gallery";
+}
+
 export function PageEditProvider({
   initialTitle,
   initialBody,
@@ -15,7 +26,7 @@ export function PageEditProvider({
   locale,
   baseHref,
   children,
-  pageSlug,
+  pageSlug,                    // ← zaten geliyordu
 }) {
   const [title, setTitle] = useState(initialTitle);
   const [bodyHtml, setBodyHtml] = useState(initialBody);
@@ -28,7 +39,12 @@ export function PageEditProvider({
   const [sideMenuDirty, setSideMenuDirty] = useState(false);
   const [sideMenuSaving, setSideMenuSaving] = useState(false);
 
-  // Baseline'ı useRef ile sakla (render tetiklemez)
+  // ⭐️ YENİ: scope’u sayfa slug’ından türet
+  const mediaScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
+
+  // (İsteğe bağlı) İlk değeri “dondurmak” istersen:
+  // const mediaScopeStable = useRef(mediaScope).current;
+
   const baselineRef = useRef({
     title: initialTitle,
     bodyHtml: initialBody,
@@ -48,26 +64,14 @@ export function PageEditProvider({
       sideMenuDirty ||
       deletedImages.length > 0
     );
-  }, [
-    title,
-    bodyHtml,
-    heroUrl,
-    heroAlt,
-    heroMediaId,
-    sideMenuDirty,
-    deletedImages,
-  ]);
+  }, [title, bodyHtml, heroUrl, heroAlt, heroMediaId, sideMenuDirty, deletedImages]);
 
   const updateSideMenuTitle = (sectionIndex, newTitle) => {
     setSideMenu((prev) => {
       if (!prev) return prev;
       return prev.map((section, idx) =>
         idx === sectionIndex
-          ? {
-              ...section,
-              title: newTitle,
-              menu_key: baseHref || "urunler", // baseHref'i kullan
-            }
+          ? { ...section, title: newTitle, menu_key: baseHref || "urunler" }
           : section
       );
     });
@@ -75,13 +79,7 @@ export function PageEditProvider({
   };
 
   const markSaved = () => {
-    baselineRef.current = {
-      title,
-      bodyHtml,
-      heroUrl,
-      heroAlt,
-      heroMediaId,
-    };
+    baselineRef.current = { title, bodyHtml, heroUrl, heroAlt, heroMediaId };
     setDeletedImages([]);
     setSideMenuDirty(false);
   };
@@ -91,21 +89,18 @@ export function PageEditProvider({
     setSideMenuDirty(false);
   };
 
-  // Helper function for API call
   const patchSideMenu = async (sideMenu, locale) => {
     const res = await fetch(`/api/side-menu`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ side_menu: sideMenu, locale }),
     });
-
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(`SideMenu API error: ${res.status} - ${errorText}`);
     }
   };
 
-  // SideMenu için ayrı save fonksiyonu
   async function handleSideMenuSave() {
     if (!sideMenuDirty) return;
     setSideMenuSaving(true);
@@ -123,11 +118,9 @@ export function PageEditProvider({
     if (!isDirty) return;
     setSaving(true);
     try {
-      // Silinen resimleri kontrol et
       for (const img of deletedImages) {
         if (heroMediaId === img.id) setHeroMediaId(null);
       }
-      // API'ye gönder
       const requestBody = {
         title,
         content_html: bodyHtml,
@@ -135,24 +128,15 @@ export function PageEditProvider({
         locale,
         slug: pageSlug,
       };
+      if (sideMenuDirty) requestBody.side_menu = sideMenu;
 
-      // Sadece sideMenu değiştiyse ekle
-      if (sideMenuDirty) {
-        requestBody.side_menu = sideMenu;
-      }
-
-      const res = await fetch(
-        `/api/${pageSlug === "kurumsal" ? "corporate" : ""}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(requestBody),
-        }
-      );
-
+      const res = await fetch(`/api/${pageSlug === "kurumsal" ? "corporate" : ""}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      });
       if (!res.ok) throw new Error("API error");
 
-      // Silinen resimleri API’den temizle
       for (const img of deletedImages) {
         try {
           await fetch(`/api/media?id=${img.id}`, { method: "DELETE" });
@@ -162,7 +146,7 @@ export function PageEditProvider({
       }
 
       setDeletedImages([]);
-      baselineRef.current = { title, bodyHtml, heroUrl, heroAlt, heroMediaId }; // mark as saved
+      baselineRef.current = { title, bodyHtml, heroUrl, heroAlt, heroMediaId };
       setSideMenuDirty(false);
     } catch (err) {
       console.error("Save failed:", err);
@@ -182,33 +166,22 @@ export function PageEditProvider({
   return (
     <PageEditContext.Provider
       value={{
-        title,
-        setTitle,
-        bodyHtml,
-        setBodyHtml,
-        heroUrl,
-        setHeroUrl,
-        heroAlt,
-        setHeroAlt,
-        heroMediaId,
-        setHeroMediaId,
-        isDirty,
-        saving,
-        handleSave,
-        deletedImages,
-        setDeletedImages,
-        resetTitle,
-        resetBody,
-        resetHero,
-        sideMenu,
-        updateSideMenuTitle,
-        sideMenuDirty,
-        handleSideMenuSave,
-        sideMenuSaving,
-        resetSideMenu,
-        pageId,
-        locale,
-        baseHref,
+        title, setTitle,
+        bodyHtml, setBodyHtml,
+        heroUrl, setHeroUrl,
+        heroAlt, setHeroAlt,
+        heroMediaId, setHeroMediaId,
+        isDirty, saving, handleSave,
+        deletedImages, setDeletedImages,
+        resetTitle, resetBody, resetHero,
+        sideMenu, updateSideMenuTitle,
+        sideMenuDirty, handleSideMenuSave,
+        sideMenuSaving, resetSideMenu,
+        pageId, locale, baseHref, pageSlug,
+
+        // ⭐️ YENİ: Artık context'te
+        mediaScope, 
+        // mediaScope: mediaScopeStable, // (opsiyonel “freeze”)
       }}
     >
       {children}
