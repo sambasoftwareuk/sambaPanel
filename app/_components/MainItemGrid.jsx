@@ -6,7 +6,6 @@ import Link from "next/link";
 const MainItemGrid = ({
   items,
   title,
-  baseHref = "", // default ""
   gridClassName = "grid-cols-1 md:grid-cols-2",
   cardProps = {},
 }) => {
@@ -15,11 +14,11 @@ const MainItemGrid = ({
       {title && <Header1 className="text-center">{title}</Header1>}
       <div className={`grid ${gridClassName} gap-8 items-center`}>
         {items?.map((item) => (
-          <Link key={item?.id} href={`/${baseHref}/${item?.slug}`}>
+          <Link key={item?.id} href={item.href}>
             <ProductCardWithImage
               key={item?.id}
               title={item?.title}
-              imageLink={`${item.hero_url}`}
+              imageLink={item.hero_url}
               altText={item.hero_alt || item.name}
               buttonLabel="DETAYLAR"
               variant={1}

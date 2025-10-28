@@ -43,6 +43,7 @@ const DetailPageTemplate = ({
           initialTitle={displayTitle}
           initialBody={
             page?.content_html ||
+            page?.body_html ||
             sanitizeHtmlContent(description || "") ||
             "<p></p>"
           }
@@ -91,7 +92,7 @@ const DetailPageTemplate = ({
                     locale={page?.locale || locale}
                   />
                 </div>
-                         
+
                 {/* Right-side image */}
                 <DraftHeroImage
                   initialUrl={
