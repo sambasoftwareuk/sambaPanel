@@ -211,18 +211,6 @@ const apply = async () => {
   }
 };
 
-console.log('slug before modal:', pageSlug);
-console.log('scope before modal:', computedScope);
-
-// modal açılınca da:
-useEffect(() => {
-  if (open) {
-    console.log('slug at open:', pageSlug);
-    console.log('scope at open:', computedScope);
-  }
-}, [open, pageSlug, computedScope]);
-
-
 
   return (
     <>

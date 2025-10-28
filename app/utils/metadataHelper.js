@@ -30,7 +30,7 @@ async function fetchFromDB(slug, isItem, locale) {
     return null;
   }
 
-  const table = isItem ? "items_locales" : "page_locales";
+  const table = isItem ? "item_locales" : "page_locales";
 
   const rows = await q(
     `SELECT meta_title AS title,
