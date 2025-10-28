@@ -39,7 +39,7 @@ const BlogComponent = ({
             href="/blog"
             className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary900 transition-colors duration-200 font-medium"
           >
-            Bloglarin Tümünü Gör
+            Blogların Tümünü Gör
           </SambaLinks>
         </div>
       )}
