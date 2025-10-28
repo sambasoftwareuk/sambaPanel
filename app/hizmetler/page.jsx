@@ -1,11 +1,11 @@
 import services from "../mocks/services.json";
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
-import { getMetadataForPath } from "../utils/metadataHelper";
+import { getMetaData } from "../utils/metadataHelper";
 import { getServicesForListing } from "@/lib/repos/-services";
 
 export async function generateMetadata() {
-  return getMetadataForPath("/hizmetler");
+  return await getMetaData("/hizmetler");
 }
 
 export default async function ServicesPage() {

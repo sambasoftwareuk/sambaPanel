@@ -2,11 +2,11 @@ import React from "react";
 // import products from "../constants/bigCardProducts.json"; (static data)
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
-import { getMetadataForPath } from "../utils/metadataHelper";
 import { getProductCollections } from "@/lib/repos/products";
+import { getMetaData } from "../utils/metadataHelper";
 
 export async function generateMetadata() {
-  return getMetadataForPath("/urunler");
+  return getMetaData("/urunler");
 }
 
 const locale = "tr-TR";

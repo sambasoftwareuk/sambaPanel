@@ -3,15 +3,10 @@ import references from "../mocks/references.json";
 import ProductCardWithImage from "../_molecules/ProductCardWithImage";
 import { Header1 } from "../_atoms/Headers";
 import Breadcrumb from "../_molecules/BreadCrumb";
-import { getMetadataForPath } from "../utils/metadataHelper";
+import { getMetaData } from "../utils/metadataHelper";
 
 export async function generateMetadata() {
-  const meta = getMetadataForPath("/referanslar");
-
-  return {
-    title: meta.title,
-    description: meta.description,
-  };
+  return await getMetaData("/referanslar");
 }
 
 const Page = () => {

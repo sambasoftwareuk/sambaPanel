@@ -6,8 +6,8 @@ import Navbar from "./_components/Navbar";
 import { Footer } from "./_components/Footer";
 import WhatsAppStickyButton from "./_components/WhatsAppStickyButton";
 import ScrollToTopButton from "./_components/ScrollToTopButton";
-import { getMetadataForPath } from "./utils/metadataHelper";
 import { ClerkProvider } from "@clerk/nextjs";
+import { getMetaData } from "./utils/metadataHelper";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -15,18 +15,16 @@ const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
 });
 
-export function generateMetadata() {
-  const meta = getMetadataForPath("/");
-
+export async function generateMetadata() {
+  const meta = await getMetaData("/");
   return {
-    title: meta.title,
-    description: meta.description,
-    icons: {
-      icon: "/gs.svg",
-    },
+    title: meta?.title || "Greenstep Su Soğutma Kuleleri",
+    description:
+      meta?.description ||
+      "Greenstep su soğutma kuleleri ile ilgili detaylı bilgi alın.",
+    icons: { icon: "/gs.svg" },
   };
 }
-
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
