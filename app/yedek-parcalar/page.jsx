@@ -1,12 +1,14 @@
 import React from "react";
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
-import spareParts from "../mocks/spareParts.json";
 import { getMetaData } from "../utils/metadataHelper";
+import { getAllSparePart } from "@/lib/repos/spare-parts";
 
 export async function generateMetadata() {
   return getMetaData("/yedek-parcalar");
 }
+const locale = "tr-TR";
+const spareParts = await getAllSparePart(locale, "spare");
 
 const SparePartsPage = () => {
   return (
