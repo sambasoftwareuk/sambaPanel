@@ -2,7 +2,7 @@ import React from "react";
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import { getMetaData } from "../utils/metadataHelper";
-import { getAllSparePart } from "@/lib/repos/spare-parts";
+import { getAllSparePart } from "@/lib/repos/spareParts";
 
 export async function generateMetadata() {
   return getMetaData("/yedek-parcalar");

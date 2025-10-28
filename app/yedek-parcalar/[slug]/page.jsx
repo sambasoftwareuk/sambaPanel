@@ -1,7 +1,7 @@
 import React from "react";
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 import { getMetaData } from "@/app/utils/metadataHelper";
-import { getSparePartBySlug } from "@/lib/repos/spare-parts";
+import { getSparePartBySlug } from "@/lib/repos/spareParts";
 // import { getSideMenuForPath } from "../../../lib/repos/-sideMenu";
 
 export async function generateMetadata({ params }) {
