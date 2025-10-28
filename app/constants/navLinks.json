@@ -97,11 +97,6 @@
     "iconName": "Blog"
   },
   {
-    "label": "E-Katalog",
-    "href": "/e-katalog",
-    "iconName": "Certificate"
-  },
-  {
     "label": "İletişim",
     "href": "/iletisim",
     "iconName": "Phone"
