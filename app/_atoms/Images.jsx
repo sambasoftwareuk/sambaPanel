@@ -2,8 +2,10 @@
 import Image from "next/image";
 import React, { useMemo, useState } from "react";
 
+// Eğer imageLink boşsa generic image döner, varsa orijinal haliyle bırakır
 const getSrc = (imageLink) =>
   imageLink && imageLink.trim() !== "" ? imageLink : "/generic-image.png";
+
 const getImageSlug = (imageLink) =>
   imageLink
     ? imageLink
@@ -12,9 +14,11 @@ const getImageSlug = (imageLink) =>
         .replace(/\.[^/.]+$/, "")
     : "generic-image";
 
+// --- SLIDER IMAGE ---
 export const SliderImage = ({ imageLink, imageAlt, orientation }) => {
   const src = useMemo(() => getSrc(imageLink), [imageLink]);
   const randomImageAlt = useMemo(() => getImageSlug(imageLink), [imageLink]);
+
   return (
     <div className="mx-auto w-full">
       <div
@@ -25,10 +29,10 @@ export const SliderImage = ({ imageLink, imageAlt, orientation }) => {
         <div className="absolute my-[auto] left-1/2 -translate-x-1/2 w-full h-full">
           <Image
             src={src}
-            alt={`slider-image-${imageAlt ? imageAlt : randomImageAlt}`}
+            alt={`slider-image-${imageAlt || randomImageAlt}`}
             fill
             className={
-              src == "/generic-image.png"
+              src === "/generic-image.png"
                 ? "object-contain bg-gray-300"
                 : "object-contain object-center"
             }
@@ -39,6 +43,7 @@ export const SliderImage = ({ imageLink, imageAlt, orientation }) => {
   );
 };
 
+// --- CARD IMAGE ---
 export const CardImage = ({
   imageLink,
   imageAlt,
@@ -46,23 +51,26 @@ export const CardImage = ({
 }) => {
   const src = useMemo(() => getSrc(imageLink), [imageLink]);
   const randomImageAlt = useMemo(() => getImageSlug(imageLink), [imageLink]);
+
   return (
     <div className="mx-auto w-full">
       <div
         className={`relative w-full  overflow-hidden rounded-t-m ${aspectRatio}`}
       >
          
-        <Image
-          src={`${imageLink ? imageLink : "/generic-image.png"}`}
-          alt={`${imageAlt ? imageAlt : randomImageAlt}`}
-          fill
-          className="object-contain"
-        />
+          <Image
+            src={src}
+            alt={imageAlt || randomImageAlt}
+            fill
+            sizes="100vw"
+            className="object-contain"
+          />
+        </div>
       </div>
-    </div>
   );
 };
 
+// --- LOGO IMAGE ---
 export const LogoImage = ({
   imageLink = "",
   width = 50,
@@ -84,7 +92,7 @@ export const LogoImage = ({
     >
       <Image
         src={src}
-        alt={`slider-image-${imageAlt ? imageAlt : randomImageAlt}`}
+        alt={`slider-image-${imageAlt || randomImageAlt}`}
         fill
         className={`object-cover ${
           src === "/generic-image.png" ? "bg-gray-300" : ""
@@ -94,14 +102,16 @@ export const LogoImage = ({
   );
 };
 
+// --- PROFILE IMAGE ---
 export const ProfileImage = ({ imageLink = "", imageAlt }) => {
   const src = useMemo(() => getSrc(imageLink), [imageLink]);
   const randomImageAlt = useMemo(() => getImageSlug(imageLink), [imageLink]);
+
   return (
     <div className="relative w-[80px] h-[80px] overflow-hidden">
       <Image
         src={src}
-        alt={`slider-image-${imageAlt ? imageAlt : randomImageAlt}`}
+        alt={`slider-image-${imageAlt || randomImageAlt}`}
         fill
         className="object-contain border-2 border-black rounded-full bg-gray-200"
       />
@@ -109,6 +119,7 @@ export const ProfileImage = ({ imageLink = "", imageAlt }) => {
   );
 };
 
+// --- ZOOMABLE IMAGE ---
 export const ZoomableImage = ({ imageLink, alt = "zoomable" }) => {
   const [zoomed, setZoomed] = useState(false);
 
@@ -117,9 +128,11 @@ export const ZoomableImage = ({ imageLink, alt = "zoomable" }) => {
     setZoomed((z) => !z);
   };
 
+  const src = getSrc(imageLink);
+
   return (
     <Image
-      src={imageLink}
+      src={src}
       width={800}
       height={600}
       alt={alt}
