@@ -8,7 +8,7 @@ import WhatsAppStickyButton from "./_components/WhatsAppStickyButton";
 import ScrollToTopButton from "./_components/ScrollToTopButton";
 import { ClerkProvider } from "@clerk/nextjs";
 import { getMetaData } from "./utils/metadataHelper";
-import { getBlogList } from "@/lib/repos/blog";
+import { getBlogTitleSlug } from "@/lib/repos/blog";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -28,7 +28,7 @@ export async function generateMetadata() {
 }
 export default async function RootLayout({ children }) {
   const locale = "tr-TR";
-  const blogPosts = await getBlogList(locale, { limit: 10 });
+  const blogPosts = await getBlogTitleSlug(locale, { limit: 10 });
   return (
     <ClerkProvider>
       <html lang="en">
