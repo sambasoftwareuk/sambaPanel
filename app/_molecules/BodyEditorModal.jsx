@@ -239,11 +239,15 @@ export default function BodyEditorModal({
             label={
               saving ? "Kaydediliyor..." : mode === "body" ? "Kaydet" : "Uygula"
             }
-            onClick={() => {
+            onClick={async () => {
               if (galleryActions && galleryActions.applyDeletes) {
-                galleryActions.applyDeletes();
+                await galleryActions.applyDeletes();
               }
               onSave();
+              // Silme işlemi varsa sayfayı yenile
+              if (galleryActions && galleryActions.hasTemporaryDeletes) {
+                window.location.reload();
+              }
             }}
             disabled={saving || (mode === "body" && !editor)}
             className="bg-black text-white disabled:opacity-60"

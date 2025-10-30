@@ -7,7 +7,7 @@ import ImageEditor from "./ImageEditor";
 import { SignedIn } from "@clerk/nextjs";
 
 export default function DraftHeroImage({
-  initialUrl = "/5.jpg",
+  initialUrl = "/generic-image.png",
   initialAlt = "Kurumsal",
   width = 320,
   height = 320,
