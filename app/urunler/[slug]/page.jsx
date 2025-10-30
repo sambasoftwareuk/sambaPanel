@@ -1,7 +1,10 @@
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 // import products from "../../constants/bigCardProducts.json";
 // import sideMenuData from "../../mocks/sideMenuData.json";
-import { getProductBySlug } from "@/lib/repos/products";
+import {
+  getProductBySlug,
+  getOtherProductCollections,
+} from "@/lib/repos/products";
 import { getMetaData } from "@/app/utils/metadataHelper";
 import { getSideMenuForPath } from "../../../lib/repos/-sideMenu";
 
@@ -22,6 +25,7 @@ export default async function ProductDetailPage({ params }) {
   }
   // const arraySideMenu = toArray(sideMenu);
   const product = await getProductBySlug(slug, locale);
+  const otherItems = await getOtherProductCollections(slug, locale);
 
   return (
     <DetailPageTemplate
@@ -29,7 +33,7 @@ export default async function ProductDetailPage({ params }) {
       locale={locale}
       // menu={arraySideMenu}
       activeHref={`/urunler/${product?.slug_i18n}`}
-      // otherItems={product.filter((p) => p.slug !== slug)}
+      otherItems={otherItems}
       otherItemsTitle="Diğer Ürünler"
       baseHref="urunler"
       notFoundText="Ürün bulunamadı."

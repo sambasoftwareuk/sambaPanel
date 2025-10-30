@@ -1,7 +1,7 @@
 import React from "react";
 import DetailPageTemplate from "@/app/_components/DetailPageTemp";
 import { getMetaData } from "@/app/utils/metadataHelper";
-import { getSparePartBySlug } from "@/lib/repos/spareParts";
+import { getSparePartBySlug, getOtherSpareParts } from "@/lib/repos/spareParts";
 // import { getSideMenuForPath } from "../../../lib/repos/-sideMenu";
 
 export async function generateMetadata({ params }) {
@@ -22,13 +22,14 @@ export default async function SparePartDetailPage({ params }) {
   // const arraySideMenu = toArray(sideMenu);
 
   const sparePart = await getSparePartBySlug(slug, locale);
+  const otherItems = await getOtherSpareParts(slug, locale);
 
   return (
     <DetailPageTemplate
       page={sparePart}
       // menu={arraySideMenu}
       activeHref={`/yedek-parcalar/${sparePart?.slug_i18n}`}
-      // otherItems={otherItems} //!Bu kisim daha sonra yapilacak
+      otherItems={otherItems}
       otherItemsTitle="Diğer Yedek Parçalar"
       baseHref="yedek-parcalar"
       notFoundText="Yedek Parça bulunamadi."
