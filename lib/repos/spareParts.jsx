@@ -82,3 +82,32 @@ export async function getSparePartBySlug(slug, locale, type = "spare") {
     hero_alt: media[0]?.alt_text || item.title,
   };
 }
+
+export async function getOtherSpareParts(slug, locale, type = "spare") {
+  const rows = await q(
+    `SELECT 
+       il.title,
+       il.slug,
+       m.url AS hero_url,
+       m.alt_text AS hero_alt
+     FROM items i
+     JOIN item_locales il 
+       ON il.item_id = i.id AND il.locale = :locale
+     LEFT JOIN item_media im 
+       ON im.item_id = i.id
+     LEFT JOIN media m 
+       ON m.id = im.media_id
+     WHERE i.type = :type
+       AND il.slug != :slug
+       AND i.status = 'published'
+       AND (i.publish_at IS NULL OR i.publish_at <= NOW())
+     GROUP BY i.id
+     ORDER BY i.id
+     LIMIT 10`,
+    { locale, slug, type }
+  );
+  return rows.map((r) => ({
+    ...r,
+    href: `/yedek-parcalar/${r.slug}`,
+  }));
+}

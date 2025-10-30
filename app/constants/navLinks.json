@@ -61,19 +61,25 @@
     "iconName": "Services",
 
     "dropdown": [
-      { "label": "Otomasyon Hizmeti", "href": "/hizmetler/otomasyon-hizmeti" },
-      { "label": "Tasarım Hizmeti", "href": "/hizmetler/tasarim-hizmeti" },
       {
-        "label": "Bakım Onarım Hizmeti",
-        "href": "/hizmetler/bakim-onarim-hizmeti"
+        "label": "Su Soğutma Kulesi Otomasyon Hizmeti",
+        "href": "/hizmetler/sogutma-kulesi-otomasyon"
       },
       {
-        "label": "Montaj-Demontaj Hizmeti",
-        "href": "/hizmetler/montaj-demontaj-hizmeti"
+        "label": "Su Soğutma Kulesi Tasarım Hizmeti",
+        "href": "/hizmetler/sogutma-kulesi-tasarim"
       },
       {
-        "label": "Enerji Analiz Hizmeti",
-        "href": "/hizmetler/enerji-analiz-hizmeti"
+        "label": "Su Soğutma Kulesi Montaj-Demontaj Hizmeti",
+        "href": "/hizmetler/sogutma-kulesi-montaj-demontaj"
+      },
+      {
+        "label": "Su Soğutma Kulesi Enerji Analiz Hizmeti",
+        "href": "/hizmetler/sogutma-kulesi-enerji-analiz"
+      },
+      {
+        "label": "Su Soğutma Kulesi Bakım Onarım Hizmeti",
+        "href": "/hizmetler/sogutma-kulesi-bakim-onarim"
       }
     ]
   },
