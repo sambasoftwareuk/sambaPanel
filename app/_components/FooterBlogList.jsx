@@ -1,21 +1,12 @@
 import React from "react";
 import Link from "next/link";
 import navLinks from "../constants/navLinks";
-import blogPosts from "../mocks/blogData.json";
-import { Header2, Header3 } from "../_atoms/Headers";
+import { Header2 } from "../_atoms/Headers";
 import { LogoImage } from "../_atoms/Images";
 import Logo from "../constants/logo.json";
 import CompanyAddress from "./CompanyAddress";
 
-// Utility to generate a slug from the title
-const slugify = (text) =>
-  text
-    .toLowerCase()
-    .replace(/[^a-z0-9ğüşıöç ]/gi, "") // remove special chars
-    .replace(/\s+/g, "-") // replace spaces with dashes
-    .replace(/-+/g, "-"); // remove duplicate dashes
-
-const FooterBlogList = () => {
+const FooterBlogList = ({ blogPosts = [] }) => {
   return (
     <section className="bg-gray-200 p-4 py-8">
       <div className="max-w-screen-xl mx-auto space-y-2">
@@ -50,9 +41,8 @@ const FooterBlogList = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 ">
           {blogPosts.map((post) => {
             if (!post.title) return null;
-            const slug = slugify(post.title);
             return (
-              <Link key={slug} href={`/blog/${slug}`}>
+              <Link key={post.slug} href={`/blog/${post.slug}`}>
                 <p className="text-sm text-gray-800 ">{post.title}</p>
               </Link>
             );
