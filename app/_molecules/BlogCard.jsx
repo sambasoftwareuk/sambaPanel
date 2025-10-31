@@ -15,7 +15,11 @@ const BlogCard = ({
   return (
     <SambaLinks
       href={`/blog/${slug}`}
-      className="bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer w-[calc(50%-12px)] sm:w-[calc(50%-12px)] md:w-[calc(50%-12px)] lg:w-[calc(50%-12px)] xl:w-[calc(20%-19.2px)]"
+      className=" bg-white shadow-md rounded-lg overflow-hidden 
+        transition-transform hover:scale-105 cursor-pointer 
+        w-full sm:w-[48%] lg:w-[30%] xl:w-[22%] 
+        max-w-[380px]
+      "
     >
       <CardImage
         imageLink={imageLink}

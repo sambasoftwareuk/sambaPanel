@@ -18,7 +18,7 @@ const BlogComponent = ({
       {showTitle && <Header1 className="m-8">{title}</Header1>}
 
       {/* Blog kartları */}
-      <div className="flex flex-wrap gap-6 justify-center mb-4 px-1 sm:px-2 md:px-2 lg:px-8 xl:px-16">
+      <div className="flex flex-wrap gap-6 justify-center mb-8 px-6  md:px-10 lg:px-16 xl:px-24">
         {displayBlogs.map((post, index) => (
           <BlogCard
             key={index}
