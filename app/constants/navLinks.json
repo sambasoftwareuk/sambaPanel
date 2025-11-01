@@ -1,8 +1,13 @@
 [
   {
+    "label": "Anasayfa",
+    "href": "/",
+    "iconName": "Home"
+  },
+  {
     "label": "Kurumsal",
     "href": "/kurumsal",
-    "iconName": "Home"
+    "iconName": "Certificate"
   },
   {
     "label": "Ürünlerimiz",
@@ -30,7 +35,7 @@
         "href": "/urunler/sogutma-kulesi-bakim-onarim"
       }
     ],
-    "iconName": "Certificate"
+    "iconName": "Products"
   },
   {
     "label": "Yedek Parçalar",
