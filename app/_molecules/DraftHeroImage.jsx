@@ -26,7 +26,7 @@ export default function DraftHeroImage({
   );
 
   return (
-    <div className="w-80 shrink-0">
+    <div className="w-full md:w-80 shrink-0 relative">
       <Image
         src={url}
         alt={alt}
@@ -36,7 +36,9 @@ export default function DraftHeroImage({
         data-imageid={id}
       />
       <SignedIn>
-        <ImageEditor initialUrl={initialUrl} initialAlt={initialAlt} />
+        <div className="absolute top-2 right-2">
+          <ImageEditor initialUrl={initialUrl} initialAlt={initialAlt} />
+        </div>
       </SignedIn>
     </div>
   );

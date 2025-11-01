@@ -70,39 +70,59 @@ const DetailPageTemplate = ({
 
             <div className="mt-8">
               <NavigationGuard />
-              <div className="bg-white rounded-lg shadow-md p-8 max-w-5xl mx-auto flex gap-8">
-                <div className="flex-1">
-                  {/* Title */}
-                  <TitleDisplay
-                    pageId={page?.id || pageId}
-                    locale={page?.locale || locale}
-                  />
+              <div className="rounded-lg shadow-sm md:max-w-5xl md:mx-auto">
+                <div className="px-4 py-3 md:p-8 flex flex-col md:flex-row md:gap-8 gap-4">
+                  {/* Desktop: Content area (left) - Mobil: Full width column */}
+                  <div className="flex-1 flex flex-col gap-4 md:gap-8">
+                    {/* Title */}
+                    <TitleDisplay
+                      pageId={page?.id || pageId}
+                      locale={page?.locale || locale}
+                    />
 
-                  {/* Body */}
-                  <BodyDisplay
-                    initialHtml={page?.content_html || description}
-                    pageId={page?.id || pageId}
-                    locale={page?.locale || locale}
-                  />
+                    {/* Hero Image - Mobilde title'dan sonra, desktop'ta görünmez (sağda) */}
+                    <div className="block md:hidden">
+                      <DraftHeroImage
+                        initialUrl={
+                          page?.hero_url
+                            ? `${page.hero_url}`
+                            : image || "/5.jpg"
+                        }
+                        initialAlt={page?.hero_alt || page?.title || title}
+                        width={320}
+                        height={320}
+                        className="rounded-lg object-cover w-full h-auto"
+                      />
+                    </div>
 
-                  {/* Save all button */}
-                  <SaveAllButton
-                    baseHref={baseHref}
-                    pageId={page?.id || pageId}
-                    locale={page?.locale || locale}
-                  />
+                    {/* Body */}
+                    <BodyDisplay
+                      initialHtml={page?.content_html || description}
+                      pageId={page?.id || pageId}
+                      locale={page?.locale || locale}
+                    />
+
+                    {/* Save all button */}
+                    <SaveAllButton
+                      baseHref={baseHref}
+                      pageId={page?.id || pageId}
+                      locale={page?.locale || locale}
+                    />
+                  </div>
+
+                  {/* Hero Image - Desktop'ta sağda, mobilde gizli */}
+                  <div className="hidden md:block shrink-0">
+                    <DraftHeroImage
+                      initialUrl={
+                        page?.hero_url ? `${page.hero_url}` : image || "/5.jpg"
+                      }
+                      initialAlt={page?.hero_alt || page?.title || title}
+                      width={320}
+                      height={320}
+                      className="rounded-lg object-cover w-80 h-80"
+                    />
+                  </div>
                 </div>
-
-                {/* Right-side image */}
-                <DraftHeroImage
-                  initialUrl={
-                    page?.hero_url ? `${page.hero_url}` : image || "/5.jpg"
-                  }
-                  initialAlt={page?.hero_alt || page?.title || title}
-                  width={320}
-                  height={320}
-                  className="rounded-lg object-cover w-80 h-80"
-                />
               </div>
               {otherItems && (
                 <>
