@@ -47,15 +47,13 @@ export default async function BlogDetailPage({ params }) {
           />
         </div>
         <div className="w-full lg:w-1/4 mt-6">
-          {post.hero_url && (
-            <Image
-              src={post.hero_url}
-              alt={post.hero_alt || post.title}
-              width={300}
-              height={300}
-              className="rounded-lg shadow-lg object-contain"
-            />
-          )}
+          <Image
+            src={post.hero_url || "/generic-image.png"}
+            alt={post.hero_alt || post.title}
+            width={300}
+            height={300}
+            className="rounded-lg shadow-lg object-contain"
+          />
         </div>
       </div>
     </div>

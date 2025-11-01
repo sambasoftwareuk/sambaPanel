@@ -8,7 +8,7 @@ import BodyEditorModal from "./BodyEditorModal";
 import UploadModal from "./UploadModal";
 
 export default function ImageEditor({
-  initialUrl = "/5.jpg",
+  initialUrl = "/generic-image.png",
   initialAlt = "Kurumsal",
   className = "mt-2",
 }) {
