@@ -23,10 +23,10 @@ export const SliderImage = ({ imageLink, imageAlt, orientation }) => {
     <div className="mx-auto w-full">
       <div
         className={`bg-primary50 custom:block relative ${
-          orientation === "split-horizontal" ? "h-[600px] ml-10" : "h-[600px]"
+          orientation === "split-horizontal" ? "h-[600px]" : "h-[600px]"
         } overflow-hidden`}
       >
-        <div className="absolute my-[auto] left-1/2 -translate-x-1/2 w-full h-full">
+        <div className="absolute my-[auto] left-1/2 -translate-x-1/2 md:w-full w-1/2 h-full">
           <Image
             src={src}
             alt={`slider-image-${imageAlt || randomImageAlt}`}
