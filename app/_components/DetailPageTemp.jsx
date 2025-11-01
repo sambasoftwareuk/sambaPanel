@@ -70,7 +70,7 @@ const DetailPageTemplate = ({
 
             <div className="mt-8">
               <NavigationGuard />
-              <div className="rounded-lg shadow-sm md:max-w-5xl md:mx-auto">
+              <div className="rounded-lg shadow-lg md:max-w-5xl md:mx-auto">
                 <div className="px-4 py-3 md:p-8 flex flex-col md:flex-row md:gap-8 gap-4">
                   {/* Desktop: Content area (left) - Mobil: Full width column */}
                   <div className="flex-1 flex flex-col gap-4 md:gap-8">
