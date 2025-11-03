@@ -19,6 +19,7 @@ import {
   Reference,
   Blog,
   socialIcons,
+  Products,
 } from "../_atoms/Icons";
 import { AccordionSection } from "../_molecules/AccordionSection";
 import { LogoImage } from "../_atoms/Images";
@@ -40,6 +41,7 @@ const HamburgerMenu = () => {
     Services,
     Reference,
     Blog,
+    Products,
   };
 
   return (
@@ -59,11 +61,11 @@ const HamburgerMenu = () => {
           />
         </Link>
         <div className="flex items-center gap-0">
-          <IconOnlyButton icon={<Icon variant={Search} size={20} />} />
+          {/* <IconOnlyButton icon={<Icon variant={Search} size={20} />} />
           <IconOnlyButton
             icon={<Icon variant={Cart} size={20} />}
             className="hidden xl:block"
-          />
+          /> */}
         </div>
       </div>
 

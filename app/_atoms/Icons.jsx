@@ -521,3 +521,17 @@ export const RefreshIcon = ({ style, className = "" }) => (
     <path d="M17.65 6.35A8 8 0 0 0 12 4V1L7 6l5 5V7a5 5 0 1 1-4.9 6h-2A7 7 0 1 0 17.65 6.35z" />
   </svg>
 );
+
+export const Products = ({ style, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    height="24px"
+    viewBox="0 0 24 24"
+    width="24px"
+    fill="currentColor"
+    style={style}
+    className={className}
+  >
+    <path d="M21 8l-9-5-9 5v10l9 5 9-5V8Zm-9 3.27L5.74 8.6 12 5.13l6.26 3.47L12 11.27Zm-7 1.57l6 3.32v4.48l-6-3.33v-4.47Zm8 7.8v-4.48l6-3.32v4.47l-6 3.33Z" />
+  </svg>
+);

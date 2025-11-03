@@ -24,32 +24,34 @@ const DesktopNavbar = () => {
           <Link href="/">
             <IconOnlyButton icon={<Icon variant={Home} size={20} />} />
           </Link>
-          {navLinks.map(({ label, href, className, dropdown }) => (
-            <div key={label} className="relative group">
-              <Link
-                href={href}
-                className={`p-3 text-md font-medium whitespace-nowrap text-secondary hover:text-primary900 hover:bg-primary50 rounded-sm transition-colors duration-200 ${
-                  className || ""
-                }`}
-              >
-                {label}
-              </Link>
+          {navLinks
+            .filter((link) => link.label !== "Anasayfa")
+            .map(({ label, href, className, dropdown }) => (
+              <div key={label} className="relative group">
+                <Link
+                  href={href}
+                  className={`p-3 text-md font-medium whitespace-nowrap text-secondary hover:text-primary900 hover:bg-primary50 rounded-sm transition-colors duration-200 ${
+                    className || ""
+                  }`}
+                >
+                  {label}
+                </Link>
 
-              {dropdown && dropdown.length > 0 && (
-                <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white border shadow-md rounded-md z-20 min-w-[200px]">
-                  {dropdown.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary50 hover:text-primary900"
-                    >
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
+                {dropdown && dropdown.length > 0 && (
+                  <div className="absolute left-0 top-full mt-1 hidden group-hover:block bg-white border shadow-md rounded-md z-20 min-w-[200px]">
+                    {dropdown.map((item) => (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary50 hover:text-primary900"
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
 
           {/* Divider */}
           <span className="inline-block w-px h-7 bg-gray-300 mx-3" />
@@ -60,7 +62,9 @@ const DesktopNavbar = () => {
             <IconOnlyButton icon={<Icon variant={UKFlag} size={22} />} />
           </div> */}
         </div>
-        <div><UserButton /></div>
+        <div>
+          <UserButton />
+        </div>
       </nav>
     </header>
   );
