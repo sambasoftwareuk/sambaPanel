@@ -17,7 +17,6 @@ const MainItemGrid = ({
         {items?.map((item) => (
           <Link key={item?.id} href={item.href}>
             <ProductCardWithImage
-              key={item?.id}
               title={item?.title}
               imageLink={item?.hero_url}
               altText={item?.hero_alt || item?.title}
