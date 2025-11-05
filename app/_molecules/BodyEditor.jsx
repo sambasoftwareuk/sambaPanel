@@ -12,8 +12,14 @@ import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 
 export default function BodyEditor({ className = "" }) {
-  const { bodyHtml, setBodyHtml, resetBody, deletedImages, setDeletedImages } =
-    usePageEdit();
+  const {
+    bodyHtml,
+    setBodyHtml,
+    resetBody,
+    deletedImages,
+    setDeletedImages,
+    pageSlug,
+  } = usePageEdit();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -181,6 +187,7 @@ export default function BodyEditor({ className = "" }) {
         onOpenImageModal={openImageModal}
         onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
         deletedImages={deletedImages}
+        pageSlug={pageSlug}
       />
 
       {/* Resim seçimi modal'ı */}
@@ -198,6 +205,7 @@ export default function BodyEditor({ className = "" }) {
         saving={false}
         error=""
         deletedImages={deletedImages}
+        pageSlug={pageSlug}
       />
     </>
   );
