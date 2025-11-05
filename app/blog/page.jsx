@@ -19,7 +19,7 @@ export default async function Blog() {
       slug: post.slug,
       title: post.title,
       excerpt: post.summary || "",
-      imageLink: post.hero_url || "/5.jpg",
+      imageLink: post.hero_url || "/generic-image.png",
       imageAlt: post.hero_alt || post.title,
       date: formatTurkishDate(post.dt),
       aspectRatio: "aspect-[16/16]",
