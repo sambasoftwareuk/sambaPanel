@@ -25,15 +25,7 @@
         "label": "Kapalı Devre Kuleler",
         "href": "/urunler/kapali-devre-kuleler"
       },
-      { "label": "İnşai Tip Kuleler", "href": "/urunler/insai-tip-kuleler" },
-      {
-        "label": "Soğutma Kulesi Yedek Parçaları",
-        "href": "/urunler/sogutma-kulesi-yedek-parcalari"
-      },
-      {
-        "label": "Soğutma Kulesi Bakım Onarım İşleri",
-        "href": "/urunler/sogutma-kulesi-bakim-onarim"
-      }
+      { "label": "İnşai Tip Kuleler", "href": "/urunler/insai-tip-kuleler" }
     ],
     "iconName": "Products"
   },

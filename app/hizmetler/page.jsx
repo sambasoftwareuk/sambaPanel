@@ -13,7 +13,7 @@ export default async function ServicesPage() {
   const filteredServices = await getServiceCards(locale);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8 text-center">
       <Breadcrumb title={"Hizmetler"} />
       <MainItemGrid
         items={filteredServices}
