@@ -2,7 +2,7 @@ import services from "../mocks/services.json";
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import { getMetaData } from "../utils/metadataHelper";
-import { getServicesForListing } from "@/lib/repos/-services";
+import { getServiceCards } from "@/lib/repos/services";
 
 export async function generateMetadata() {
   return await getMetaData("/hizmetler");
@@ -10,7 +10,7 @@ export async function generateMetadata() {
 
 export default async function ServicesPage() {
   const locale = "tr-TR";
-  const filteredServices = await getServicesForListing(locale);
+  const filteredServices = await getServiceCards(locale);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">

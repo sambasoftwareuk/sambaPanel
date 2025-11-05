@@ -5,10 +5,10 @@ import footerData from "../mocks/footerData";
 import { AccordionSection } from "../_molecules/AccordionSection";
 import FooterBlogList from "./FooterBlogList";
 
-export function Footer() {
+export function Footer({ blogPosts }) {
   return (
     <footer className="text-white text-[16px]">
-      <FooterBlogList />
+      <FooterBlogList blogPosts={blogPosts} />
       <div className="border-t border-black w-full" />
 
       <div className="bg-gray-200 w-full text-sm text-gray-800  py-6 px-6">

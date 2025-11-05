@@ -28,7 +28,7 @@ const ProductCardWithImage = ({
   const Image = (
     <div className="overflow-hidden rounded-md my-5">
       <div className="transition-transform duration-300 ease-in-out group-hover:scale-105">
-        <CardImage imageLink={`${imageLink}`} imageAlt={altText ? altText : title} />
+        <CardImage imageLink={`${imageLink ? imageLink : "/generic-image.png"}`} imageAlt={altText ? altText : title} />
       </div>
     </div>
   );
