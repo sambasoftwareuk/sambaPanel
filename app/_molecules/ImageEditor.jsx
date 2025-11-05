@@ -8,7 +8,7 @@ import BodyEditorModal from "./BodyEditorModal";
 import UploadModal from "./UploadModal";
 
 export default function ImageEditor({
-  initialUrl = "/5.jpg",
+  initialUrl = "/generic-image.png",
   initialAlt = "Kurumsal",
   className = "mt-2",
 }) {
@@ -24,8 +24,7 @@ export default function ImageEditor({
     deletedImages,
     pageId,
     locale,
-    pageSlug
-    
+    pageSlug,
   } = usePageEdit();
 
   const [open, setOpen] = useState(false);
@@ -46,11 +45,12 @@ export default function ImageEditor({
     if (!open) return;
     setUrl(heroUrl || initialUrl);
     setAlt(heroAlt || initialAlt);
+    setStagedMediaId(heroMediaId || null);
     setPreviewOk(true);
     setError("");
     setUploadComplete(false);
     setShowUploadModal(false);
-  }, [open, heroUrl, heroAlt, initialUrl, initialAlt]);
+  }, [open, heroUrl, heroAlt, heroMediaId, initialUrl, initialAlt]);
 
   // URL kontrol
   useEffect(() => {
@@ -118,99 +118,105 @@ export default function ImageEditor({
     if (stagedPreview) URL.revokeObjectURL(stagedPreview);
     setStagedFile(null);
     setStagedPreview(null);
+    setStagedMediaId(null);
     setUrl(heroUrl || initialUrl);
   };
 
-  
-const scopeFromPage = (slug) => {
-  // Sayfaya göre scope eşlemesi — ihtiyacına göre genişletebilirsin
-  if (!slug) return 'gallery';
-  if (slug === 'kurumsal' || slug === 'about-us' || slug === 'corporate') return 'kurumsal';
-  if (slug.startsWith('urun') || slug.startsWith('products')) return 'product';
-  if (slug.startsWith('hizmet') || slug.startsWith('services')) return 'service';
-  if (slug.startsWith('yedek') || slug.includes('spare')) return 'spare';
-  if (slug.startsWith('iletisim') || slug.startsWith('contact')) return 'contact';
-  return 'gallery';
-};
+  const scopeFromPage = (slug) => {
+    // Sayfaya göre scope eşlemesi — ihtiyacına göre genişletebilirsin
+    if (!slug) return "gallery";
+    if (slug === "kurumsal" || slug === "about-us" || slug === "corporate")
+      return "kurumsal";
+    if (slug.startsWith("urun") || slug.startsWith("products"))
+      return "product";
+    if (slug.startsWith("hizmet") || slug.startsWith("services"))
+      return "service";
+    if (slug.startsWith("yedek") || slug.includes("spare")) return "spare";
+    if (slug.startsWith("iletisim") || slug.startsWith("contact"))
+      return "contact";
+    return "gallery";
+  };
 
+  const computedScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
 
+  const apply = async () => {
+    if (!url) {
+      setError("Görsel URL gerekli");
+      return;
+    }
+    setUploading(true);
+    setError("");
+    try {
+      const scope = computedScope;
+      let finalUrl = url;
+      let mime = stagedFile?.type || "image/png";
+      let mediaId = null;
 
-const computedScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
+      // 1) Dosya seçildiyse önce storage'a yükle → /api/upload
+      if (stagedFile) {
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
 
-const apply = async () => {
-  if (!url) {
-    setError("Görsel URL gerekli");
-    return;
-  }
-  setUploading(true);
-  setError("");
-  try {
-    const scope = computedScope;
-    let finalUrl = url;
-    let mime = stagedFile?.type || 'image/png';
+        const formData = new FormData();
+        formData.append("file", stagedFile);
 
-   
-    
-
-
-    // 1) Dosya seçildiyse önce storage’a yükle → /api/upload
-    if (stagedFile) {
-      const controller = new AbortController();
-      abortControllerRef.current = controller;
-
-      const formData = new FormData();
-      formData.append("file", stagedFile);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-        signal: controller.signal,
-      });
-      if (!res.ok) {
-        const t = await res.text();
-        throw new Error("Upload başarısız: " + res.status + " - " + t);
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+          signal: controller.signal,
+        });
+        if (!res.ok) {
+          const t = await res.text();
+          throw new Error("Upload başarısız: " + res.status + " - " + t);
+        }
+        const data = await res.json();
+        finalUrl = data.url; // storage URL
+        if (stagedPreview) URL.revokeObjectURL(stagedPreview);
+        setStagedFile(null);
+        setStagedPreview(null);
+        abortControllerRef.current = null;
       }
-      const data = await res.json();
-      finalUrl = data.url;              // storage URL
-      if (stagedPreview) URL.revokeObjectURL(stagedPreview);
-      setStagedFile(null);
-      setStagedPreview(null);
+
+      // 2) Önizleme için context'i güncelle
+      setHeroUrl(finalUrl);
+      setHeroAlt(alt);
+
+      // 3) Media kaydı + scope ataması
+      // Eğer galeriden seçildiyse (stagedMediaId varsa), yeni kayıt oluşturma
+      if (stagedMediaId) {
+        // Galeriden seçildi, mevcut media kaydını kullan
+        mediaId = stagedMediaId;
+      } else {
+        // Yeni dosya yüklendi, media kaydı oluştur
+        const mediaRes = await fetch("/api/media", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: finalUrl,
+            alt_text: alt || null,
+            mime_type: mime,
+            scopes: [scope],
+          }),
+        });
+        if (!mediaRes.ok) {
+          const errorText = await mediaRes.text();
+          throw new Error("Media oluşturulamadı: " + errorText);
+        }
+        const created = await mediaRes.json();
+        mediaId = created.media.id;
+      }
+
+      // 4) Page context → hero_media_id'yi bağla (Save All PATCH'inde DB'ye yazılacak)
+      setHeroMediaId(mediaId);
+
+      setOpen(false);
+    } catch (e) {
+      if (e.name !== "AbortError") setError(e.message || "Güncellenemedi");
+    } finally {
+      setUploading(false);
       abortControllerRef.current = null;
     }
-
-    // 2) Önizleme için context’i güncelle
-    setHeroUrl(finalUrl);
-    setHeroAlt(alt);
-
-    // 3) Media kaydı + scope ataması → /api/media (POST)
-    const mediaRes = await fetch("/api/media", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        url: finalUrl,
-        alt_text: alt || null,
-        mime_type: mime,
-        scopes: [scope],             // 🔑 kurumsal sayfadaysan ['corporate']
-      }),
-    });
-    if (!mediaRes.ok) {
-      const errorText = await mediaRes.text();
-      throw new Error("Media oluşturulamadı: " + errorText);
-    }
-    const created = await mediaRes.json(); // { message, media: { id, url, ... } }
-
-    // 4) Page context → hero_media_id’yi bağla (Save All PATCH’inde DB’ye yazılacak)
-    setHeroMediaId(created.media.id);
-
-    setOpen(false);
-  } catch (e) {
-    if (e.name !== "AbortError") setError(e.message || "Güncellenemedi");
-  } finally {
-    setUploading(false);
-    abortControllerRef.current = null;
-  }
-};
-
+  };
 
   return (
     <>
@@ -222,7 +228,6 @@ const apply = async () => {
         />
         <XButton onClick={resetHero} />
       </div>
-      
 
       <BodyEditorModal
         isOpen={open}
@@ -237,6 +242,7 @@ const apply = async () => {
         onImageSelect={(id, selectedUrl) => {
           clearStaged();
           setUrl(selectedUrl);
+          setStagedMediaId(id); // Galeriden seçildiğini işaretle
           setPreviewOk(true);
         }}
         onSave={apply}
@@ -248,9 +254,7 @@ const apply = async () => {
       />
 
       {/* Upload Modal */}
-      
 
-      
       <UploadModal
         key={computedScope}
         isOpen={showUploadModal}

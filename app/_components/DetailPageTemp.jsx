@@ -49,7 +49,7 @@ const DetailPageTemplate = ({
           }
           //TODO json data iptal olunca burayi guncelleyelim!!
           initialHeroUrl={
-            page?.hero_url ? `${page.hero_url}` : image || "/5.jpg"
+            page?.hero_url ? `${page.hero_url}` : image || "/generic-image.png"
           }
           initialHeroAlt={page?.hero_alt || page?.title || title}
           initialHeroMediaId={page?.hero_media_id}
@@ -110,19 +110,16 @@ const DetailPageTemplate = ({
                     />
                   </div>
 
-                  {/* Hero Image - Desktop'ta sağda, mobilde gizli */}
-                  <div className="hidden md:block shrink-0">
-                    <DraftHeroImage
-                      initialUrl={
-                        page?.hero_url ? `${page.hero_url}` : image || "/5.jpg"
-                      }
-                      initialAlt={page?.hero_alt || page?.title || title}
-                      width={320}
-                      height={320}
-                      className="rounded-lg object-cover w-80 h-80"
-                    />
-                  </div>
-                </div>
+                {/* Right-side image */}
+                <DraftHeroImage
+                  initialUrl={
+                    page?.hero_url ? `${page.hero_url}` : image || "/generic-image.png"
+                  }
+                  initialAlt={page?.hero_alt || page?.title || title}
+                  width={320}
+                  height={320}
+                  className="rounded-lg object-cover w-80 h-80"
+                />
               </div>
               {otherItems && (
                 <>

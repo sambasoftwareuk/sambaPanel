@@ -48,16 +48,37 @@ export default function ImageGallery({
   };
 
   // "Uygula" butonuna basıldığında çağrılacak (modal'ın uygula butonundan)
-  const applyDeletes = () => {
-    // Geçici silinen resimleri context'e gönder
-    temporarilyDeleted.forEach((image) => {
-      if (onDeleteImage) {
-        onDeleteImage(image);
-      }
-    });
+  const applyDeletes = async () => {
+    if (!temporarilyDeleted.length) return;
 
-    // Geçici silmeleri temizle
-    setTemporarilyDeleted([]);
+    try {
+      // API'den anında sil ve galeriden çıkar
+      await Promise.all(
+        temporarilyDeleted.map(async (image) => {
+          try {
+            const res = await fetch(`/api/media?id=${image.id}`, {
+              method: "DELETE",
+              headers: {
+                "x-admin-token":
+                  process.env.NEXT_PUBLIC_ADMIN_TOKEN || "admin123",
+              },
+            });
+            if (!res.ok) {
+              const t = await res.text();
+              console.error("Silinemedi:", image.id, t);
+              return;
+            }
+            // Local galeriden de düş
+            setGallery((prev) => prev.filter((it) => it.id !== image.id));
+          } catch (e) {
+            console.error("Silme hatası:", image.id, e);
+          }
+        })
+      );
+    } finally {
+      // Geçici silmeleri temizle
+      setTemporarilyDeleted([]);
+    }
   };
 
   // onApply prop'u değiştiğinde applyDeletes'i parent'a bildir
