@@ -5,7 +5,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
-import Image from "@tiptap/extension-image";
+import { CustomImageNode } from "../_extensions/CustomImageNode";
 import EditButton from "../_atoms/EditButton";
 import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
@@ -40,12 +40,7 @@ export default function BodyEditor({ className = "" }) {
       TextAlign.configure({
         types: ["paragraph"],
       }),
-      Image.configure({
-        HTMLAttributes: {
-          class: "max-w-full h-auto rounded",
-          style: "max-width: 100%; height: auto; max-height: 400px;",
-        },
-      }),
+      CustomImageNode,
     ],
     content: "",
     editorProps: {
@@ -79,24 +74,27 @@ export default function BodyEditor({ className = "" }) {
     setImageModalOpen(true);
   };
 
-  // Resim seçildiğinde editöre ekleme fonksiyonu
-  const handleImageSelect = (imageUrl) => {
+  // Resim/video seçildiğinde editöre ekleme fonksiyonu
+  const handleImageSelect = (id, imageUrl, mimeType) => {
     if (editor && imageUrl) {
-      // URL'den dosya adını çıkar ve alt text oluştur
       const fileName = imageUrl.split("/").pop();
       const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+      const isVideo = mimeType?.startsWith("video/") || /\.(mp4|webm|ogg|mov)$/i.test(imageUrl);
 
-      const imageHtml = `<img src="${imageUrl}" alt="${altText}" style="max-width: 100%; height: auto; max-height: 400px;" />`;
-      const pos = editor.state.selection.from;
-      editor.chain().focus().insertContentAt(pos, imageHtml).run();
+      editor.commands.setCustomImage({ 
+        src: imageUrl, 
+        alt: altText,
+        type: isVideo ? 'video' : 'image',
+        width: '100%'
+      });
     }
     setImageModalOpen(false);
   };
 
-  // Resim yükleme fonksiyonu (ImageEditor'dan kopyalandı)
+  // Resim/video yükleme fonksiyonu
   const handleImageUpload = async (file) => {
-    if (!file.type.startsWith("image/")) {
-      alert("Sadece resim dosyaları kabul edilir");
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+      alert("Sadece resim ve video dosyaları kabul edilir");
       return;
     }
 
@@ -129,11 +127,15 @@ export default function BodyEditor({ className = "" }) {
         }),
       });
 
-      // Resmi editöre ekle (doğru alt text ile)
+      // Resim/video'yu editöre ekle
       if (editor && data.url) {
-        const imageHtml = `<img src="${data.url}" alt="${altText}" style="max-width: 100%; height: auto; max-height: 400px;" />`;
-        const pos = editor.state.selection.from;
-        editor.chain().focus().insertContentAt(pos, imageHtml).run();
+        const isVideo = file.type.startsWith("video/");
+        editor.commands.setCustomImage({ 
+          src: data.url, 
+          alt: altText,
+          type: isVideo ? 'video' : 'image',
+          width: '100%'
+        });
 
         // Context'i de güncelle (Save All butonunu aktif etmek için)
         const updatedHtml = editor.getHTML();
@@ -199,7 +201,7 @@ export default function BodyEditor({ className = "" }) {
         imageAlt=""
         onImageUrlChange={() => {}}
         onImageAltChange={() => {}}
-        onImageSelect={(id, url) => handleImageSelect(url)}
+        onImageSelect={(id, url, mimeType) => handleImageSelect(id, url, mimeType)}
         onImageUpload={handleImageUpload}
         onSave={() => setImageModalOpen(false)}
         saving={false}

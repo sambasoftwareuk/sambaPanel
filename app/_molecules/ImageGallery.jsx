@@ -130,14 +130,21 @@ export default function ImageGallery({
                 }`}
               >
                 <div
-                  onClick={() => onImageSelect(item.id, item.url)}
+                  onClick={() => onImageSelect(item.id, item.url, item.mime_type)}
                   className="cursor-pointer"
                 >
-                  <img
-                    src={item.url}
-                    alt={item.alt_text || "Galeri"}
-                    className="w-full h-20 object-contain rounded"
-                  />
+                  {item.mime_type?.startsWith("video/") ? (
+                    <video
+                      src={item.url}
+                      className="w-full h-20 object-contain rounded"
+                    />
+                  ) : (
+                    <img
+                      src={item.url}
+                      alt={item.alt_text || "Galeri"}
+                      className="w-full h-20 object-contain rounded"
+                    />
+                  )}
                 </div>
 
                 {/* Silme butonu */}

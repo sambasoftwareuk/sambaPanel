@@ -157,15 +157,18 @@ export default function BodyEditorModal({
             {/* İçerik */}
             {inlineGalleryTab === "gallery" ? (
               <ImageGallery
-                onImageSelect={(id, url) => {
+                onImageSelect={(id, url, mimeType) => {
                   if (editor) {
-                    const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
-                    const pos = editor.state.selection.from;
-                    editor
-                      .chain()
-                      .focus()
-                      .insertContentAt(pos, imageHtml)
-                      .run();
+                    const isVideo = mimeType?.startsWith("video/") || /\.(mp4|webm|ogg|mov)$/i.test(url);
+                    const fileName = url.split("/").pop();
+                    const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+                    
+                    editor.commands.setCustomImage({ 
+                      src: url, 
+                      alt: altText,
+                      type: isVideo ? 'video' : 'image',
+                      width: '100%'
+                    });
                   }
                   setShowGallery(false); // seçimden sonra panel kapanır
                 }}
@@ -185,7 +188,7 @@ export default function BodyEditorModal({
         {/* Tab Content */}
         {activeTab === "gallery" ? (
           <ImageGallery
-            onImageSelect={(id, url) => onImageSelect(id, url)}
+            onImageSelect={(id, url, mimeType) => onImageSelect(id, url, mimeType)}
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
@@ -200,7 +203,7 @@ export default function BodyEditorModal({
             URL özelliği geçici olarak devre dışı
           </div>
         ) : (
-          <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
+          <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*", "video/*"]}>
             {showHtml ? (
               <HtmlEditor
                 htmlContent={htmlContent}
