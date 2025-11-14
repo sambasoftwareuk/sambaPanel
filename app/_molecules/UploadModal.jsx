@@ -22,24 +22,23 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
 
   const handleFileSelect = (files) => {
     const fileArray = Array.from(files);
-    const mediaFiles = fileArray.filter((file) =>
-      file.type.startsWith("image/") || file.type.startsWith("video/")
+    const imageFiles = fileArray.filter((file) =>
+      file.type.startsWith("image/")
     );
 
-    if (mediaFiles.length === 0) {
-      alert("Sadece resim ve video dosyaları seçilebilir");
+    if (imageFiles.length === 0) {
+      alert("Sadece resim dosyaları seçilebilir");
       return;
     }
 
     // Her dosya için blob URL ve benzersiz ID oluştur
-    const newPreviews = mediaFiles.map((file) => ({
+    const newPreviews = imageFiles.map((file) => ({
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       file,
       url: URL.createObjectURL(file),
-      type: file.type.startsWith("video/") ? "video" : "image",
     }));
 
-    setSelectedFiles((prev) => [...prev, ...mediaFiles]);
+    setSelectedFiles((prev) => [...prev, ...imageFiles]);
     setFilePreviews((prev) => [...prev, ...newPreviews]);
   };
 
@@ -133,7 +132,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
       <div className="w-full max-w-4xl h-5/6 rounded-xl bg-white p-4 shadow-lg">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
-          <Header2 className="text-lg font-semibold">Medya Yükle</Header2>
+          <Header2 className="text-lg font-semibold">Resim Yükle</Header2>
           <OutlinedButton
             label="✖"
             onClick={handleClose}
@@ -142,7 +141,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
         </div>
 
         {/* Upload Area */}
-        <DragDropZone onFileDrop={handleFileSelect} acceptTypes={["image/*", "video/*"]}>
+        <DragDropZone onFileDrop={handleFileSelect} acceptTypes={["image/*"]}>
           <div
             className="p-6 text-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50"
             onClick={handleClick}
@@ -153,40 +152,32 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
               onChange={(e) => handleFileSelect(e.target.files)}
               multiple
               className="hidden"
-              accept="image/*,video/*"
+              accept="image/*"
             />
             <p className="text-sm text-gray-600 mb-2">
-              Resim veya video yüklemek için tıklayın ya da sürükleyip bırakın
+              Resim yüklemek için tıklayın ya da sürükleyip bırakın
             </p>
-            <p className="text-xs text-gray-500">JPG, PNG, GIF, MP4, WebM desteklenir</p>
+            <p className="text-xs text-gray-500">JPG, PNG, GIF desteklenir</p>
           </div>
         </DragDropZone>
 
-        {/* Seçilen medya */}
+        {/* Seçilen resimler */}
         {selectedFiles.length > 0 && (
           <div className="mt-4 h-4/6">
             <h4 className="text-sm font-medium text-gray-700 mb-2">
-              Seçilen Dosyalar ({selectedFiles.length})
+              Seçilen Resimler ({selectedFiles.length})
             </h4>
             <div className="grid grid-cols-3 gap-2 h-5/6 overflow-y-auto p-2">
               {filePreviews?.map((preview) => (
                   <div key={preview.id} className="relative">
                     <div className="relative w-full h-32 rounded border overflow-hidden">
-                      {preview.type === "video" ? (
-                        <video
-                          src={preview.url}
-                          className="w-full h-full object-contain rounded"
-                          controls
-                        />
-                      ) : (
-                        <Image
-                          src={preview.url}
-                          alt={preview.file.name}
-                          fill
-                          unoptimized
-                          className="object-contain rounded"
-                        />
-                      )}
+                      <Image
+                        src={preview.url}
+                        alt={preview.file.name}
+                        fill
+                        unoptimized
+                        className="object-contain rounded"
+                      />
                     </div>
                     <div className="absolute -top-1 -right-1">
                       <XButton

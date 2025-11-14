@@ -16,18 +16,17 @@ export async function POST(request) {
     }
 
     // Dosya tipini kontrol et
-    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+    if (!file.type.startsWith("image/")) {
       return NextResponse.json(
-        { error: "Sadece resim ve video dosyaları kabul edilir" },
+        { error: "Sadece resim dosyaları kabul edilir" },
         { status: 400 }
       );
     }
 
-    // Dosya boyutunu kontrol et (resim: 5MB, video: 50MB)
-    const maxSize = file.type.startsWith("video/") ? 50 * 1024 * 1024 : 5 * 1024 * 1024;
-    if (file.size > maxSize) {
+    // Dosya boyutunu kontrol et (5MB)
+    if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { error: `Dosya boyutu ${file.type.startsWith("video/") ? "50MB" : "5MB"}'dan büyük olamaz` },
+        { error: "Dosya boyutu 5MB'dan büyük olamaz" },
         { status: 400 }
       );
     }
@@ -80,13 +79,12 @@ export async function POST(request) {
     }
 
     // Sıralı numaralandırma için sayaç bul
-    const prefix = file.type.startsWith("video/") ? "sambaVideo" : "sambaImage";
-    const sambaFiles = existingFiles.filter((f) =>
-      f.startsWith(prefix)
+    const sambaImageFiles = existingFiles.filter((f) =>
+      f.startsWith("sambaImage")
     );
-    const counter = sambaFiles.length + 1;
+    const counter = sambaImageFiles.length + 1;
 
-    const fileName = `${prefix}${counter
+    const fileName = `sambaImage${counter
       .toString()
       .padStart(2, "0")}.${fileExtension}`;
     const filePath = join(uploadsDir, fileName);

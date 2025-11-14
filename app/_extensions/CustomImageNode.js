@@ -23,6 +23,9 @@ export const CustomImageNode = Node.create({
       type: {
         default: 'image',
       },
+      aspectRatio: {
+        default: null,
+      },
     };
   },
   
@@ -38,23 +41,33 @@ export const CustomImageNode = Node.create({
         }),
       },
       {
-        tag: 'video[src]',
+        tag: 'iframe[src]',
         getAttrs: (dom) => ({
           src: dom.getAttribute('src'),
-          alt: dom.getAttribute('alt') || '',
+          alt: '',
           width: dom.style.width || '100%',
-          type: 'video',
+          type: 'iframe',
         }),
       },
     ];
   },
   
   renderHTML({ HTMLAttributes }) {
-    const { type, ...attrs } = HTMLAttributes;
-    if (type === 'video') {
-      return ['video', { ...attrs, controls: true }];
+    const { type, width, ...attrs } = HTMLAttributes;
+    
+    if (type === 'iframe') {
+      return [
+        'iframe',
+        {
+          ...attrs,
+          style: `width: ${width || '100%'}; aspect-ratio: 16/9; border: none;`,
+          allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+          allowFullScreen: true,
+        },
+      ];
     }
-    return ['img', attrs];
+    
+    return ['img', { ...attrs, style: `width: ${width || '100%'}` }];
   },
   
   addNodeView() {

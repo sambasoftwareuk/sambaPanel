@@ -74,27 +74,26 @@ export default function BodyEditor({ className = "" }) {
     setImageModalOpen(true);
   };
 
-  // Resim/video seçildiğinde editöre ekleme fonksiyonu
-  const handleImageSelect = (id, imageUrl, mimeType) => {
+  // Resim seçildiğinde editöre ekleme fonksiyonu
+  const handleImageSelect = (id, imageUrl) => {
     if (editor && imageUrl) {
       const fileName = imageUrl.split("/").pop();
       const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-      const isVideo = mimeType?.startsWith("video/") || /\.(mp4|webm|ogg|mov)$/i.test(imageUrl);
 
       editor.commands.setCustomImage({ 
         src: imageUrl, 
         alt: altText,
-        type: isVideo ? 'video' : 'image',
+        type: 'image',
         width: '100%'
       });
     }
     setImageModalOpen(false);
   };
 
-  // Resim/video yükleme fonksiyonu
+  // Resim yükleme fonksiyonu
   const handleImageUpload = async (file) => {
-    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
-      alert("Sadece resim ve video dosyaları kabul edilir");
+    if (!file.type.startsWith("image/")) {
+      alert("Sadece resim dosyaları kabul edilir");
       return;
     }
 
@@ -127,13 +126,12 @@ export default function BodyEditor({ className = "" }) {
         }),
       });
 
-      // Resim/video'yu editöre ekle
+      // Resmi editöre ekle
       if (editor && data.url) {
-        const isVideo = file.type.startsWith("video/");
         editor.commands.setCustomImage({ 
           src: data.url, 
           alt: altText,
-          type: isVideo ? 'video' : 'image',
+          type: 'image',
           width: '100%'
         });
 
@@ -201,7 +199,7 @@ export default function BodyEditor({ className = "" }) {
         imageAlt=""
         onImageUrlChange={() => {}}
         onImageAltChange={() => {}}
-        onImageSelect={(id, url, mimeType) => handleImageSelect(id, url, mimeType)}
+        onImageSelect={(id, url) => handleImageSelect(id, url)}
         onImageUpload={handleImageUpload}
         onSave={() => setImageModalOpen(false)}
         saving={false}

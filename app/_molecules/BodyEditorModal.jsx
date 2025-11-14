@@ -157,16 +157,15 @@ export default function BodyEditorModal({
             {/* İçerik */}
             {inlineGalleryTab === "gallery" ? (
               <ImageGallery
-                onImageSelect={(id, url, mimeType) => {
+                onImageSelect={(id, url) => {
                   if (editor) {
-                    const isVideo = mimeType?.startsWith("video/") || /\.(mp4|webm|ogg|mov)$/i.test(url);
                     const fileName = url.split("/").pop();
                     const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
                     
                     editor.commands.setCustomImage({ 
                       src: url, 
                       alt: altText,
-                      type: isVideo ? 'video' : 'image',
+                      type: 'image',
                       width: '100%'
                     });
                   }
@@ -188,7 +187,7 @@ export default function BodyEditorModal({
         {/* Tab Content */}
         {activeTab === "gallery" ? (
           <ImageGallery
-            onImageSelect={(id, url, mimeType) => onImageSelect(id, url, mimeType)}
+            onImageSelect={(id, url) => onImageSelect(id, url)}
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
@@ -203,7 +202,7 @@ export default function BodyEditorModal({
             URL özelliği geçici olarak devre dışı
           </div>
         ) : (
-          <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*", "video/*"]}>
+          <DragDropZone onFileDrop={onImageUpload} acceptTypes={["image/*"]}>
             {showHtml ? (
               <HtmlEditor
                 htmlContent={htmlContent}
