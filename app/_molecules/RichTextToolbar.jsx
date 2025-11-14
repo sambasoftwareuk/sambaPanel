@@ -1,12 +1,27 @@
 "use client";
 
+import { useState } from "react";
 import ToolbarButton from "../_atoms/ToolbarButton";
+import VideoLinkModal from "./VideoLinkModal";
 
 export default function RichTextToolbar({
   editor,
   onImageUpload,
   onOpenImageModal,
 }) {
+  const [showVideoModal, setShowVideoModal] = useState(false);
+
+  const handleVideoInsert = (videoUrl) => {
+    if (!editor) return;
+    
+    editor.commands.setCustomImage({
+      src: videoUrl,
+      alt: '',
+      type: 'iframe',
+      width: '100%',
+    });
+  };
+
   if (!editor) return null;
 
   return (
@@ -171,6 +186,19 @@ export default function RichTextToolbar({
       >
         📷
       </ToolbarButton>
+
+      <ToolbarButton
+        title="Video Ekle"
+        onClick={() => setShowVideoModal(true)}
+      >
+        ▶️
+      </ToolbarButton>
+
+      <VideoLinkModal
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+        onInsert={handleVideoInsert}
+      />
     </div>
   );
 }

@@ -264,10 +264,12 @@ export async function PATCH(req) {
             "h3",
             "figure",
             "figcaption",
+            "iframe",
           ]),
           allowedAttributes: {
             a: ["href", "name", "target", "rel"],
             img: ["src", "alt", "width", "height", "loading"],
+            iframe: ["src", "width", "height", "allow", "allowfullscreen", "frameborder", "title", "referrerpolicy"],
             "*": ["style", "class"],
           },
           allowedSchemes: ["http", "https", "mailto", "tel", "data"],

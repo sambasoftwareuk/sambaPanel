@@ -239,7 +239,7 @@ export default function ImageEditor({
         onImageUrlChange={setUrl}
         onImageAltChange={setAlt}
         onImageUpload={handleFileSelected}
-        onImageSelect={(id, selectedUrl) => {
+        onImageSelect={(id, selectedUrl, mimeType) => {
           clearStaged();
           setUrl(selectedUrl);
           setStagedMediaId(id); // Galeriden seçildiğini işaretle

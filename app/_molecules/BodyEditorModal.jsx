@@ -159,13 +159,15 @@ export default function BodyEditorModal({
               <ImageGallery
                 onImageSelect={(id, url) => {
                   if (editor) {
-                    const imageHtml = `<img src="${url}" alt="Galeri resmi" style="max-width: 100%; height: auto; max-height: 400px;" />`;
-                    const pos = editor.state.selection.from;
-                    editor
-                      .chain()
-                      .focus()
-                      .insertContentAt(pos, imageHtml)
-                      .run();
+                    const fileName = url.split("/").pop();
+                    const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
+                    
+                    editor.commands.setCustomImage({ 
+                      src: url, 
+                      alt: altText,
+                      type: 'image',
+                      width: '100%'
+                    });
                   }
                   setShowGallery(false); // seçimden sonra panel kapanır
                 }}
