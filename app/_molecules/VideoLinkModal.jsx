@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
+import { InputBasic } from "../_atoms/Inputs";
+import Icon from "../_atoms/Icon";
 
 export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
   const [videoUrl, setVideoUrl] = useState("");
@@ -15,12 +17,12 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
     }
 
     let embedUrl = videoUrl.trim();
-    
+
     // Eğer iframe HTML'i yapıştırılmışsa, src'yi çıkar
     if (embedUrl.includes("<iframe")) {
-      const temp = document.createElement('div');
+      const temp = document.createElement("div");
       temp.innerHTML = embedUrl;
-      const iframe = temp.querySelector('iframe');
+      const iframe = temp.querySelector("iframe");
       if (iframe && iframe.src) {
         embedUrl = iframe.src;
       } else {
@@ -34,10 +36,10 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
         }
       }
     }
-    
+
     // URL'deki hatalı slash'leri düzelt (https:/ -> https://)
-    embedUrl = embedUrl.replace(/https?:\/(?!\/)/g, (match) => match + '/');
-    
+    embedUrl = embedUrl.replace(/https?:\/(?!\/)/g, (match) => match + "/");
+
     // YouTube watch URL'sini embed'e çevir
     if (embedUrl.includes("youtube.com/watch")) {
       const videoId = embedUrl.split("v=")[1]?.split("&")[0];
@@ -59,7 +61,9 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
 
     // YouTube embed URL'ini doğrula
     if (embedUrl.includes("youtube.com") && !embedUrl.includes("/embed/")) {
-      setError("YouTube linki embed formatında olmalı (örn: https://www.youtube.com/embed/VIDEO_ID)");
+      setError(
+        "YouTube linki embed formatında olmalı (örn: https://www.youtube.com/embed/VIDEO_ID)"
+      );
       return;
     }
 
@@ -83,7 +87,7 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
         <div className="flex items-center justify-between mb-4">
           <Header2 className="text-lg font-semibold">Video Linki Ekle</Header2>
           <OutlinedButton
-            label="✖"
+            icon={<Icon variant="LineXIcon" />}
             onClick={handleClose}
             className="text-sm px-3 py-1"
           />
@@ -93,7 +97,7 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Video Embed Linki
           </label>
-          <input
+          <InputBasic
             type="text"
             value={videoUrl}
             onChange={(e) => {
@@ -101,26 +105,22 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
               setError("");
             }}
             placeholder="https://www.youtube.com/embed/VIDEO_ID"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 handleSubmit();
               }
             }}
           />
-          {error && (
-            <p className="mt-2 text-sm text-red-600">{error}</p>
-          )}
+          {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
           <p className="mt-2 text-xs text-gray-500">
-            Örnek: https://www.youtube.com/watch?v=VIDEO_ID veya https://www.youtube.com/embed/VIDEO_ID
+            Örnek: https://www.youtube.com/watch?v=VIDEO_ID veya
+            https://www.youtube.com/embed/VIDEO_ID
           </p>
         </div>
 
         <div className="flex justify-end gap-2">
-          <OutlinedButton
-            label="İptal"
-            onClick={handleClose}
-          />
+          <OutlinedButton label="İptal" onClick={handleClose} />
           <PrimaryButton
             label="Ekle"
             onClick={handleSubmit}
@@ -131,4 +131,3 @@ export default function VideoLinkModal({ isOpen, onClose, onInsert }) {
     </div>
   );
 }
-

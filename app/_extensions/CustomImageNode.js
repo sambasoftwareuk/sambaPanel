@@ -32,28 +32,62 @@ export const CustomImageNode = Node.create({
     };
   },
 
-  parseHTML() {
-    return [
-      {
-        tag: "img[src]",
-        getAttrs: (dom) => ({
+ parseHTML() {
+  return [
+    {
+      tag: "img[src]",
+      getAttrs: (dom) => {
+        const style = dom.style || {};
+        const marginLeft = style.marginLeft || "";
+        const marginRight = style.marginRight || "";
+        
+        // Margin'den textAlign hesapla
+        let textAlign = null;
+        if (marginLeft === "auto" && marginRight === "auto") {
+          textAlign = "center";
+        } else if (marginLeft === "auto") {
+          textAlign = "right";
+        } else if (marginLeft === "0" || !marginLeft) {
+          textAlign = "left";
+        }
+        
+        return {
           src: dom.getAttribute("src"),
           alt: dom.getAttribute("alt"),
-          width: dom.style.width || "100%",
+          width: style.width || "100%",
           type: "image",
-        }),
+          textAlign: textAlign,
+        };
       },
-      {
-        tag: "iframe[src]",
-        getAttrs: (dom) => ({
+    },
+    {
+      tag: "iframe[src]",
+      getAttrs: (dom) => {
+        const style = dom.style || {};
+        const marginLeft = style.marginLeft || "";
+        const marginRight = style.marginRight || "";
+        
+        // Margin'den textAlign hesapla
+        let textAlign = null;
+        if (marginLeft === "auto" && marginRight === "auto") {
+          textAlign = "center";
+        } else if (marginLeft === "auto") {
+          textAlign = "right";
+        } else if (marginLeft === "0" || !marginLeft) {
+          textAlign = "left";
+        }
+        
+        return {
           src: dom.getAttribute("src"),
           alt: "",
-          width: dom.style.width || "100%",
+          width: style.width || "100%",
           type: "iframe",
-        }),
+          textAlign: textAlign,
+        };
       },
-    ];
-  },
+    },
+  ];
+},
 
   renderHTML({ HTMLAttributes }) {
     const { type, width, textAlign, ...attrs } = HTMLAttributes;
