@@ -1,10 +1,12 @@
 [
-  { "title": "ARÇELİK", "imageLink": "/arcelik.webp" },
-  { "title": "ETİ", "imageLink": "/arcelik.webp" },
-  { "title": "DİMES", "imageLink": "/arcelik.webp" },
-  { "title": "TÜRKŞEKER", "imageLink": "/arcelik.webp" },
-  { "title": "GÜBRETAŞ", "imageLink": "/arcelik.webp" },
-  { "title": "AKÇANSA", "imageLink": "/arcelik.webp" },
-  { "title": "TOSB", "imageLink": "/arcelik.webp" },
-  { "title": "TOSÇELİK", "imageLink": "/arcelik.webp" }
+  { "title": "MAYBİ", "imageLink": "/referance/maybi.png" },
+  { "title": "DANONE", "imageLink": "/referance/danone.jpeg" },
+  { "title": "İSTANBUL ENERJİ", "imageLink": "/referance/istanbul_enerji.png" },
+  { "title": "HP PELZER PIMSA OTOMOTIV A.Ş.", "imageLink": "/referance/hp_pelzer.png" },
+  { "title": "BİRLER ÇELİK A.Ş.", "imageLink": "/referance/birler_celik.png" },
+  { "title": "SC NOATELLI&CO SRL", "imageLink": "/referance/noatelli.png" },
+  { "title": "MERIT DIAMOND OTEL", "imageLink": "/referance/merit.png" },
+  { "title": "ÇORUM ŞEKER", "imageLink": "/referance/corum_seker.jpeg" },
+  { "title": "KABLOTEK KABLO SAN VE TİC A.Ş.", "imageLink": "/referance/kabtek.jpeg" }
+
 ]
