@@ -38,7 +38,7 @@ export default function BodyEditor({ className = "" }) {
         HTMLAttributes: { rel: "noopener noreferrer nofollow" },
       }),
       TextAlign.configure({
-        types: ["paragraph"],
+        types: ["paragraph", "customImage"],
       }),
       CustomImageNode,
     ],
@@ -80,11 +80,11 @@ export default function BodyEditor({ className = "" }) {
       const fileName = imageUrl.split("/").pop();
       const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
 
-      editor.commands.setCustomImage({ 
-        src: imageUrl, 
+      editor.commands.setCustomImage({
+        src: imageUrl,
         alt: altText,
-        type: 'image',
-        width: '100%'
+        type: "image",
+        width: "100%",
       });
     }
     setImageModalOpen(false);
@@ -128,11 +128,11 @@ export default function BodyEditor({ className = "" }) {
 
       // Resmi editöre ekle
       if (editor && data.url) {
-        editor.commands.setCustomImage({ 
-          src: data.url, 
+        editor.commands.setCustomImage({
+          src: data.url,
           alt: altText,
-          type: 'image',
-          width: '100%'
+          type: "image",
+          width: "100%",
         });
 
         // Context'i de güncelle (Save All butonunu aktif etmek için)
