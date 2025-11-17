@@ -155,7 +155,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
               accept="image/*"
             />
             <p className="text-sm text-gray-600 mb-2">
-              Resim yüklemek için tıklayın ya da sürükleyip birakin
+              Resim yüklemek için tıklayın ya da sürükleyip bırakın
             </p>
             <p className="text-xs text-gray-500">JPG, PNG, GIF desteklenir</p>
           </div>
@@ -182,7 +182,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
                     <div className="absolute -top-1 -right-1">
                       <XButton
                         onClick={() => removeFile(preview.id)}
-                        title="Resmi kaldır"
+                        title="Dosyayı kaldır"
                       />
                     </div>
                     <p className="text-xs text-gray-600 truncate mt-1">
@@ -192,7 +192,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
                 ))
                ?? (
                 <div className="col-span-2 text-center text-gray-500 text-sm py-4">
-                  Resim bulunamadı
+                  Dosya bulunamadı
                 </div>
               )
             }
