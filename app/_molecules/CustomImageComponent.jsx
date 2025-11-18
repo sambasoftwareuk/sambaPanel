@@ -17,6 +17,8 @@ export default function CustomImageComponent(props) {
   const [isResizing, setIsResizing] = useState(false);
   const [startWidth, setStartWidth] = useState(0);
   const [startX, setStartX] = useState(0);
+  const [activeCorner, setActiveCorner] = useState(null);
+  const [startLeft, setStartLeft] = useState(0);
 
   // Aspect ratio hesapla (ilk render'da)
   const [calculatedAspectRatio, setCalculatedAspectRatio] =
@@ -40,12 +42,15 @@ export default function CustomImageComponent(props) {
   const handleMouseDown = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const corner = e.currentTarget.dataset.corner;
+    setActiveCorner(corner);
     setIsResizing(true);
     setStartX(e.clientX);
 
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       setStartWidth(rect.width);
+      setStartLeft(rect.left);
     }
   };
 
@@ -59,24 +64,51 @@ export default function CustomImageComponent(props) {
     if (!isResizing) return;
 
     const handleMouseMove = (e) => {
-      const deltaX = e.clientX - startX;
-      const newWidth = startWidth + deltaX;
-
       if (containerRef.current && containerRef.current.parentElement) {
         const parentWidth =
           containerRef.current.parentElement.getBoundingClientRect().width;
         const maxWidth = parentWidth;
         const minWidth = 100; // Minimum 100px
 
-        let finalWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
-        const percentage = (finalWidth / parentWidth) * 100;
+        let deltaX = e.clientX - startX;
+        let newWidth;
+        let newLeft;
 
-        props.updateAttributes({ width: `${percentage}%` });
+        // Sol köşeler için ters mantık
+        if (activeCorner === "bottom-left" || activeCorner === "top-left") {
+          // Sola gidince width azalır, left pozisyonu sola kayar
+          newWidth = startWidth - deltaX;
+          newLeft = startLeft + deltaX;
+
+          // Sınırları kontrol et
+          newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+
+          // Parent'a göre yüzde hesapla
+          const percentage = (newWidth / parentWidth) * 100;
+
+          // marginLeft'i parent'a göre hesapla
+          const parentLeft =
+            containerRef.current.parentElement.getBoundingClientRect().left;
+          const marginLeftPx = newLeft - parentLeft;
+          const marginLeftPercent = (marginLeftPx / parentWidth) * 100;
+
+          props.updateAttributes({
+            width: `${percentage}%`,
+            marginLeft: `${marginLeftPercent}%`,
+          });
+        } else {
+          // Sağ köşeler için mevcut mantık
+          newWidth = startWidth + deltaX;
+          newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+          const percentage = (newWidth / parentWidth) * 100;
+          props.updateAttributes({ width: `${percentage}%` });
+        }
       }
     };
 
     const handleMouseUp = () => {
       setIsResizing(false);
+      setActiveCorner(null);
     };
 
     document.addEventListener("mousemove", handleMouseMove);
@@ -86,14 +118,14 @@ export default function CustomImageComponent(props) {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, startX, startWidth, props]);
+  }, [isResizing, startX, startWidth, startLeft, activeCorner, props]);
 
   return (
     <NodeViewWrapper className="custom-image-wrapper" contentEditable={false}>
       <div
         ref={containerRef}
-        className={`relative block ${
-          props.selected ? "ring-2 ring-blue-500" : ""
+        className={`relative block rounded ${
+          props.selected ? "ring-2 ring-primary" : ""
         }`}
         style={{
           width,
@@ -110,6 +142,7 @@ export default function CustomImageComponent(props) {
               ? "auto"
               : "0",
           display: "block",
+          cursor: type === "iframe" ? "default" : "auto",
         }}
       >
         {type === "iframe" ? (
@@ -122,6 +155,8 @@ export default function CustomImageComponent(props) {
                 ? `${calculatedAspectRatio}`
                 : "16/9",
               border: "none",
+              cursor: "default",
+              pointerEvents: isResizing ? "none" : "auto",
             }}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -166,30 +201,82 @@ export default function CustomImageComponent(props) {
           </button>
         )}
 
-        {/* Resize handle - sağ üst köşe */}
+        {/* Resize handles - 4 köşe */}
         {props.selected && (
-          <div
-            ref={resizeHandleRef}
-            onMouseDown={handleMouseDown}
-            className="absolute -top-1 -right-1 w-4 h-4 bg-blue-600 border-2 border-white rounded shadow-lg z-10 flex items-center justify-center"
-            style={{ cursor: "nesw-resize" }}
-          >
-            <svg
-              width="8"
-              height="8"
-              viewBox="0 0 8 8"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
+          <>
+            {/* Sağ üst köşe */}
+            <div
+              ref={resizeHandleRef}
+              onMouseDown={handleMouseDown}
+              data-corner="top-right"
+              className="absolute -top-1 -right-1 w-4 h-4 bg-primary border-2 border-white rounded shadow-lg z-10 flex items-center justify-center"
+              style={{ cursor: "nesw-resize" }}
             >
-              <path
-                d="M0 8L8 0M6 0H8V2M2 8H0V6"
-                stroke="white"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
+              <svg
+                width="8"
+                height="8"
+                viewBox="0 0 8 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 8L8 0M6 0H8V2M2 8H0V6"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+            {/* Sağ alt köşe */}
+            <div
+              onMouseDown={handleMouseDown}
+              data-corner="bottom-right"
+              className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary border-2 border-white rounded shadow-lg z-10 flex items-center justify-center"
+              style={{ cursor: "nwse-resize" }}
+            >
+              <svg
+                width="8"
+                height="8"
+                viewBox="0 0 8 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                transform="rotate(270)"
+              >
+                <path
+                  d="M0 8L8 0M6 0H8V2M2 8H0V6"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            {/* Sol alt köşe */}
+            <div
+              onMouseDown={handleMouseDown}
+              data-corner="bottom-left"
+              className="absolute -bottom-1 -left-1 w-4 h-4 bg-primary border-2 border-white rounded shadow-lg z-10 flex items-center justify-center"
+              style={{ cursor: "nesw-resize" }}
+            >
+              <svg
+                width="8"
+                height="8"
+                viewBox="0 0 8 8"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 8L8 0M6 0H8V2M2 8H0V6"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </>
         )}
       </div>
     </NodeViewWrapper>
