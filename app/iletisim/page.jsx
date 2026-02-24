@@ -1,7 +1,7 @@
 import React from "react";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import ContactCard from "../_molecules/ContactCard";
-import { Header1, Header3 } from "../_atoms/Headers";
+import { Header1, Header2, Header3 } from "../_atoms/Headers";
 import contactData from "../mocks/contactData.json";
 import ContactFormWrapper from "../_components/ContactFormWrapper";
 import { getMetaData } from "../utils/metadataHelper";
@@ -40,7 +40,54 @@ const ContactPage = () => {
           ))}
         </div>
 
-        <div className="flex flex-col lg:w-2/4 sm:w-9/12 w-full">
+        <div className="flex flex-col lg:w-2/4 sm:w-9/12 w-full gap-2">
+            <Header2 className="text-center">Cari Bilgiler</Header2>
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <Header1 className="text-xl font-bold text-primary900 mb-4">
+              Firma Bilgileri
+            </Header1>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Header3 className=" mb-2">
+                  CTP MÜHENDİSLİK SU SOĞUTMA KULELERİ A.Ş.
+                </Header3>
+                <div className="space-y-1 text-sm text-gray-600">
+                  <p>
+                    <span className="font-medium">ADRES:</span> NİŞANTEPE MAH.
+                    NİŞANTEPE CAD. ŞEN SOK. NO:5 ÇEKMEKÖY İSTANBUL
+                  </p>
+                  <p>
+                    <span className="font-medium">VERGİ DAİRESİ:</span>{" "}
+                    ŞEHİTKAMİL
+                  </p>
+                  <p>
+                    <span className="font-medium">VERGİ NUMARASI:</span>{" "}
+                    2150446689
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <Header3 className="mb-2">
+                  CTP ENGINEERING DIŞ TİCARET A.Ş.
+                </Header3>
+                <div className="space-y-1 text-sm text-gray-600">
+                  <p>
+                    <span className="font-medium">ADRES:</span> SANAYİ MAH.
+                    60363 CAD. B BLOK NO: 40 ŞEHİTKAMİL/GAZİANTEP
+                  </p>
+                  <p>
+                    <span className="font-medium">VERGİ DAİRESİ:</span>{" "}
+                    ŞEHİTKAMİL
+                  </p>
+                  <p>
+                    <span className="font-medium">VERGİ NO:</span> 215 066 9840
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <ContactCard
             title="Banka Bilgileri"
             rightImage="/sampleimages/excel.png"
@@ -94,56 +141,11 @@ const ContactPage = () => {
               </div>
             </div>
           </ContactCard>
-
           <ContactFormWrapper
             kvkkLink="/kvkk-aydinlatma-metni"
             className="w-full mb-12 text-center"
           />
           {/* İletişim Formu */}
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <Header1 className="text-xl font-bold text-primary900 mb-4">
-            Firma Bilgileri
-          </Header1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <Header3 className=" mb-2">
-                CTP MÜHENDİSLİK SU SOĞUTMA KULELERİ ANONİM ŞİRKETİ
-              </Header3>
-              <div className="space-y-1 text-sm text-gray-600">
-                <p>
-                  <span className="font-medium">ADRES:</span> NİŞANTEPE MAH.
-                  NİŞANTEPE CAD. ŞEN SOK. NO:5 ÇEKMEKÖY İSTANBUL
-                </p>
-                <p>
-                  <span className="font-medium">VERGİ DAİRESİ:</span> ŞEHİTKAMİL
-                </p>
-                <p>
-                  <span className="font-medium">VERGİ NUMARASI:</span>{" "}
-                  2150446689
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <Header3 className="mb-2">
-                CTP ENGINEERING DIŞ TİCARET A.Ş.
-              </Header3>
-              <div className="space-y-1 text-sm text-gray-600">
-                <p>
-                  <span className="font-medium">ADRES:</span> SANAYİ MAH. 60363
-                  CAD. B BLOK NO: 40 ŞEHİTKAMİL/GAZİANTEP
-                </p>
-                <p>
-                  <span className="font-medium">VERGİ DAİRESİ:</span> ŞEHİTKAMİL
-                </p>
-                <p>
-                  <span className="font-medium">VERGİ NO:</span> 215 066 9840
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

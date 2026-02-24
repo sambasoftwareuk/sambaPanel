@@ -9,7 +9,7 @@ const ProductBanner = ({ bannerProducts }) => {
         {bannerProducts.map((product) => (
           <Link
             key={product?.id}
-            href={`/urunler/${product?.id}`}
+            href={`/urunler/${product?.slug}`}
             className="cursor-pointer"
           >
             
