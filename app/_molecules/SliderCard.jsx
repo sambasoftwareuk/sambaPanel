@@ -12,7 +12,7 @@ export default function SliderCard({
   body,
   secondaryLabel,
   secondaryLabelLink,
-  headingLevel = 1,
+  headingLevel = 2,
 }) {
 
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function SliderCard({
     }
   };
 
-  const HeadingTag = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h1";
+  const HeadingTag = headingLevel === 3 ? "h3" : "h2";
 
   return (
     <div className="rounded-4xl shadow-lg bg-white p-6 md:p-12 max-w-md w-full flex flex-col justify-between h-full">

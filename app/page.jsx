@@ -25,28 +25,28 @@ export default function Home() {
       <section className="w-full bg-primary50 border-y border-primary100">
         <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
           <h1 className="text-2xl md:text-3xl font-bold text-primary text-center md:text-left">
-            Cooling Tower Manufacturer | Su Soğutma Kulesi Üreticisi
+            Greenstep Su Soğutma Kulesi Üreticisi
           </h1>
           <p className="mt-3 text-gray-700 max-w-4xl text-base">
-            Greenstep, endüstriyel tesisler için enerji verimli su soğutma kuleleri üretir; mühendislik, montaj ve bakım süreçlerini uçtan uca yönetir.
+            Endüstriyel tesislere özel su soğutma kulesi tasarım, üretim ve montaj hizmetini tek merkezden sunuyoruz. Projenize uygun sistemi kısa sürede planlayıp güvenilir performansla devreye alıyoruz.
           </p>
-          <p className="mt-2 text-gray-700 max-w-4xl text-base">
-            Ürün, hizmet ve yedek parça çözümlerini tek noktadan inceleyip hızlı teklif talebi oluşturabilirsiniz.
+          <p className="mt-2 text-gray-700 max-w-4xl text-sm md:text-base font-medium">
+            Ürün, hizmet ve yedek parçada hızlı teklif ve teknik destek.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
-              Hızlı Teklif Al
+              Hemen Teklif Alın
             </Link>
             <Link href="/urunler" className="bg-white text-primary border border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
-              Ürünleri İncele
+              Ürünleri Görün
             </Link>
           </div>
 
           <nav className="mt-4 flex flex-wrap gap-4 text-sm md:text-base">
-            <Link href="/urunler" className="text-primary underline underline-offset-4">Ürün Sayfası</Link>
-            <Link href="/hizmetler" className="text-primary underline underline-offset-4">Hizmetler</Link>
-            <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">Yedek Parçalar</Link>
+            <Link href="/urunler" className="text-primary underline underline-offset-4">Ürün Çözümleri</Link>
+            <Link href="/hizmetler" className="text-primary underline underline-offset-4">Mühendislik Hizmetleri</Link>
+            <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">Yedek Parça Çözümleri</Link>
           </nav>
         </div>
       </section>
