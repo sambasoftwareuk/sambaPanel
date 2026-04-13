@@ -8,6 +8,34 @@ import { getHomeData } from "@/lib/repos/home";
 const locale = "tr-TR";
 const data = await getHomeData(locale, { latestBlog: 8 });
 
+const removePriceAndSignature = (value = "") => {
+  if (typeof value !== "string") return value;
+
+  return value
+    .replace(/Albert\s*S\.?Y\.?/gi, "")
+    .replace(/\b\d{1,3}(?:[.,]\d{3})*(?:[.,]\d+)?\s?(?:TL|₺|USD|\$|EUR|€)\b/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+};
+
+const sanitizeItems = (items = []) =>
+  items.map((item) => ({
+    ...item,
+    title: removePriceAndSignature(item?.title),
+    subtitle: removePriceAndSignature(item?.subtitle),
+    body: removePriceAndSignature(item?.body),
+    excerpt: removePriceAndSignature(item?.excerpt),
+  }));
+
+const homepageData = {
+  ...data,
+  slider: sanitizeItems(data?.slider),
+  featuredCollections: sanitizeItems(data?.featuredCollections),
+  serviceCarousel: sanitizeItems(data?.serviceCarousel),
+  spareCarousel: sanitizeItems(data?.spareCarousel),
+  latestPosts: sanitizeItems(data?.latestPosts),
+};
+
 
 export default function Home() {
 
@@ -16,7 +44,7 @@ export default function Home() {
       <section className="w-full">
         <SliderComponent
           size={"lg"}
-          sliderData={data?.slider}
+          sliderData={homepageData?.slider}
           orientation={"split-horizontal"}
           cardHeadingLevel={2}
         />
@@ -53,7 +81,7 @@ export default function Home() {
 
       <section className="w-full">
         <MainItemGrid
-          items={data?.featuredCollections}
+          items={homepageData?.featuredCollections}
           title="Ürün Kategorileri"
           baseHref="urunler"
           headingLevel={2}
@@ -62,7 +90,7 @@ export default function Home() {
 
       <section className="w-full">
         <CarouselSlider
-          data={data?.serviceCarousel}
+          data={homepageData?.serviceCarousel}
           title="Hizmetler"
           isAutoSlide={true}
           isInfinite={true}
@@ -72,7 +100,7 @@ export default function Home() {
 
       <section className="w-full">
         <CarouselSlider
-          data={data?.spareCarousel}
+          data={homepageData?.spareCarousel}
           title="Yedek Parçalar"
           isAutoSlide={true}
           isInfinite={true}
@@ -108,7 +136,7 @@ export default function Home() {
       <section className="w-full" aria-label="Blog içerikleri">
         <h2 className="text-3xl font-bold text-primary text-center mt-10">Bilgi Merkezi</h2>
         <BlogComponent
-          blogData={data?.latestPosts}
+          blogData={homepageData?.latestPosts}
           maxItems={4}
           showViewAllButton={true}
           showTitle={false}
