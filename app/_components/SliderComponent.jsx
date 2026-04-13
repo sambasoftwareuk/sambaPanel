@@ -2,7 +2,7 @@ import { SambaSlider } from "../_molecules/Slider";
 import { SliderImage } from "../_atoms/Images";
 import SliderCard from "../_molecules/SliderCard";
 
-const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
+const SliderComponent = ({ size, variant, sliderData = [], orientation, cardHeadingLevel = 1 }) => {
   return (
     <SambaSlider
       size={size}
@@ -78,6 +78,7 @@ const SliderComponent = ({ size, variant, sliderData = [], orientation }) => {
                     primaryLabelLink={primaryLabelLink}
                     secondaryLabel={secondaryLabel}
                     secondaryLabelLink={secondaryLabelLink}
+                    headingLevel={cardHeadingLevel}
                   />
                 </div>
               </div>

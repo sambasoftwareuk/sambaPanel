@@ -1,6 +1,5 @@
 import React from "react";
 import ProductCardWithImage from "../_molecules/ProductCardWithImage";
-import { Header1 } from "../_atoms/Headers";
 import Link from "next/link";
 
 const MainItemGrid = ({
@@ -8,11 +7,14 @@ const MainItemGrid = ({
   title,
   gridClassName = "grid-cols-1 md:grid-cols-2",
   cardProps = {},
+  headingLevel = 1,
 }) => {
+  const HeadingTag = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h1";
+
   return (
     <div className="w-full max-w-7xl mx-auto mt-6 p-4">
       
-      {title && <Header1 className="text-center">{title}</Header1>}
+      {title && <HeadingTag className="text-3xl font-bold text-primary text-center mb-4">{title}</HeadingTag>}
       <div className={`grid ${gridClassName} gap-8 items-center`}>
         {items?.map((item) => (
           <Link key={item?.id} href={item.href}>

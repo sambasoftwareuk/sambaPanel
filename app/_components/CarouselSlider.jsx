@@ -2,7 +2,6 @@
 import React from "react";
 import { SambaSlider } from "../_molecules/Slider";
 import ProductCardWithImage from "../_molecules/ProductCardWithImage";
-import { Header1 } from "../_atoms/Headers";
 import { useWindowSize } from "../utils/useWindowSize";
 
 const CarouselSlider = ({
@@ -11,8 +10,10 @@ const CarouselSlider = ({
   title,
   isAutoSlide,
   isInfinite,
+  headingLevel = 1,
 }) => {
   const { width } = useWindowSize();
+  const HeadingTag = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h1";
 
   const getResponsiveItems = () => {
     if (width < 640) return 1; // mobile
@@ -25,7 +26,7 @@ const CarouselSlider = ({
 
   return (
     <div className="mt-2 w-[90%] md:w-[85%] lg:w-[80%] xl:w-[75%] mx-auto">
-      {title && <Header1 className="text-center">{title}</Header1>}
+      {title && <HeadingTag className="text-3xl font-bold text-primary text-center mb-4">{title}</HeadingTag>}
 
       <SambaSlider
         variant="slide"

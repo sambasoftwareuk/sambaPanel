@@ -1,10 +1,6 @@
-import services from "./mocks/services.json";
-import ProductBanner from "./_molecules/ProductBanner";
+import Link from "next/link";
 import SliderComponent from "./_components/SliderComponent.jsx";
-import bannerProducts from "./mocks/bannerProducts.json";
-// import mainProducts from "./constants/bigCardProducts.json"; //(static data)
 import CarouselSlider from "./_components/CarouselSlider.jsx";
-import products from "./mocks/spareParts.json";
 import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import { getHomeData } from "@/lib/repos/home";
@@ -16,38 +12,111 @@ const data = await getHomeData(locale, { latestBlog: 8 });
 export default function Home() {
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <SliderComponent
-        size={"lg"}
-        sliderData={data?.slider}
-        orientation={"split-horizontal"}
-      />
-      <ProductBanner bannerProducts={data?.featuredItems} />
+    <main className="flex flex-col items-center min-h-screen w-full">
+      <section className="w-full bg-primary50 border-b border-primary100">
+        <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
+          <h1 className="text-3xl md:text-4xl font-bold text-primary text-center md:text-left">
+            Endüstriyel Cooling Tower Manufacturer | Su Soğutma Kulesi Üreticisi
+          </h1>
+          <p className="mt-4 text-gray-700 max-w-4xl text-base md:text-lg">
+            Greenstep, proses ve HVAC sistemleri için yüksek verimli su soğutma kuleleri tasarlar ve üretir.
+            Projeye özel mühendislik, montaj ve bakım hizmetleriyle yatırım maliyetini optimize ederken enerji
+            verimliliğini artırır.
+          </p>
+          <p className="mt-2 text-gray-700 max-w-4xl text-base md:text-lg">
+            Ürün gruplarımızı inceleyebilir, hizmet detaylarını görebilir ve yedek parça talepleriniz için hızlıca
+            teklif alabilirsiniz.
+          </p>
 
-      <MainItemGrid
-        items={data?.featuredCollections}
-        title="Ürünlerimiz"
-        baseHref="urunler"
-      />
-      
-      <CarouselSlider
-        data={data?.spareCarousel}
-        title="Yedek Parçalar"
-        isAutoSlide={true}
-        isInfinite={true}
-      />
-      <CarouselSlider
-        data={data?.serviceCarousel}
-        title="Hizmetlerimiz"
-        isAutoSlide={true}
-        isInfinite={true}
-      />
-      <BlogComponent
-        blogData={data?.latestPosts}
-        title="Son Blog Yazıları"
-        maxItems={4}
-        showViewAllButton={true}
-      />
-    </div>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
+              Hızlı Teklif Al
+            </Link>
+            <Link href="/urunler" className="bg-white text-primary border border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
+              Ürünleri İncele
+            </Link>
+          </div>
+
+          <nav className="mt-5 flex flex-wrap gap-4 text-sm md:text-base">
+            <Link href="/urunler" className="text-primary underline underline-offset-4">Ürün Sayfası</Link>
+            <Link href="/hizmetler" className="text-primary underline underline-offset-4">Hizmetler</Link>
+            <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">Yedek Parçalar</Link>
+          </nav>
+        </div>
+      </section>
+
+      <section className="w-full">
+        <SliderComponent
+          size={"lg"}
+          sliderData={data?.slider}
+          orientation={"split-horizontal"}
+          cardHeadingLevel={2}
+        />
+      </section>
+
+      <section className="w-full">
+        <MainItemGrid
+          items={data?.featuredCollections}
+          title="Ürün Kategorileri"
+          baseHref="urunler"
+          headingLevel={2}
+        />
+      </section>
+
+      <section className="w-full">
+        <CarouselSlider
+          data={data?.serviceCarousel}
+          title="Hizmetler"
+          isAutoSlide={true}
+          isInfinite={true}
+          headingLevel={2}
+        />
+      </section>
+
+      <section className="w-full">
+        <CarouselSlider
+          data={data?.spareCarousel}
+          title="Yedek Parçalar"
+          isAutoSlide={true}
+          isInfinite={true}
+          headingLevel={2}
+        />
+      </section>
+
+      <section className="w-full max-w-7xl mx-auto px-4 py-12 text-center">
+        <h2 className="text-3xl font-bold text-primary">Güven ve Deneyim</h2>
+        <p className="mt-4 text-gray-700 max-w-3xl mx-auto">
+          Farklı sektörlerde tamamladığımız projeler, mühendislik tecrübemiz ve satış sonrası desteğimizle
+          işletmelerin sürdürülebilir soğutma performansı elde etmesine yardımcı oluyoruz.
+        </p>
+        <div className="mt-6">
+          <Link href="/referanslar" className="text-primary font-semibold underline underline-offset-4">
+            Referanslarımızı Görün
+          </Link>
+        </div>
+      </section>
+
+      <section className="w-full bg-primary900 text-white py-10 px-4 text-center">
+        <h2 className="text-2xl md:text-3xl font-bold">Projeniz için uygun çözümü birlikte belirleyelim</h2>
+        <p className="mt-3 text-sm md:text-base max-w-3xl mx-auto">
+          Teknik ekibimizle iletişime geçin, kapasite ve uygulama senaryonuza uygun kule tipini kısa sürede tekliflendirelim.
+        </p>
+        <div className="mt-5">
+          <Link href="/iletisim" className="inline-block bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
+            Teklif ve Keşif Talebi
+          </Link>
+        </div>
+      </section>
+
+      <section className="w-full" aria-label="Blog içerikleri">
+        <h2 className="text-3xl font-bold text-primary text-center mt-10">Bilgi Merkezi</h2>
+        <BlogComponent
+          blogData={data?.latestPosts}
+          maxItems={4}
+          showViewAllButton={true}
+          showTitle={false}
+        />
+      </section>
+    </main>
   );
 }
