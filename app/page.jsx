@@ -13,22 +13,28 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center min-h-screen w-full">
-      <section className="w-full bg-primary50 border-b border-primary100">
-        <div className="max-w-7xl mx-auto px-4 py-10 md:py-14">
-          <h1 className="text-3xl md:text-4xl font-bold text-primary text-center md:text-left">
-            Endüstriyel Cooling Tower Manufacturer | Su Soğutma Kulesi Üreticisi
+      <section className="w-full">
+        <SliderComponent
+          size={"lg"}
+          sliderData={data?.slider}
+          orientation={"split-horizontal"}
+          cardHeadingLevel={2}
+        />
+      </section>
+
+      <section className="w-full bg-primary50 border-y border-primary100">
+        <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary text-center md:text-left">
+            Cooling Tower Manufacturer | Su Soğutma Kulesi Üreticisi
           </h1>
-          <p className="mt-4 text-gray-700 max-w-4xl text-base md:text-lg">
-            Greenstep, proses ve HVAC sistemleri için yüksek verimli su soğutma kuleleri tasarlar ve üretir.
-            Projeye özel mühendislik, montaj ve bakım hizmetleriyle yatırım maliyetini optimize ederken enerji
-            verimliliğini artırır.
+          <p className="mt-3 text-gray-700 max-w-4xl text-base">
+            Greenstep, endüstriyel tesisler için enerji verimli su soğutma kuleleri üretir; mühendislik, montaj ve bakım süreçlerini uçtan uca yönetir.
           </p>
-          <p className="mt-2 text-gray-700 max-w-4xl text-base md:text-lg">
-            Ürün gruplarımızı inceleyebilir, hizmet detaylarını görebilir ve yedek parça talepleriniz için hızlıca
-            teklif alabilirsiniz.
+          <p className="mt-2 text-gray-700 max-w-4xl text-base">
+            Ürün, hizmet ve yedek parça çözümlerini tek noktadan inceleyip hızlı teklif talebi oluşturabilirsiniz.
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
               Hızlı Teklif Al
             </Link>
@@ -37,21 +43,12 @@ export default function Home() {
             </Link>
           </div>
 
-          <nav className="mt-5 flex flex-wrap gap-4 text-sm md:text-base">
+          <nav className="mt-4 flex flex-wrap gap-4 text-sm md:text-base">
             <Link href="/urunler" className="text-primary underline underline-offset-4">Ürün Sayfası</Link>
             <Link href="/hizmetler" className="text-primary underline underline-offset-4">Hizmetler</Link>
             <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">Yedek Parçalar</Link>
           </nav>
         </div>
-      </section>
-
-      <section className="w-full">
-        <SliderComponent
-          size={"lg"}
-          sliderData={data?.slider}
-          orientation={"split-horizontal"}
-          cardHeadingLevel={2}
-        />
       </section>
 
       <section className="w-full">
