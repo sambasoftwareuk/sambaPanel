@@ -30,9 +30,21 @@ export default function Home() {
           <p className="mt-3 text-gray-700 max-w-4xl text-base">
             Endüstriyel tesislere özel su soğutma kulesi tasarım, üretim ve montaj hizmetini tek merkezden sunuyoruz. Projenize uygun sistemi kısa sürede planlayıp güvenilir performansla devreye alıyoruz.
           </p>
-          <p className="mt-2 text-gray-700 max-w-4xl text-sm md:text-base font-medium">
+          <p className="mt-2 text-gray-700 max-w-4xl text-base">
+            Projeye göre kapalı tip soğutma kulesi ve endüstriyel soğutma kulesi üretiminde esnek kapasiteyle çalışıyor, farklı sektörlere uygun soğutma kulesi sistemleri geliştiriyoruz.
+          </p>
+          <p className="mt-3 text-gray-700 max-w-4xl text-sm md:text-base font-medium">
             Ürün, hizmet ve yedek parçada hızlı teklif ve teknik destek.
           </p>
+
+          <div className="mt-4 max-w-4xl text-gray-700 text-sm md:text-base space-y-2">
+            <p>
+              Üretim altyapımızda dolgu malzemesi, serpantin ve kritik yedek parçalar aynı kalite standardıyla sunulur.
+            </p>
+            <p>
+              Böylece hem yeni kurulumlarda hem modernizasyon projelerinde süreçler tek üretici çatısı altında güvenle ilerler.
+            </p>
+          </div>
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
