@@ -7,9 +7,9 @@ const MainItemGrid = ({
   title,
   gridClassName = "grid-cols-1 md:grid-cols-2",
   cardProps = {},
-  headingLevel = 1,
+  headingLevel = 2,
 }) => {
-  const HeadingTag = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h1";
+  const HeadingTag = headingLevel === 3 ? "h3" : "h2";
 
   return (
     <div className="w-full max-w-7xl mx-auto mt-6 p-4">

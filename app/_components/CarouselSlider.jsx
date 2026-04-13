@@ -10,10 +10,10 @@ const CarouselSlider = ({
   title,
   isAutoSlide,
   isInfinite,
-  headingLevel = 1,
+  headingLevel = 2,
 }) => {
   const { width } = useWindowSize();
-  const HeadingTag = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h1";
+  const HeadingTag = headingLevel === 3 ? "h3" : "h2";
 
   const getResponsiveItems = () => {
     if (width < 640) return 1; // mobile
