@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { PrimaryButton } from "../_atoms/Buttons";
-import { Header1, Header2 } from "../_atoms/Headers";
+import { Header2 } from "../_atoms/Headers";
 import { useRouter } from "next/navigation";
 
 export default function SliderCard({
@@ -12,6 +12,7 @@ export default function SliderCard({
   body,
   secondaryLabel,
   secondaryLabelLink,
+  headingLevel = 1,
 }) {
 
   const router = useRouter();
@@ -28,10 +29,12 @@ export default function SliderCard({
     }
   };
 
+  const HeadingTag = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h1";
+
   return (
     <div className="rounded-4xl shadow-lg bg-white p-6 md:p-12 max-w-md w-full flex flex-col justify-between h-full">
       <div>
-        <Header1 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{title}</Header1>
+        <HeadingTag className="text-xl md:text-2xl font-bold text-gray-900 mb-2 text-primary">{title}</HeadingTag>
         <Header2 className="hidden md:flex text-gray-700 text-base">{subtitle}</Header2>
       </div>
       <div>
