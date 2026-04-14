@@ -5,6 +5,12 @@ import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import { getHomeData } from "@/lib/repos/home";
 
+export const metadata = {
+  title: "Greenstep Su Soğutma Kulesi Üreticisi | Endüstriyel Çözüm",
+  description:
+    "Greenstep, endüstriyel su soğutma kulesi üretim ve mühendislik çözümleri sunar. Projenize özel hızlı teklif için bizimle iletişime geçin.",
+};
+
 const locale = "tr-TR";
 const data = await getHomeData(locale, { latestBlog: 8 });
 
