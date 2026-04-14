@@ -27,15 +27,31 @@ const structuredData = {
       sameAs: [
         "https://www.instagram.com/greenstep_cooling_towers/",
       ],
-      contactPoint: [
-        {
-          "@type": "ContactPoint",
-          contactType: "satış",
-          areaServed: "TR",
-          availableLanguage: ["tr"],
-          url: `${BASE_URL}/iletisim`,
-        },
-      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "satış",
+        areaServed: "TR",
+        availableLanguage: ["tr"],
+        url: `${BASE_URL}/iletisim`,
+      },
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": `${BASE_URL}/#yerel-isletme`,
+      name: "Greenstep",
+      url: BASE_URL,
+      image: `${BASE_URL}/greenstep-logo.png`,
+      email: "info@greenstepcoolingtowers.com",
+      parentOrganization: {
+        "@id": `${BASE_URL}/#kurulus`,
+      },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Alemdag Mah. Saray Cad. 111. Sk. No:1-3 Daire:10",
+        addressLocality: "Çekmeköy",
+        addressRegion: "İstanbul",
+        addressCountry: "TR",
+      },
     },
     {
       "@type": "WebSite",
@@ -85,16 +101,19 @@ export default function Home() {
           <h1 className="text-2xl md:text-3xl font-bold text-primary text-center md:text-left">
             Su Soğutma Kulesi Üreticisi
           </h1>
+          <p className="sr-only">
+            Endüstriyel su soğutma kulesi ve soğutma kulesi sistemleri için üretim, mühendislik ve teknik destek çözümleri.
+          </p>
           <p className="mt-3 text-gray-700 max-w-4xl text-base">
             Greenstep, endüstriyel su soğutma kulesi üretimi ve soğutma kulesi sistemleri mühendisliğini tek merkezden sunarak tesislerinize güvenilir, verimli ve sürdürülebilir çözüm sağlar.
           </p>
           <p className="mt-2 text-gray-700 max-w-4xl text-sm md:text-base font-medium">
-            Kapalı tip soğutma kulesi, dolgu malzemesi ve serpantin sistemleri için projeye özel hızlı teklif alın.
+            Kapalı tip soğutma kulesi, dolgu malzemesi ve serpantin sistemlerinde projenize en uygun çözümü birlikte planlayalım.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
-              Teklif Alın
+              Hızlı Teklif İsteyin
             </Link>
             <Link href="/urunler" className="bg-white text-primary border border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
               Ürünleri İnceleyin
