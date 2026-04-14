@@ -21,7 +21,7 @@ const structuredData = {
     {
       "@type": "Organization",
       "@id": `${BASE_URL}/#kurulus`,
-      name: "Greenstep",
+      name: "Greenstep Cooling Towers",
       url: BASE_URL,
       logo: `${BASE_URL}/greenstep-logo.png`,
       sameAs: [
@@ -38,7 +38,7 @@ const structuredData = {
     {
       "@type": "LocalBusiness",
       "@id": `${BASE_URL}/#yerel-isletme`,
-      name: "Greenstep",
+      name: "Greenstep Cooling Towers",
       url: BASE_URL,
       image: `${BASE_URL}/greenstep-logo.png`,
       email: "info@greenstepcoolingtowers.com",
@@ -57,8 +57,13 @@ const structuredData = {
       "@type": "WebSite",
       "@id": `${BASE_URL}/#websitesi`,
       url: BASE_URL,
-      name: "Greenstep",
+      name: "Greenstep Cooling Towers",
       inLanguage: "tr-TR",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${BASE_URL}/arama?q={arama_ifadesi}`,
+        "query-input": "required name=arama_ifadesi",
+      },
       publisher: {
         "@id": `${BASE_URL}/#kurulus`,
       },
@@ -102,7 +107,7 @@ export default function Home() {
             Su Soğutma Kulesi Üreticisi
           </h1>
           <p className="sr-only">
-            Endüstriyel su soğutma kulesi ve soğutma kulesi sistemleri için üretim, mühendislik ve teknik destek çözümleri.
+            Endüstriyel su soğutma kulesi üreticisi olarak soğutma kulesi sistemleri, kapalı tip soğutma kulesi, dolgu malzemesi ve serpantin sistemlerinde üretim, mühendislik ve teknik destek sunuyoruz.
           </p>
           <p className="mt-3 text-gray-700 max-w-4xl text-base">
             Greenstep, endüstriyel su soğutma kulesi üretimi ve soğutma kulesi sistemleri mühendisliğini tek merkezden sunarak tesislerinize güvenilir, verimli ve sürdürülebilir çözüm sağlar.
@@ -113,10 +118,19 @@ export default function Home() {
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
-              Hızlı Teklif İsteyin
+              Teklif İste
             </Link>
             <Link href="/urunler" className="bg-white text-primary border border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
-              Ürünleri İnceleyin
+              Ürünleri Gör
+            </Link>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-4 text-sm md:text-base">
+            <Link href="/hizmetler" className="text-primary underline underline-offset-4">
+              Mühendislik Hizmetleri
+            </Link>
+            <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">
+              Yedek Parça Çözümleri
             </Link>
           </div>
         </div>
