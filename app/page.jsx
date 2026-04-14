@@ -5,14 +5,93 @@ import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import { getHomeData } from "@/lib/repos/home";
 
+const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://www.greenstepcoolingtowers.com").replace(/\/$/, "");
+
+export const metadata = {
+  title: "Su Soğutma Kulesi Üreticisi | Endüstriyel Sistemler - Greenstep",
+  description:
+    "Endüstriyel su soğutma kulesi üretimi, mühendislik ve sistem çözümleri. Projenize özel hızlı teklif ve teknik destek için Greenstep ile iletişime geçin.",
+};
+
 const locale = "tr-TR";
 const data = await getHomeData(locale, { latestBlog: 8 });
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${BASE_URL}/#kurulus`,
+      name: "Greenstep Cooling Towers",
+      url: BASE_URL,
+      logo: `${BASE_URL}/greenstep-logo.png`,
+      sameAs: [
+        "https://www.instagram.com/greenstep_cooling_towers/",
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "satış",
+        areaServed: "TR",
+        availableLanguage: ["tr"],
+        url: `${BASE_URL}/iletisim`,
+      },
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": `${BASE_URL}/#yerel-isletme`,
+      name: "Greenstep Cooling Towers",
+      url: BASE_URL,
+      image: `${BASE_URL}/greenstep-logo.png`,
+      email: "info@greenstepcoolingtowers.com",
+      parentOrganization: {
+        "@id": `${BASE_URL}/#kurulus`,
+      },
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "Alemdag Mah. Saray Cad. 111. Sk. No:1-3 Daire:10",
+        addressLocality: "Çekmeköy",
+        addressRegion: "İstanbul",
+        addressCountry: "TR",
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${BASE_URL}/#websitesi`,
+      url: BASE_URL,
+      name: "Greenstep Cooling Towers",
+      inLanguage: "tr-TR",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${BASE_URL}/arama?q={arama_ifadesi}`,
+        "query-input": "required name=arama_ifadesi",
+      },
+      publisher: {
+        "@id": `${BASE_URL}/#kurulus`,
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${BASE_URL}/#ekmek-kirintisi`,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Ana Sayfa",
+          item: BASE_URL,
+        },
+      ],
+    },
+  ],
+};
 
 
 export default function Home() {
 
   return (
     <main className="flex flex-col items-center min-h-screen w-full">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <section className="w-full">
         <SliderComponent
           size={"lg"}
@@ -25,41 +104,35 @@ export default function Home() {
       <section className="w-full bg-primary50 border-y border-primary100">
         <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
           <h1 className="text-2xl md:text-3xl font-bold text-primary text-center md:text-left">
-            Greenstep Su Soğutma Kulesi Üreticisi
+            Su Soğutma Kulesi Üreticisi
           </h1>
+          <p className="sr-only">
+            Endüstriyel su soğutma kulesi üreticisi olarak soğutma kulesi sistemleri, kapalı tip soğutma kulesi, dolgu malzemesi ve serpantin sistemlerinde üretim, mühendislik ve teknik destek sunuyoruz.
+          </p>
           <p className="mt-3 text-gray-700 max-w-4xl text-base">
-            Endüstriyel tesislere özel su soğutma kulesi tasarım, üretim ve montaj hizmetini tek merkezden sunuyoruz. Projenize uygun sistemi kısa sürede planlayıp güvenilir performansla devreye alıyoruz.
+            Greenstep, endüstriyel su soğutma kulesi üretimi ve soğutma kulesi sistemleri mühendisliğini tek merkezden sunarak tesislerinize güvenilir, verimli ve sürdürülebilir çözüm sağlar.
           </p>
-          <p className="mt-2 text-gray-700 max-w-4xl text-base">
-            Projeye göre kapalı tip soğutma kulesi ve endüstriyel soğutma kulesi üretiminde esnek kapasiteyle çalışıyor, farklı sektörlere uygun soğutma kulesi sistemleri geliştiriyoruz.
+          <p className="mt-2 text-gray-700 max-w-4xl text-sm md:text-base font-medium">
+            Kapalı tip soğutma kulesi, dolgu malzemesi ve serpantin sistemlerinde projenize en uygun çözümü birlikte planlayalım.
           </p>
-          <p className="mt-3 text-gray-700 max-w-4xl text-sm md:text-base font-medium">
-            Ürün, hizmet ve yedek parçada hızlı teklif ve teknik destek.
-          </p>
-
-          <div className="mt-4 max-w-4xl text-gray-700 text-sm md:text-base space-y-2">
-            <p>
-              Üretim altyapımızda dolgu malzemesi, serpantin ve kritik yedek parçalar aynı kalite standardıyla sunulur.
-            </p>
-            <p>
-              Böylece hem yeni kurulumlarda hem modernizasyon projelerinde süreçler tek üretici çatısı altında güvenle ilerler.
-            </p>
-          </div>
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
-              Hemen Teklif Alın
+              Teklif İste
             </Link>
             <Link href="/urunler" className="bg-white text-primary border border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
-              Ürünleri Görün
+              Ürünleri Gör
             </Link>
           </div>
 
-          <nav className="mt-4 flex flex-wrap gap-4 text-sm md:text-base">
-            <Link href="/urunler" className="text-primary underline underline-offset-4">Ürün Çözümleri</Link>
-            <Link href="/hizmetler" className="text-primary underline underline-offset-4">Mühendislik Hizmetleri</Link>
-            <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">Yedek Parça Çözümleri</Link>
-          </nav>
+          <div className="mt-4 flex flex-wrap gap-4 text-sm md:text-base">
+            <Link href="/hizmetler" className="text-primary underline underline-offset-4">
+              Mühendislik Hizmetleri
+            </Link>
+            <Link href="/yedek-parcalar" className="text-primary underline underline-offset-4">
+              Yedek Parça Çözümleri
+            </Link>
+          </div>
         </div>
       </section>
 
