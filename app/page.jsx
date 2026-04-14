@@ -6,9 +6,9 @@ import BlogComponent from "./_components/BlogComponent.jsx";
 import { getHomeData } from "@/lib/repos/home";
 
 export const metadata = {
-  title: "Greenstep Su Soğutma Kulesi Üreticisi | Endüstriyel Çözüm",
+  title: "Su Soğutma Kulesi Üreticisi | Endüstriyel Sistemler - Greenstep",
   description:
-    "Greenstep, endüstriyel su soğutma kulesi üretim ve mühendislik çözümleri sunar. Projenize özel hızlı teklif için bizimle iletişime geçin.",
+    "Endüstriyel su soğutma kulesi üretimi, mühendislik ve sistem çözümleri. Projenize özel hızlı teklif ve teknik destek için Greenstep ile iletişime geçin.",
 };
 
 const locale = "tr-TR";
