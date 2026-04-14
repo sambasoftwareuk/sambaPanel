@@ -5,12 +5,12 @@ import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import { getHomeData } from "@/lib/repos/home";
 
-const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://www.greenstepcoolingtower.com").replace(/\/$/, "");
+const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://www.greenstepcoolingtowers.com").replace(/\/$/, "");
 
 export const metadata = {
-  title: "Su Soğutma Kulesi Üreticisi Greenstep | Endüstriyel Çözümler",
+  title: "Su Soğutma Kulesi Üreticisi | Endüstriyel Sistemler - Greenstep",
   description:
-    "Endüstriyel su soğutma kulesi üretimi, mühendislik ve saha odaklı sistem çözümleri için Greenstep yanınızda. Projenize özel hızlı teklif alın.",
+    "Endüstriyel su soğutma kulesi üretimi, mühendislik ve sistem çözümleri. Projenize özel hızlı teklif ve teknik destek için Greenstep ile iletişime geçin.",
 };
 
 const locale = "tr-TR";
@@ -24,6 +24,9 @@ const structuredData = {
       name: "Greenstep",
       url: BASE_URL,
       logo: `${BASE_URL}/greenstep-logo.png`,
+      sameAs: [
+        "https://www.instagram.com/greenstep_cooling_towers/",
+      ],
       contactPoint: [
         {
           "@type": "ContactPoint",
@@ -80,7 +83,7 @@ export default function Home() {
       <section className="w-full bg-primary50 border-y border-primary100">
         <div className="max-w-7xl mx-auto px-4 py-8 md:py-10">
           <h1 className="text-2xl md:text-3xl font-bold text-primary text-center md:text-left">
-            Su Soğutma Kulesi Üreticisi ile Endüstriyel Performansı Yükseltin
+            Su Soğutma Kulesi Üreticisi
           </h1>
           <p className="mt-3 text-gray-700 max-w-4xl text-base">
             Greenstep, endüstriyel su soğutma kulesi üretimi ve soğutma kulesi sistemleri mühendisliğini tek merkezden sunarak tesislerinize güvenilir, verimli ve sürdürülebilir çözüm sağlar.
@@ -91,10 +94,10 @@ export default function Home() {
 
           <div className="mt-5 flex flex-wrap gap-3">
             <Link href="/iletisim" className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary900 transition-colors">
-              Hızlı Teklif Alın
+              Teklif Alın
             </Link>
             <Link href="/urunler" className="bg-white text-primary border border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary100 transition-colors">
-              Endüstriyel Çözümleri İnceleyin
+              Ürünleri İnceleyin
             </Link>
           </div>
         </div>
