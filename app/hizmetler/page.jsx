@@ -68,6 +68,8 @@ export default async function ServicesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      <Breadcrumb title={"Hizmetler"} />
+
       <section className="mb-10">
         <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">
           Soğutma Kulesi Hizmetleri
@@ -80,23 +82,7 @@ export default async function ServicesPage() {
           Uzman ekibimiz; keşif, planlama ve uygulama süreçlerinde işletmenize özel
           çözümler geliştirerek uzun ömürlü kullanım ve sürdürülebilir verim sağlar.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center gap-3">
-          <a
-            href="/iletisim"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-primary text-white font-semibold hover:opacity-90 transition"
-          >
-            Teklif Al
-          </a>
-          <a
-            href="#hizmetler-grid"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-md border border-primary text-primary font-semibold hover:bg-primary hover:text-white transition"
-          >
-            Hizmetleri İncele
-          </a>
-        </div>
       </section>
-
-      <Breadcrumb title={"Hizmetler"} />
 
       <section id="hizmetler-grid">
         <MainItemGrid
@@ -127,23 +113,20 @@ export default async function ServicesPage() {
           verimliliği odaklı optimizasyonlar yaparak toplam işletme maliyetlerinizi
           düşürmenize yardımcı oluyoruz.
         </p>
-      </section>
-
-      <section className="mt-12 bg-gray-50 rounded-xl p-8">
-        <h2 className="text-2xl md:text-3xl font-semibold text-black mb-3">
-          Projenizi Güçlü Bir Hizmet Altyapısıyla Büyütün
-        </h2>
-        <p className="text-gray-700 mb-5 max-w-3xl mx-auto">
-          İşletmenize en uygun soğutma kulesi çözümünü birlikte planlayalım;
-          sürdürülebilir performans ve hızlı geri dönüş için hemen bizimle iletişime
-          geçin.
-        </p>
-        <a
-          href="/iletisim"
-          className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-primary text-white font-semibold hover:opacity-90 transition"
-        >
-          İletişime Geç
-        </a>
+        <div className="flex flex-col sm:flex-row justify-center gap-3 mt-6">
+          <a
+            href="/iletisim"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-md bg-primary text-white font-semibold hover:opacity-90 transition"
+          >
+            Teklif Al
+          </a>
+          <a
+            href="#hizmetler-grid"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-md border border-primary text-primary font-semibold hover:bg-primary hover:text-white transition"
+          >
+            Hizmetleri İncele
+          </a>
+        </div>
       </section>
 
       <section className="mt-12 text-left max-w-4xl mx-auto">
