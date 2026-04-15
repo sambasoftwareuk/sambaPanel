@@ -71,7 +71,7 @@ export default async function ServicesPage() {
       <Breadcrumb title={"Hizmetler"} />
 
       <section className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-black mb-4">
+        <h1 className="text-3xl md:text-4xl font-bold text-primary mb-4">
           Soğutma Kulesi Hizmetleri
         </h1>
         <p className="text-base md:text-lg text-gray-700 max-w-3xl mx-auto mb-3">
@@ -87,7 +87,7 @@ export default async function ServicesPage() {
       <section id="hizmetler-grid">
         <MainItemGrid
           items={filteredServices}
-          title="Hizmetler"
+          title=""
           baseHref="hizmetler"
           gridClassName="grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
           cardProps={{ variant: 2, button: false, titleColor: "text-black" }}
@@ -95,7 +95,7 @@ export default async function ServicesPage() {
       </section>
 
       <section className="mt-12 text-left max-w-4xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-semibold text-black mb-4 text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-4 text-center">
           Hizmetlerimiz Hakkında
         </h2>
         <p className="text-gray-700 mb-3">
@@ -130,7 +130,7 @@ export default async function ServicesPage() {
       </section>
 
       <section className="mt-12 text-left max-w-4xl mx-auto">
-        <h2 className="text-2xl md:text-3xl font-semibold text-black mb-5 text-center">
+        <h2 className="text-2xl md:text-3xl font-semibold text-primary mb-5 text-center">
           Sıkça Sorulan Sorular
         </h2>
 
