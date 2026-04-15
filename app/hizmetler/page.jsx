@@ -1,23 +1,26 @@
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
+import { getMetaData } from "../utils/metadataHelper";
 import { getServiceCards } from "@/lib/repos/services";
 
-export const metadata = {
-  title: "Soğutma Kulesi Hizmetleri | Bakım, Montaj ve Otomasyon",
-  description:
-    "Soğutma kulesi hizmetleri kapsamında bakım, montaj, otomasyon ve enerji verimliliği odaklı profesyonel çözümler sunuyoruz.",
-  keywords: [
-    "soğutma kulesi hizmetleri",
-    "soğutma kulesi bakım",
-    "soğutma kulesi montaj",
-    "soğutma kulesi otomasyon",
-    "enerji verimliliği",
-    "endüstriyel soğutma",
-  ],
-  alternates: {
-    canonical: "/hizmetler",
-  },
-};
+export async function generateMetadata() {
+  const dynamicMeta = await getMetaData("/hizmetler");
+
+  return {
+    ...dynamicMeta,
+    keywords: [
+      "soğutma kulesi hizmetleri",
+      "soğutma kulesi bakım",
+      "soğutma kulesi montaj",
+      "soğutma kulesi otomasyon",
+      "enerji verimliliği",
+      "endüstriyel soğutma",
+    ],
+    alternates: {
+      canonical: "/hizmetler",
+    },
+  };
+}
 
 export default async function ServicesPage() {
   const locale = "tr-TR";
