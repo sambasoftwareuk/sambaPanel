@@ -1,13 +1,57 @@
 import MainItemGrid from "../_components/MainItemGrid";
 import Breadcrumb from "../_molecules/BreadCrumb";
-import { getMetaData } from "../utils/metadataHelper";
 import { getServiceCards } from "@/lib/repos/services";
+import { buildMetadata, getSeoPage } from "@/lib/repos/seo";
+import JsonLd from "@/components/seo/JsonLd";
+
+const locale = "tr-TR";
+
+const hizmetlerMetadataFallback = {
+  title: "Hizmetlerimiz - Greenstep Su Soğutma Kuleleri",
+  description: "Hizmetlerimiz sayfası - Greenstep Su Soğutma Kuleleri",
+  canonical: "/hizmetler",
+};
+
+const hizmetlerJsonLdFallback = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "Samba Panel",
+      url: "https://www.sambapanel.com",
+      logo: "https://www.sambapanel.com/logo.png",
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "müşteri hizmetleri",
+        url: "https://www.sambapanel.com/iletisim",
+        availableLanguage: "tr",
+      },
+    },
+    {
+      "@type": "Service",
+      serviceType: "Soğutma Kulesi Hizmetleri",
+      name: "Soğutma Kulesi Bakım, Montaj ve Otomasyon Hizmetleri",
+      description:
+        "Endüstriyel tesisler için soğutma kulesi bakım, montaj, otomasyon ve enerji verimliliği odaklı hizmetler.",
+      provider: {
+        "@type": "Organization",
+        name: "Samba Panel",
+        url: "https://www.sambapanel.com",
+      },
+      areaServed: {
+        "@type": "Country",
+        name: "Türkiye",
+      },
+      url: "https://www.sambapanel.com/hizmetler",
+    },
+  ],
+};
 
 export async function generateMetadata() {
-  const dynamicMeta = await getMetaData("/hizmetler");
+  const seo = await getSeoPage("hizmetler", locale);
 
   return {
-    ...dynamicMeta,
+    ...buildMetadata(seo, hizmetlerMetadataFallback),
     keywords: [
       "soğutma kulesi hizmetleri",
       "soğutma kulesi bakım",
@@ -16,57 +60,20 @@ export async function generateMetadata() {
       "enerji verimliliği",
       "endüstriyel soğutma",
     ],
-    alternates: {
-      canonical: "/hizmetler",
-    },
   };
 }
 
 export default async function ServicesPage() {
-  const locale = "tr-TR";
-  const filteredServices = await getServiceCards(locale);
+  const [filteredServices, seo] = await Promise.all([
+    getServiceCards(locale),
+    getSeoPage("hizmetler", locale),
+  ]);
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Organization",
-        name: "Samba Panel",
-        url: "https://www.sambapanel.com",
-        logo: "https://www.sambapanel.com/logo.png",
-        contactPoint: {
-          "@type": "ContactPoint",
-          contactType: "müşteri hizmetleri",
-          url: "https://www.sambapanel.com/iletisim",
-          availableLanguage: "tr",
-        },
-      },
-      {
-        "@type": "Service",
-        serviceType: "Soğutma Kulesi Hizmetleri",
-        name: "Soğutma Kulesi Bakım, Montaj ve Otomasyon Hizmetleri",
-        description:
-          "Endüstriyel tesisler için soğutma kulesi bakım, montaj, otomasyon ve enerji verimliliği odaklı hizmetler.",
-        provider: {
-          "@type": "Organization",
-          name: "Samba Panel",
-          url: "https://www.sambapanel.com",
-        },
-        areaServed: {
-          "@type": "Country",
-          name: "Türkiye",
-        },
-        url: "https://www.sambapanel.com/hizmetler",
-      },
-    ],
-  };
+  const jsonLdData = seo?.json_ld || hizmetlerJsonLdFallback;
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLdData} />
 
       <Breadcrumb title={"Hizmetler"} />
 
