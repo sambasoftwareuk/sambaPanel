@@ -12,40 +12,6 @@ const hizmetlerMetadataFallback = {
   canonical: "/hizmetler",
 };
 
-const hizmetlerJsonLdFallback = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Organization",
-      name: "Samba Panel",
-      url: "https://www.sambapanel.com",
-      logo: "https://www.sambapanel.com/logo.png",
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "müşteri hizmetleri",
-        url: "https://www.sambapanel.com/iletisim",
-        availableLanguage: "tr",
-      },
-    },
-    {
-      "@type": "Service",
-      serviceType: "Soğutma Kulesi Hizmetleri",
-      name: "Soğutma Kulesi Bakım, Montaj ve Otomasyon Hizmetleri",
-      description:
-        "Endüstriyel tesisler için soğutma kulesi bakım, montaj, otomasyon ve enerji verimliliği odaklı hizmetler.",
-      provider: {
-        "@type": "Organization",
-        name: "Samba Panel",
-        url: "https://www.sambapanel.com",
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "Türkiye",
-      },
-      url: "https://www.sambapanel.com/hizmetler",
-    },
-  ],
-};
 
 export async function generateMetadata() {
   const seo = await getSeoPage("hizmetler", locale);
@@ -69,11 +35,9 @@ export default async function ServicesPage() {
     getSeoPage("hizmetler", locale),
   ]);
 
-  const jsonLdData = seo?.json_ld || hizmetlerJsonLdFallback;
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-      <JsonLd data={jsonLdData} />
+      <JsonLd data={seo?.json_ld} />
 
       <Breadcrumb title={"Hizmetler"} />
 
