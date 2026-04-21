@@ -5,8 +5,44 @@ import Image from "next/image";
 import { MobileSideMenu, SideMenu } from "@/app/_molecules/SideMenu";
 import sideMenuData from "../../mocks/sideMenuData.json";
 import { getBlogPostBySlug } from "@/lib/repos/blog";
+import JsonLd from "@/components/seo/JsonLd";
 
 const locale = "tr-TR";
+
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(locale, slug);
+
+  if (!post) {
+    return {
+      title: "Blog Yazısı Bulunamadı",
+      description: "İlgili blog yazısı bulunamadı.",
+    };
+  }
+
+  const title = post.meta_title || post.title;
+  const description = post.meta_description || post.summary || post.title;
+  const ogTitle = post.og_title || title;
+  const ogDescription = post.og_description || description;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
+    openGraph: {
+      title: ogTitle,
+      description: ogDescription,
+      ...(post.hero_url ? { images: [post.hero_url] } : {}),
+    },
+    twitter: {
+      title: ogTitle,
+      description: ogDescription,
+      ...(post.hero_url ? { images: [post.hero_url] } : {}),
+    },
+  };
+}
 
 export default async function BlogDetailPage({ params }) {
   const { slug } = await params;
@@ -26,6 +62,7 @@ export default async function BlogDetailPage({ params }) {
 
   return (
     <div className="max-w-5xl mx-auto p-6">
+      <JsonLd data={post.json_ld} />
       <div className="text-center">
         <Breadcrumb title={post.title} />
       </div>
