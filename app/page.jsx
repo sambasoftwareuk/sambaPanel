@@ -4,18 +4,20 @@ import CarouselSlider from "./_components/CarouselSlider.jsx";
 import MainItemGrid from "./_components/MainItemGrid.jsx";
 import BlogComponent from "./_components/BlogComponent.jsx";
 import { getHomeData } from "@/lib/repos/home";
+import { buildMetadata, getSeoPage } from "@/lib/repos/seo";
+import JsonLd from "@/components/seo/JsonLd";
 
 const BASE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://www.greenstepcoolingtowers.com").replace(/\/$/, "");
+const locale = "tr-TR";
 
-export const metadata = {
+const homeMetadataFallback = {
   title: "Su Soğutma Kulesi Üreticisi | Endüstriyel Sistemler - Greenstep",
   description:
     "Endüstriyel su soğutma kulesi üretimi, mühendislik ve sistem çözümleri. Projenize özel hızlı teklif ve teknik destek için Greenstep ile iletişime geçin.",
+  canonical: "/",
 };
 
-const locale = "tr-TR";
-const data = await getHomeData(locale, { latestBlog: 8 });
-const structuredData = {
+const homeJsonLdFallback = {
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -24,9 +26,7 @@ const structuredData = {
       name: "Greenstep Cooling Towers",
       url: BASE_URL,
       logo: `${BASE_URL}/greenstep-logo.png`,
-      sameAs: [
-        "https://www.instagram.com/greenstep_cooling_towers/",
-      ],
+      sameAs: ["https://www.instagram.com/greenstep_cooling_towers/"],
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "satış",
@@ -83,15 +83,21 @@ const structuredData = {
   ],
 };
 
+export async function generateMetadata() {
+  const seo = await getSeoPage("homepage", locale);
+  return buildMetadata(seo, homeMetadataFallback);
+}
 
-export default function Home() {
+export default async function Home() {
+  const [data, seo] = await Promise.all([
+    getHomeData(locale, { latestBlog: 8 }),
+    getSeoPage("homepage", locale),
+  ]);
+  const jsonLdData = seo?.json_ld || homeJsonLdFallback;
 
   return (
     <main className="flex flex-col items-center min-h-screen w-full">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      <JsonLd data={jsonLdData} />
       <section className="w-full">
         <SliderComponent
           size={"lg"}

@@ -4,15 +4,28 @@ import ContactCard from "../_molecules/ContactCard";
 import { Header1, Header2, Header3 } from "../_atoms/Headers";
 import contactData from "../mocks/contactData.json";
 import ContactFormWrapper from "../_components/ContactFormWrapper";
-import { getMetaData } from "../utils/metadataHelper";
+import { buildMetadata, getSeoPage } from "@/lib/repos/seo";
+import JsonLd from "@/components/seo/JsonLd";
+
+const locale = "tr-TR";
+
+const iletisimMetadataFallback = {
+  title: "İletişim - Greenstep Su Soğutma Kuleleri",
+  description: "İletişim sayfası - Greenstep Su Soğutma Kuleleri",
+  canonical: "/iletisim",
+};
 
 export async function generateMetadata() {
-  return await getMetaData("/iletisim");
+  const seo = await getSeoPage("iletisim", locale);
+  return buildMetadata(seo, iletisimMetadataFallback);
 }
 
-const ContactPage = () => {
+const ContactPage = async () => {
+  const seo = await getSeoPage("iletisim", locale);
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <JsonLd data={seo?.json_ld} />
       <div className="flex container mx-auto px-4 py-8 flex-col justify-center items-center">
         <div className="text-center">
           <Breadcrumb />
