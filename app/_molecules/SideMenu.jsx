@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { SambaLinks } from "../_atoms/SambaLinks";
 
 export const SideMenu = ({ menu, activeHref }) => (
-  <aside className="w-64 bg-white  p-0 hidden md:block">
+  <aside className="w-64 bg-white p-0 hidden lg:block">
     {menu?.map((section, idx) => (
       <div key={idx} className="mb-0">
         <div
@@ -51,7 +51,7 @@ export const MobileSideMenu = ({ menu, activeHref }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
   return (
-    <aside className="w-full bg-white border rounded p-0 md:hidden my-4">
+    <aside className="w-full bg-white border rounded p-0 lg:hidden my-4">
       {menu.map((section, idx) => (
         <div key={idx} className="border-b relative">
           <button
