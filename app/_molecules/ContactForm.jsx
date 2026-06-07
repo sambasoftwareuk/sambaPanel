@@ -4,6 +4,7 @@ import { Header2 } from '../_atoms/Headers';
 import { InputBasic } from '../_atoms/Inputs';
 import { Checkbox } from '../_atoms/Checkbox';
 import { PrimaryButton } from '../_atoms/Buttons';
+import { toast } from 'sonner';
 
 const ContactForm = ({ 
   title = "Bize Ulaşın",
@@ -86,7 +87,7 @@ const ContactForm = ({
       if (onSubmit) {
         onSubmit(formData);
       } else {
-        alert('Mesajınız başarıyla gönderildi!');
+        toast.success('Mesajınız başarıyla gönderildi!');
         
         setFormData({
           firstName: '',
