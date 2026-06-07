@@ -11,6 +11,7 @@ import { Header2 } from "../_atoms/Headers";
 import InlineTabButton from "../_atoms/InlineTabButton";
 import FileUploadPanel from "../_atoms/FileUploadPanel";
 import UploadModal from "./UploadModal";
+import UploadProgressBar from "../_atoms/UploadProgressBar";
 
 export default function BodyEditorModal({
   isOpen,
@@ -31,7 +32,11 @@ export default function BodyEditorModal({
   onDeleteImage = () => {},
   deletedImages = [],
   onUploadComplete = () => {},
-  pageSlug
+  pageSlug,
+  imageUploading = false,
+  uploadProgress = 0,
+  uploadLoaded = 0,
+  uploadTotal = 0,
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -221,6 +226,17 @@ export default function BodyEditorModal({
             )}
           </DragDropZone>
         )}
+                {imageUploading && (
+          <div className="mt-3">
+            <UploadProgressBar
+              percent={uploadProgress}
+              label="Resim yükleniyor..."
+              loaded={uploadLoaded}
+              total={uploadTotal}
+            />
+          </div>
+        )}
+
 
         {/* Error Message */}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}

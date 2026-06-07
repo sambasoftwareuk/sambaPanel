@@ -7,25 +7,30 @@ import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
 import XButton from "../_atoms/XButton";
 import { usePageEdit } from "../context/PageEditProvider";
+import UploadProgressBar from "../_atoms/UploadProgressBar";
+import { uploadWithProgress } from "../../lib/uploadWithProgress";
 
-export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
+export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [filePreviews, setFilePreviews] = useState([]); // Blob URL'leri tutmak için
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadLoaded, setUploadLoaded] = useState(0);
+  const [uploadTotal, setUploadTotal] = useState(0);
+  const [currentFileIndex, setCurrentFileIndex] = useState(0);
+  const [uploadingFileName, setUploadingFileName] = useState("");
   const inputRef = useRef(null);
   const { mediaScope } = usePageEdit();
 
-  
-
-  
-
-
   const handleFileSelect = (files) => {
-    const fileArray = Array.from(files);
-    const imageFiles = fileArray.filter((file) =>
-      file.type.startsWith("image/")
-    );
-
+    const fileArray = files instanceof File
+      ? [files]
+      : Array.from(files || []);
+    const imageFiles = fileArray.filter((file) => {
+      if (file.type?.startsWith("image/")) return true;
+      const ext = file.name.split(".").pop()?.toLowerCase();
+      return ["jpg", "jpeg", "png", "gif", "webp"].includes(ext);
+    });
     if (imageFiles.length === 0) {
       alert("Sadece resim dosyaları seçilebilir");
       return;
@@ -60,48 +65,47 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
-   
 
-     if (!mediaScope) {
-       // Scope zorunlu değil demiştin; ama senin ihtiyacında gerekli.
-       // İstersen bunu uyarı yerine sessizce scopes göndermeyebilirsin.
-       alert("scope eksik.");
-       return;
-     }
+    if (!mediaScope) {
+      alert("scope eksik.");
+      return;
+    }
 
     setUploading(true);
+    setUploadProgress(0);
+    setUploadLoaded(0);
+    setUploadTotal(0);
+
     try {
-      for (const file of selectedFiles) {
-        // Direkt API'ye upload et
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        setCurrentFileIndex(i + 1);
+        setUploadingFileName(file.name);
+        setUploadProgress(0);
+        setUploadLoaded(0);
+        setUploadTotal(file.size);
+
         const formData = new FormData();
         formData.append("file", file);
 
-        const uploadRes = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
+        const uploadData = await uploadWithProgress("/api/upload", formData, {
+          onProgress: ({ percent, loaded, total }) => {
+            setUploadProgress(percent);
+            setUploadLoaded(loaded);
+            setUploadTotal(total);
+          },
         });
 
-        if (!uploadRes.ok) {
-          const errorText = await uploadRes.text();
-          throw new Error(
-            `Upload başarısız: ${uploadRes.status} - ${errorText}`
-          );
-        }
-
-        const uploadData = await uploadRes.json();
-
-        
-        // Media kaydı yap
         const mediaRes = await fetch("/api/media", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      url: uploadData.url,
-      alt_text: file.name,
-      mime_type: uploadData?.mime_type || file.type || null,
-      scopes: [mediaScope],                 // ← hard-coded "kurumsal" yerine bu
-    }),
-  });
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: uploadData.url,
+            alt_text: file.name,
+            mime_type: uploadData?.mime_type || file.type || null,
+            scopes: [mediaScope],
+          }),
+        });
 
         if (!mediaRes.ok) throw new Error("Media kaydı başarısız");
       }
@@ -114,6 +118,8 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
       alert("Resim yüklenirken hata oluştu: " + error.message);
     } finally {
       setUploading(false);
+      setUploadProgress(0);
+      setUploadingFileName("");
     }
   };
 
@@ -169,37 +175,48 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
             </h4>
             <div className="grid grid-cols-3 gap-2 h-5/6 overflow-y-auto p-2">
               {filePreviews?.map((preview) => (
-                  <div key={preview.id} className="relative">
-                    <div className="relative w-full h-32 rounded border overflow-hidden">
-                      <Image
-                        src={preview.url}
-                        alt={preview.file.name}
-                        fill
-                        unoptimized
-                        className="object-contain rounded"
-                      />
-                    </div>
-                    <div className="absolute -top-1 -right-1">
-                      <XButton
-                        onClick={() => removeFile(preview.id)}
-                        title="Dosyayı kaldır"
-                      />
-                    </div>
-                    <p className="text-xs text-gray-600 truncate mt-1">
-                      {preview.file.name}
-                    </p>
+                <div key={preview.id} className="relative">
+                  <div className="relative w-full h-32 rounded border overflow-hidden">
+                    <Image
+                      src={preview.url}
+                      alt={preview.file.name}
+                      fill
+                      unoptimized
+                      className="object-contain rounded"
+                    />
                   </div>
-                ))
-               ?? (
-                <div className="col-span-2 text-center text-gray-500 text-sm py-4">
-                  Dosya bulunamadı
+                  <div className="absolute -top-1 -right-1">
+                    <XButton
+                      onClick={() => removeFile(preview.id)}
+                      title="Dosyayı kaldır"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600 truncate mt-1">
+                    {preview.file.name}
+                  </p>
                 </div>
-              )
-            }
+              ))
+                ?? (
+                  <div className="col-span-2 text-center text-gray-500 text-sm py-4">
+                    Dosya bulunamadı
+                  </div>
+                )
+              }
             </div>
           </div>
         )}
-
+        {uploading && (
+          <div className="mt-4">
+            <UploadProgressBar
+              percent={uploadProgress}
+              label={`Yükleniyor: ${uploadingFileName}`}
+              loaded={uploadLoaded}
+              total={uploadTotal}
+              fileIndex={currentFileIndex}
+              fileCount={selectedFiles.length}
+            />
+          </div>
+        )}
         {/* Action Buttons */}
         <div className="flex justify-end gap-2 mt-4">
           <OutlinedButton
