@@ -61,20 +61,26 @@ export default async function BlogDetailPage({ params }) {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6 flex flex-col">
       <JsonLd data={post.json_ld} />
-      <div className="text-center">
-        <Breadcrumb title={post.title} />
+
+      {/* Mobile: 1 — Tüm Bloglar */}
+      <div className="order-1 lg:hidden">
+        <MobileSideMenu menu={blogMenu} activeHref={`/blog/${post.slug}`} />
       </div>
 
-      <Header1 className="text-center my-5 w-full lg:w-1/2 max-w-2xl m-auto text-lg">
+      {/* Mobile: 2 — Breadcrumb | Desktop: first */}
+      <div className="text-center order-2 lg:order-1">
+        <Breadcrumb title={post.title} />
+      </div>
+      <Header1 className="lg:hidden text-center my-5 w-full max-w-2xl lg:w-1/2 m-auto text-lg order-3 lg:order-2">
         {post.title}
       </Header1>
 
-      <div className="flex flex-col lg:flex-row justify-between gap-8">
+      <div className="flex flex-col lg:flex-row justify-between gap-8 order-4 lg:order-3">
         <SideMenu menu={blogMenu} activeHref={`/blog/${post.slug}`} />
-        <MobileSideMenu menu={blogMenu} activeHref={`/blog/${post.slug}`} />
-        <div className="prose prose-lg w-full lg:w-1/2 max-w-2xl text-justify">
+        {/* Mobile: 4 — Text | Desktop: middle column */}
+        <div className="prose prose-lg w-full lg:w-1/2 max-w-2xl text-justify order-2 lg:order-none">
           <p className="text-red-500 text-sm mb-4">{formattedDate}</p>
           <div
             className="text-sm leading-relaxed text-justify"
@@ -83,7 +89,8 @@ export default async function BlogDetailPage({ params }) {
             }}
           />
         </div>
-        <div className="w-full lg:w-1/4 mt-6">
+        {/* Mobile: 3 — Image | Desktop: right column */}
+        <div className="w-full lg:w-1/4 order-1 lg:order-none lg:mt-6 ">
           <Image
             src={post.hero_url || "/generic-image.png"}
             alt={post.hero_alt || post.title}
