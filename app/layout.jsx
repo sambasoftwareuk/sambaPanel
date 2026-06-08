@@ -6,6 +6,7 @@ import Navbar from "./_components/Navbar";
 import { Footer } from "./_components/Footer";
 import WhatsAppStickyButton from "./_components/WhatsAppStickyButton";
 import ScrollToTopButton from "./_components/ScrollToTopButton";
+import ToastProvider from "./_components/ToastProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { getMetaData } from "./utils/metadataHelper";
 import { getBlogTitleSlug } from "@/lib/repos/blog";
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }) {
             <WhatsAppStickyButton />
             <ScrollToTopButton />
           </div>
+          <ToastProvider />
         </body>
       </html>
     </ClerkProvider>

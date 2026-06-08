@@ -7,6 +7,7 @@ import { PrimaryButton, OutlinedButton } from "../_atoms/Buttons";
 import { Header2 } from "../_atoms/Headers";
 import XButton from "../_atoms/XButton";
 import { usePageEdit } from "../context/PageEditProvider";
+import { showError } from "../utils/toast";
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -27,7 +28,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
     );
 
     if (imageFiles.length === 0) {
-      alert("Sadece resim dosyaları seçilebilir");
+      showError("Only image files can be selected");
       return;
     }
 
@@ -65,7 +66,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
      if (!mediaScope) {
        // Scope zorunlu değil demiştin; ama senin ihtiyacında gerekli.
        // İstersen bunu uyarı yerine sessizce scopes göndermeyebilirsin.
-       alert("scope eksik.");
+       showError("Scope is missing.");
        return;
      }
 
@@ -111,7 +112,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
       onClose();
     } catch (error) {
       console.error("Upload error:", error);
-      alert("Resim yüklenirken hata oluştu: " + error.message);
+      showError("An error occurred while uploading the image: " + error.message);
     } finally {
       setUploading(false);
     }

@@ -10,6 +10,7 @@ import EditButton from "../_atoms/EditButton";
 import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
+import { showError } from "../utils/toast";
 
 export default function BodyEditor({ className = "" }) {
   const {
@@ -93,7 +94,7 @@ export default function BodyEditor({ className = "" }) {
   // Resim yükleme fonksiyonu
   const handleImageUpload = async (file) => {
     if (!file.type.startsWith("image/")) {
-      alert("Sadece resim dosyaları kabul edilir");
+      showError("Only image files are accepted");
       return;
     }
 
@@ -140,7 +141,7 @@ export default function BodyEditor({ className = "" }) {
         setBodyHtml(updatedHtml);
       }
     } catch (e) {
-      alert("Resim yüklenirken hata oluştu: " + e.message);
+      showError("An error occurred while uploading the image: " + e.message);
     }
   };
 
