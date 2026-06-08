@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { showError } from "../utils/toast";
 
 export default function DragDropZone({
   children,
@@ -45,7 +46,7 @@ export default function DragDropZone({
     if (acceptedFile) {
       onFileDrop(acceptedFile);
     } else {
-      alert(`Lütfen sadece ${acceptTypes.join(", ")} dosyaları sürükleyin`);
+      showError(`Please drop only ${acceptTypes.join(", ")} files`);
     }
   };
 
