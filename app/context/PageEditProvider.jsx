@@ -1,18 +1,19 @@
 "use client";
 
 import { createContext, useContext, useState, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { showError, showSuccess } from "../utils/toast";
+import { resolveMediaScope } from "@/lib/mediaScope";
 
 const PageEditContext = createContext(null);
 
-// 👉 İSTER AYRI DOSYAYA KOY (lib/scope.js) İSTER ŞİMDİLİK BURADA DURSUN
-function scopeFromPage(slug) {
-  if (!slug) return "gallery";
-  if (slug === "kurumsal" || slug === "about-us" || slug === "corporate") return "kurumsal";
-  if (slug.startsWith("urun") || slug.startsWith("products")) return "product";
-  if (slug.startsWith("hizmet") || slug.startsWith("services")) return "service";
-  if (slug.startsWith("yedek") || slug.includes("spare")) return "spare";
-  if (slug.startsWith("iletisim") || slug.startsWith("contact")) return "contact";
-  return "gallery";
+function itemTypeFromBaseHref(baseHref) {
+  const map = {
+    urunler: "product",
+    hizmetler: "service",
+    "yedek-parcalar": "spare",
+  };
+  return map[baseHref] || null;
 }
 
 export function PageEditProvider({
@@ -26,8 +27,9 @@ export function PageEditProvider({
   locale,
   baseHref,
   children,
-  pageSlug,                    // ← zaten geliyordu
+  pageSlug,
 }) {
+  const router = useRouter();
   const [title, setTitle] = useState(initialTitle);
   const [bodyHtml, setBodyHtml] = useState(initialBody);
   const [heroUrl, setHeroUrl] = useState(initialHeroUrl);
@@ -39,8 +41,10 @@ export function PageEditProvider({
   const [sideMenuDirty, setSideMenuDirty] = useState(false);
   const [sideMenuSaving, setSideMenuSaving] = useState(false);
 
-  // ⭐️ YENİ: scope’u sayfa slug’ından türet
-  const mediaScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
+  const mediaScope = useMemo(
+    () => resolveMediaScope(pageSlug, baseHref),
+    [pageSlug, baseHref]
+  );
 
   // (İsteğe bağlı) İlk değeri “dondurmak” istersen:
   // const mediaScopeStable = useRef(mediaScope).current;
@@ -115,41 +119,84 @@ export function PageEditProvider({
   }
 
   async function handleSave() {
-    if (!isDirty) return;
+    if (!isDirty) {
+      showError("No changes to save.");
+      return;
+    }
+
+    if (!pageSlug) {
+      showError("Cannot save: page slug is missing.");
+      return;
+    }
+
     setSaving(true);
     try {
+      let nextHeroMediaId = heroMediaId;
       for (const img of deletedImages) {
-        if (heroMediaId === img.id) setHeroMediaId(null);
+        if (nextHeroMediaId === img.id) nextHeroMediaId = null;
       }
+      if (nextHeroMediaId !== heroMediaId) {
+        setHeroMediaId(nextHeroMediaId);
+      }
+
       const requestBody = {
         title,
         content_html: bodyHtml,
-        hero_media_id: heroMediaId,
+        hero_media_id: nextHeroMediaId,
         locale,
         slug: pageSlug,
       };
-      if (sideMenuDirty) requestBody.side_menu = sideMenu;
 
-      const res = await fetch(`/api/${pageSlug === "kurumsal" ? "corporate" : ""}`, {
+      let endpoint;
+
+      if (pageSlug === "kurumsal") {
+        endpoint = "/api/corporate";
+        if (sideMenuDirty) requestBody.side_menu = sideMenu;
+      } else {
+        const itemType = itemTypeFromBaseHref(baseHref);
+        if (!itemType) {
+          throw new Error(`Save is not supported for this page (baseHref: ${baseHref || "missing"})`);
+        }
+        endpoint = `/api/items/${pageSlug}`;
+        requestBody.type = itemType;
+      }
+
+      console.log("[SaveAll] PATCH", endpoint, requestBody);
+
+      const res = await fetch(endpoint, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
+        credentials: "same-origin",
         body: JSON.stringify(requestBody),
       });
-      if (!res.ok) throw new Error("API error");
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText || "Save failed");
+      }
 
       for (const img of deletedImages) {
         try {
           await fetch(`/api/media?id=${img.id}`, { method: "DELETE" });
         } catch (e) {
-          console.error("Resim silinemedi:", e);
+          console.error("Failed to delete image:", e);
         }
       }
 
       setDeletedImages([]);
-      baselineRef.current = { title, bodyHtml, heroUrl, heroAlt, heroMediaId };
+      baselineRef.current = {
+        title,
+        bodyHtml,
+        heroUrl,
+        heroAlt,
+        heroMediaId: nextHeroMediaId,
+      };
       setSideMenuDirty(false);
+      showSuccess("Changes saved successfully.");
+      router.refresh();
     } catch (err) {
       console.error("Save failed:", err);
+      showError(err.message || "Failed to save changes.");
     } finally {
       setSaving(false);
     }

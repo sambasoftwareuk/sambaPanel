@@ -52,11 +52,11 @@ const DetailPageTemplate = ({
             page?.hero_url ? `${page.hero_url}` : image || "/generic-image.png"
           }
           initialHeroAlt={page?.hero_alt || page?.title || title}
-          initialHeroMediaId={page?.hero_media_id}
+          initialHeroMediaId={page?.hero_media_id ?? page?.media?.[0]?.id}
           initialSideMenu={menu}
           pageId={page?.id || pageId}
           locale={page?.locale || locale}
-          pageSlug={pageSlug}
+          pageSlug={pageSlug || page?.slug}
           baseHref={baseHref}
         >
           {/* Whole page layout: sidebar + content */}

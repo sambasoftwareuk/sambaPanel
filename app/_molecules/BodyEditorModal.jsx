@@ -11,6 +11,7 @@ import { Header2 } from "../_atoms/Headers";
 import InlineTabButton from "../_atoms/InlineTabButton";
 import FileUploadPanel from "../_atoms/FileUploadPanel";
 import UploadModal from "./UploadModal";
+import { usePageEdit } from "../context/PageEditProvider";
 
 export default function BodyEditorModal({
   isOpen,
@@ -31,8 +32,18 @@ export default function BodyEditorModal({
   onDeleteImage = () => {},
   deletedImages = [],
   onUploadComplete = () => {},
-  pageSlug
+  pageSlug,
+  mediaScope: mediaScopeProp,
+  galleryRefreshKey: galleryRefreshKeyProp = 0,
 }) {
+  const { mediaScope: contextMediaScope } = usePageEdit();
+  const mediaScope = mediaScopeProp || contextMediaScope;
+  const [galleryRefreshKey, setGalleryRefreshKey] = useState(galleryRefreshKeyProp);
+
+  useEffect(() => {
+    setGalleryRefreshKey(galleryRefreshKeyProp);
+  }, [galleryRefreshKeyProp]);
+
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
     mode === "body" ? "visual" : "gallery"
@@ -174,7 +185,8 @@ export default function BodyEditorModal({
                 onDeleteImage={onDeleteImage}
                 deletedImages={deletedImages}
                 onApply={setGalleryActions}
-                pageSlug={pageSlug}
+                mediaScope={mediaScope}
+                refreshKey={galleryRefreshKey}
               />
             ) : (
               <div className="p-4 text-center text-gray-500">
@@ -191,7 +203,8 @@ export default function BodyEditorModal({
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
-            pageSlug={pageSlug}
+            mediaScope={mediaScope}
+            refreshKey={galleryRefreshKey}
           />
         ) : activeTab === "upload" ? (
           <div className="p-4 text-center text-gray-500">
@@ -266,9 +279,10 @@ export default function BodyEditorModal({
         }}
         onUploadComplete={() => {
           onUploadComplete?.();
+          setGalleryRefreshKey((k) => k + 1);
           setShowUploadModal(false);
-          setActiveTab("gallery"); // Upload sonrası galeri sekmesine geç
-          setShowGallery(false); // Inline gallery'yi de kapat
+          setActiveTab("gallery");
+          setShowGallery(false);
         }}
       />
     </div>

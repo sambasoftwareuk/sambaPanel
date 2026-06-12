@@ -1,87 +1,83 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import XButton from "../_atoms/XButton";
 import DeleteConfirmModal from "../_atoms/DeleteConfirmModal";
-import { getMediaByScope } from "@/lib/repos/gallery";
 
 export default function ImageGallery({
   onImageSelect,
   selectedUrl = "",
   onDeleteImage,
-  pageSlug,
-  deletedImages = [], // Context'ten silinen resimleri al
-  onApply, // Gallery fonksiyonlarını parent'a bildir
+  mediaScope,
+  deletedImages = [],
+  onApply,
+  refreshKey = 0,
 }) {
   const [gallery, setGallery] = useState([]);
   const [loading, setLoading] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
-  const [temporarilyDeleted, setTemporarilyDeleted] = useState([]); // Geçici silinen resimler
-  // Gallery yükle
-  const loadGallery = async () => {
+  const [temporarilyDeleted, setTemporarilyDeleted] = useState([]);
+
+  const loadGallery = useCallback(async () => {
+    if (!mediaScope) return;
+
     setLoading(true);
     try {
-      const res = await getMediaByScope(pageSlug);
-      setGallery(res.items || []);
+      const qs = new URLSearchParams({ scope: mediaScope });
+      const res = await fetch(`/api/media?${qs.toString()}`, {
+        credentials: "same-origin",
+      });
+      if (!res.ok) throw new Error(`Gallery load failed: ${res.status}`);
+      const data = await res.json();
+      setGallery(data.items || []);
     } catch (e) {
-      console.error("Galeri yüklenemedi:", e);
+      console.error("Gallery failed to load:", e);
+      setGallery([]);
     } finally {
       setLoading(false);
     }
-  };
+  }, [mediaScope]);
 
-  // Component mount olduğunda gallery yükle
   useEffect(() => {
     loadGallery();
-  }, []);
+  }, [loadGallery, refreshKey]);
 
-  // Resim silme fonksiyonu (sadece geçici olarak gizle)
   const handleDelete = (item) => {
-    // Geçici silinen listesine ekle
     setTemporarilyDeleted((prev) => [...prev, item]);
     setDeleteConfirm(null);
   };
 
-  // Modal kapandığında geçici silmeleri temizle
   const resetTemporaryDeletes = () => {
     setTemporarilyDeleted([]);
   };
 
-  // "Uygula" butonuna basıldığında çağrılacak (modal'ın uygula butonundan)
   const applyDeletes = async () => {
     if (!temporarilyDeleted.length) return;
 
     try {
-      // API'den anında sil ve galeriden çıkar
       await Promise.all(
         temporarilyDeleted.map(async (image) => {
           try {
             const res = await fetch(`/api/media?id=${image.id}`, {
               method: "DELETE",
-              headers: {
-                "x-admin-token":
-                  process.env.NEXT_PUBLIC_ADMIN_TOKEN || "admin123",
-              },
+              credentials: "same-origin",
             });
             if (!res.ok) {
               const t = await res.text();
-              console.error("Silinemedi:", image.id, t);
+              console.error("Delete failed:", image.id, t);
               return;
             }
-            // Local galeriden de düş
             setGallery((prev) => prev.filter((it) => it.id !== image.id));
           } catch (e) {
-            console.error("Silme hatası:", image.id, e);
+            console.error("Delete error:", image.id, e);
           }
         })
       );
     } finally {
-      // Geçici silmeleri temizle
       setTemporarilyDeleted([]);
     }
   };
 
-  // onApply prop'u değiştiğinde applyDeletes'i parent'a bildir
   useEffect(() => {
     if (onApply) {
       onApply({
@@ -90,11 +86,10 @@ export default function ImageGallery({
         resetTemporaryDeletes,
       });
     }
-  }, [temporarilyDeleted.length]);
+  }, [temporarilyDeleted.length, onApply]);
 
   return (
     <div className="max-h-64 overflow-y-auto p-2">
-      {/* Geçici silinen resimler varsa bilgi göster */}
       {temporarilyDeleted.length > 0 && (
         <div className="mt-4 p-3 bg-primary300 border border-primary500 rounded flex justify-between mb-2">
           <p className="text-sm text-secondary400">
@@ -111,6 +106,10 @@ export default function ImageGallery({
       {loading ? (
         <p className="text-sm text-gray-500 text-center py-4">
           Galeri yükleniyor...
+        </p>
+      ) : gallery.length === 0 ? (
+        <p className="text-sm text-gray-500 text-center py-4">
+          No images in gallery for scope: {mediaScope || "—"}
         </p>
       ) : (
         <div className="grid grid-cols-4 gap-2">
@@ -140,7 +139,6 @@ export default function ImageGallery({
                   />
                 </div>
 
-                {/* Silme butonu */}
                 <div className="absolute -top-2 -right-2">
                   <XButton
                     onClick={(e) => {
