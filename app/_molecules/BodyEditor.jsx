@@ -100,7 +100,7 @@ export default function BodyEditor({ className = "" }) {
   // Resim yükleme fonksiyonu
   const handleImageUpload = async (file) => {
     if (!file.type.startsWith("image/")) {
-      showError("Only image files are accepted.");
+      showError("Only image files are accepted");
       return;
     }
   

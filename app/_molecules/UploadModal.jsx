@@ -34,7 +34,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
       return ["jpg", "jpeg", "png", "gif", "webp"].includes(ext);
     });
     if (imageFiles.length === 0) {
-      showError("Only image files can be selected.");
+      showError("Only image files can be selected");
       return;
     }
 
