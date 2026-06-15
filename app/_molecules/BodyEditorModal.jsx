@@ -11,6 +11,7 @@ import { Header2 } from "../_atoms/Headers";
 import InlineTabButton from "../_atoms/InlineTabButton";
 import FileUploadPanel from "../_atoms/FileUploadPanel";
 import UploadModal from "./UploadModal";
+import UploadProgressBar from "../_atoms/UploadProgressBar";
 
 export default function BodyEditorModal({
   isOpen,
@@ -31,7 +32,11 @@ export default function BodyEditorModal({
   onDeleteImage = () => {},
   deletedImages = [],
   onUploadComplete = () => {},
-  pageSlug
+  pageSlug,
+  imageUploading = false,
+  uploadProgress = 0,
+  uploadLoaded = 0,
+  uploadTotal = 0,
 }) {
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
@@ -215,12 +220,23 @@ export default function BodyEditorModal({
                 {editor ? (
                   <EditorContent editor={editor} />
                 ) : (
-                  <div className="p-3 text-sm text-gray-500">Yükleniyor…</div>
+                  <div className="p-3 text-sm text-gray-500">Loading...</div>
                 )}
               </>
             )}
           </DragDropZone>
         )}
+                {imageUploading && (
+          <div className="mt-3">
+            <UploadProgressBar
+              percent={uploadProgress}
+              label="Uploading image..."
+              loaded={uploadLoaded}
+              total={uploadTotal}
+            />
+          </div>
+        )}
+
 
         {/* Error Message */}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
