@@ -220,7 +220,7 @@ export default function BodyEditorModal({
                 {editor ? (
                   <EditorContent editor={editor} />
                 ) : (
-                  <div className="p-3 text-sm text-gray-500">Yükleniyor…</div>
+                  <div className="p-3 text-sm text-gray-500">Loading...</div>
                 )}
               </>
             )}
@@ -230,7 +230,7 @@ export default function BodyEditorModal({
           <div className="mt-3">
             <UploadProgressBar
               percent={uploadProgress}
-              label="Resim yükleniyor..."
+              label="Uploading image..."
               loaded={uploadLoaded}
               total={uploadTotal}
             />

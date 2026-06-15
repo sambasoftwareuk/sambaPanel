@@ -4,7 +4,7 @@ import { formatBytes } from "../../lib/uploadWithProgress";
 
 export default function UploadProgressBar({
   percent = 0,
-  label = "Yükleniyor...",
+  label = "Uploading...",
   loaded = 0,
   total = 0,
   fileIndex,
@@ -16,7 +16,7 @@ export default function UploadProgressBar({
         <span>{label}</span>
         {fileCount > 1 && fileIndex != null && (
           <span>
-            Dosya {fileIndex}/{fileCount}
+            File {fileIndex}/{fileCount}
           </span>
         )}
       </div>
