@@ -48,8 +48,8 @@ export async function POST(request) {
 
     const smtpPort = Number(process.env.SMTP_PORT || 587);
     const smtpSecure = String(process.env.SMTP_SECURE || "false").toLowerCase() === "true";
-    const from = process.env.CONTACT_MAIL_FROM || "noreply@greenstep.com";
-    const to = process.env.CONTACT_MAIL_TO || from;
+    const from = process.env.CONTACT_MAIL_FROM || "noreply@greenstepcoolingtowers.com";
+    const to = process.env.CONTACT_MAIL_TO || "info@greenstepcoolingtowers.com";
 
     await sendSmtpMail({
       host: getRequiredEnv("SMTP_HOST"),
