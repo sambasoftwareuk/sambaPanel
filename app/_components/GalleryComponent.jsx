@@ -4,6 +4,7 @@ import { Header1 } from "../_atoms/Headers";
 import { CardImage, ZoomableImage } from "../_atoms/Images";
 import Modal from "../_molecules/Modal";
 import { SambaSlider } from "../_molecules/Slider";
+import XButton from "../_atoms/XButton";
 import { useState } from "react";
 
 const GalleryComponent = ({ title = "Galeri", images = [] }) => {
@@ -27,24 +28,34 @@ const GalleryComponent = ({ title = "Galeri", images = [] }) => {
 
       {selectedIndex !== null && (
         <Modal onClose={() => setSelectedIndex(null)}>
-          <SambaSlider
-            itemsPerSlide={1}
-            isScroll={false}
-            isInfinite={true}
-            showDots={true}
-            showArrows={true}
-            size="lg"
-            initialSlide={selectedIndex}
-          >
-            {images.map((img, i) => (
-              <div
-                key={i}
-                className="w-full h-full flex justify-center items-center"
-              >
-                <ZoomableImage imageLink={img} aspectRatio="aspect-[4/3]" />
-              </div>
-            ))}
-          </SambaSlider>
+          <div className="w-full max-w-5xl mx-auto px-4">
+            <SambaSlider
+              itemsPerSlide={1}
+              isScroll={false}
+              isInfinite={true}
+              showDots={true}
+              showArrows={true}
+              size="lg"
+              initialSlide={selectedIndex}
+            >
+              {images.map((img, i) => (
+                <div
+                  key={i}
+                  className="w-full h-full flex justify-center items-center"
+                >
+                  <div className="relative w-fit max-w-full [&_span]:!w-auto [&_span]:!h-auto [&_img]:max-w-full [&_img]:h-auto">
+                    <ZoomableImage imageLink={img} aspectRatio="aspect-[4/3]" />
+                    <div className="absolute top-2 right-0 z-30 translate-x-1/2">
+                      <XButton
+                        onClick={() => setSelectedIndex(null)}
+                        title="Kapat"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </SambaSlider>
+          </div>
         </Modal>
       )}
     </div>
