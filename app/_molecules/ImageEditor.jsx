@@ -7,6 +7,7 @@ import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 import UploadModal from "./UploadModal";
 import { apiFetch } from "../utils/apiFetch";
+import { uploadWithProgress } from "../../lib/uploadWithProgress";
 
 export default function ImageEditor({
   initialUrl = "/generic-image.png",
@@ -42,6 +43,9 @@ export default function ImageEditor({
   const [uploadComplete, setUploadComplete] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const abortControllerRef = useRef(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadLoaded, setUploadLoaded] = useState(0);
+  const [uploadTotal, setUploadTotal] = useState(0);
   // Modal açılınca state güncelle
   useEffect(() => {
     if (!open) return;
@@ -144,20 +148,23 @@ export default function ImageEditor({
         const controller = new AbortController();
         abortControllerRef.current = controller;
 
+        setUploadProgress(0);
+        setUploadLoaded(0);
+        setUploadTotal(stagedFile.size);
+
         const formData = new FormData();
         formData.append("file", stagedFile);
 
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
+        const data = await uploadWithProgress("/api/upload", formData, {
           signal: controller.signal,
+          onProgress: ({ percent, loaded, total }) => {
+            setUploadProgress(percent);
+            setUploadLoaded(loaded);
+            setUploadTotal(total);
+          },
         });
-        if (!res.ok) {
-          const t = await res.text();
-          throw new Error("Upload başarısız: " + res.status + " - " + t);
-        }
-        const data = await res.json();
-        finalUrl = data.url; // storage URL
+
+        finalUrl = data.url;
         if (stagedPreview) URL.revokeObjectURL(stagedPreview);
         setStagedFile(null);
         setStagedPreview(null);
@@ -201,6 +208,7 @@ export default function ImageEditor({
       if (e.name !== "AbortError") setError(e.message || "Güncellenemedi");
     } finally {
       setUploading(false);
+      setUploadProgress(0);
       abortControllerRef.current = null;
     }
   };
