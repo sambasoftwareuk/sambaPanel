@@ -109,7 +109,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
           }),
         });
 
-        if (!mediaRes.ok) throw new Error("Media record failed");
+        if (!mediaRes.ok) throw new Error("Media kaydı başarısız");
       }
 
       setSelectedFiles([]);

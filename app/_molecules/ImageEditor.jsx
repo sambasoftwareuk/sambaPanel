@@ -251,6 +251,10 @@ export default function ImageEditor({
           setUploadComplete(true);
           setGalleryRefreshKey((k) => k + 1);
         }}
+        imageUploading={uploading && !!stagedFile}
+        uploadProgress={uploadProgress}
+        uploadLoaded={uploadLoaded}
+        uploadTotal={uploadTotal}
       />
 
       <UploadModal
