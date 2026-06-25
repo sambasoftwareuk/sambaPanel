@@ -4,7 +4,7 @@ import { Header2 } from '../_atoms/Headers';
 import { InputBasic } from '../_atoms/Inputs';
 import { Checkbox } from '../_atoms/Checkbox';
 import { PrimaryButton } from '../_atoms/Buttons';
-import { showSuccess } from '../utils/toast';
+import { showError, showSuccess } from '../utils/toast';
 
 const ContactForm = ({ 
   title = "Bize Ulaşın",
@@ -18,10 +18,12 @@ const ContactForm = ({
     email: '',
     phone: '',
     message: '',
+    securityAnswer: '',
     kvkkAccepted: false
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,6 +74,12 @@ const ContactForm = ({
       newErrors.message = 'Mesaj alanı zorunludur';
     }
 
+    if (!formData.securityAnswer.trim()) {
+      newErrors.securityAnswer = 'Güvenlik sorusunu cevaplayınız';
+    } else if (formData.securityAnswer.trim() !== '9') {
+      newErrors.securityAnswer = 'Güvenlik sorusunun cevabı hatalı';
+    }
+
     if (!formData.kvkkAccepted) {
       newErrors.kvkkAccepted = 'KVKK ve Aydınlatma Metni\'ni kabul etmelisiniz';
     }
@@ -80,24 +88,36 @@ const ContactForm = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const resetForm = () => {
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      message: '',
+      securityAnswer: '',
+      kvkkAccepted: false
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (validateForm()) {
+
+    if (!validateForm() || isSubmitting) return;
+
+    setIsSubmitting(true);
+
+    try {
       if (onSubmit) {
-        onSubmit(formData);
-      } else {
-        showSuccess("Your message was sent successfully!");
-        
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          message: '',
-          kvkkAccepted: false
-        });
+        await onSubmit(formData);
       }
+
+      showSuccess("Mesajınız başarıyla gönderildi.");
+      resetForm();
+    } catch (error) {
+      showError(error.message || "Mesaj gönderilemedi. Lütfen daha sonra tekrar deneyiniz.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -177,6 +197,25 @@ const ContactForm = ({
         </div>
 
         <div>
+          <label htmlFor="securityAnswer" className="block text-sm font-medium text-gray-700 mb-1">
+            Güvenlik sorusu: 4 + 5 kaç eder? *
+          </label>
+          <InputBasic
+            type="text"
+            inputMode="numeric"
+            id="securityAnswer"
+            name="securityAnswer"
+            placeholder="Cevabınız"
+            value={formData.securityAnswer}
+            onChange={handleInputChange}
+            className={errors.securityAnswer ? 'border-red-500' : ''}
+          />
+          {errors.securityAnswer && (
+            <p className="text-red-500 text-xs mt-1">{errors.securityAnswer}</p>
+          )}
+        </div>
+
+        <div>
           <Checkbox
             id="kvkk"
             label={
@@ -203,8 +242,9 @@ const ContactForm = ({
         <div className="text-center">
           <PrimaryButton
             type="submit"
-            label="Gönder"
+            label={isSubmitting ? "Gönderiliyor..." : "Gönder"}
             className="px-8 py-3 text-base"
+            disabled={isSubmitting}
           />
         </div>
       </form>

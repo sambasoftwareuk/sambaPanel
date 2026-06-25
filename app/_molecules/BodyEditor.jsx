@@ -10,8 +10,10 @@ import EditButton from "../_atoms/EditButton";
 import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
+import { uploadWithProgress } from "../../lib/uploadWithProgress";
 import { showError } from "../utils/toast";
 import { apiFetch } from "../utils/apiFetch";
+import { getUploadErrorMessage } from "../../lib/uploadErrorMessage";
 
 export default function BodyEditor({ className = "" }) {
   const {
@@ -28,6 +30,10 @@ export default function BodyEditor({ className = "" }) {
   const [mounted, setMounted] = useState(false);
   const [htmlContent, setHtmlContent] = useState("");
   const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadLoaded, setUploadLoaded] = useState(0);
+  const [uploadTotal, setUploadTotal] = useState(0);
 
   useEffect(() => setMounted(true), []);
 
@@ -98,23 +104,24 @@ export default function BodyEditor({ className = "" }) {
       showError("Only image files are accepted");
       return;
     }
-
+  
+    setImageUploading(true);
+    setUploadProgress(0);
+    setUploadLoaded(0);
+    setUploadTotal(file.size);
+  
     try {
       const formData = new FormData();
       formData.append("file", file);
-
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
+  
+      const data = await uploadWithProgress("/api/upload", formData, {
+        onProgress: ({ percent, loaded, total }) => {
+          setUploadProgress(percent);
+          setUploadLoaded(loaded);
+          setUploadTotal(total);
+        },
       });
-
-      if (!res.ok) {
-        throw new Error("Upload başarısız");
-      }
-
-      const data = await res.json();
-
-      // Dosya adından alt text oluştur
+  
       const fileName = data.fileName || data.url.split("/").pop();
       const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
 
@@ -127,8 +134,7 @@ export default function BodyEditor({ className = "" }) {
           alt_text: altText,
         }),
       });
-
-      // Resmi editöre ekle
+  
       if (editor && data.url) {
         editor.commands.setCustomImage({
           src: data.url,
@@ -136,13 +142,15 @@ export default function BodyEditor({ className = "" }) {
           type: "image",
           width: "100%",
         });
-
-        // Context'i de güncelle (Save All butonunu aktif etmek için)
+  
         const updatedHtml = editor.getHTML();
         setBodyHtml(updatedHtml);
       }
     } catch (e) {
-      showError("An error occurred while uploading the image: " + e.message);
+      showError(getUploadErrorMessage(e));
+    } finally {
+      setImageUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -189,6 +197,10 @@ export default function BodyEditor({ className = "" }) {
         onOpenImageModal={openImageModal}
         onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
         deletedImages={deletedImages}
+        imageUploading={imageUploading}
+        uploadProgress={uploadProgress}
+        uploadLoaded={uploadLoaded}
+        uploadTotal={uploadTotal}
         pageSlug={pageSlug}
       />
 
@@ -199,14 +211,18 @@ export default function BodyEditor({ className = "" }) {
         mode="image"
         imageUrl=""
         imageAlt=""
-        onImageUrlChange={() => {}}
-        onImageAltChange={() => {}}
+        onImageUrlChange={() => { }}
+        onImageAltChange={() => { }}
         onImageSelect={(id, url) => handleImageSelect(id, url)}
         onImageUpload={handleImageUpload}
         onSave={() => setImageModalOpen(false)}
         saving={false}
         error=""
         deletedImages={deletedImages}
+        imageUploading={imageUploading}
+        uploadProgress={uploadProgress}
+        uploadLoaded={uploadLoaded}
+        uploadTotal={uploadTotal}
         pageSlug={pageSlug}
       />
     </>
