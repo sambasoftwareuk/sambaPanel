@@ -11,6 +11,7 @@ import { Header2 } from "../_atoms/Headers";
 import InlineTabButton from "../_atoms/InlineTabButton";
 import FileUploadPanel from "../_atoms/FileUploadPanel";
 import UploadModal from "./UploadModal";
+import { usePageEdit } from "../context/PageEditProvider";
 import UploadProgressBar from "../_atoms/UploadProgressBar";
 
 export default function BodyEditorModal({
@@ -33,11 +34,23 @@ export default function BodyEditorModal({
   deletedImages = [],
   onUploadComplete = () => {},
   pageSlug,
+  mediaScope: mediaScopeProp,
+  galleryRefreshKey: galleryRefreshKeyProp = 0,
   imageUploading = false,
   uploadProgress = 0,
   uploadLoaded = 0,
   uploadTotal = 0,
 }) {
+  const { mediaScope: contextMediaScope } = usePageEdit();
+  const mediaScope = mediaScopeProp || contextMediaScope;
+  const [galleryRefreshKey, setGalleryRefreshKey] = useState(
+    galleryRefreshKeyProp
+  );
+
+  useEffect(() => {
+    setGalleryRefreshKey(galleryRefreshKeyProp);
+  }, [galleryRefreshKeyProp]);
+
   const [showHtml, setShowHtml] = useState(false);
   const [activeTab, setActiveTab] = useState(
     mode === "body" ? "visual" : "gallery"
@@ -165,13 +178,15 @@ export default function BodyEditorModal({
                 onImageSelect={(id, url) => {
                   if (editor) {
                     const fileName = url.split("/").pop();
-                    const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-                    
-                    editor.commands.setCustomImage({ 
-                      src: url, 
+                    const altText = fileName
+                      .replace(/\.[^/.]+$/, "")
+                      .replace(/[-_]/g, " ");
+
+                    editor.commands.setCustomImage({
+                      src: url,
                       alt: altText,
-                      type: 'image',
-                      width: '100%'
+                      type: "image",
+                      width: "100%",
                     });
                   }
                   setShowGallery(false); // seçimden sonra panel kapanır
@@ -179,7 +194,8 @@ export default function BodyEditorModal({
                 onDeleteImage={onDeleteImage}
                 deletedImages={deletedImages}
                 onApply={setGalleryActions}
-                pageSlug={pageSlug}
+                mediaScope={mediaScope}
+                refreshKey={galleryRefreshKey}
               />
             ) : (
               <div className="p-4 text-center text-gray-500">
@@ -196,7 +212,8 @@ export default function BodyEditorModal({
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
-            pageSlug={pageSlug}
+            mediaScope={mediaScope}
+            refreshKey={galleryRefreshKey}
           />
         ) : activeTab === "upload" ? (
           <div className="p-4 text-center text-gray-500">
@@ -226,7 +243,7 @@ export default function BodyEditorModal({
             )}
           </DragDropZone>
         )}
-                {imageUploading && (
+        {imageUploading && (
           <div className="mt-3">
             <UploadProgressBar
               percent={uploadProgress}
@@ -236,7 +253,6 @@ export default function BodyEditorModal({
             />
           </div>
         )}
-
 
         {/* Error Message */}
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
@@ -282,9 +298,10 @@ export default function BodyEditorModal({
         }}
         onUploadComplete={() => {
           onUploadComplete?.();
+          setGalleryRefreshKey((k) => k + 1);
           setShowUploadModal(false);
-          setActiveTab("gallery"); // Upload sonrası galeri sekmesine geç
-          setShowGallery(false); // Inline gallery'yi de kapat
+          setActiveTab("gallery");
+          setShowGallery(false);
         }}
       />
     </div>

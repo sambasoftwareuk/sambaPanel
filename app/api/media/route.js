@@ -1,18 +1,13 @@
 // app/api/media/route.js
 import { NextResponse } from "next/server";
 import { q, tx } from "@/lib/db";
+import { isRouteAuthorized } from "@/lib/auth";
 
 function ok(data, init = 200) {
   return NextResponse.json(data, { status: init });
 }
 function bad(message, code = 400) {
   return NextResponse.json({ error: message }, { status: code });
-}
-function requireAdmin(req) {
-  const need = process.env.ADMIN_TOKEN;
-  if (!need) return true; // dev'de serbest bırak
-  const got = req.headers.get("x-admin-token");
-  return need && got && got === need;
 }
 
 // --- GET /api/media?scope=corporate&limit=24&offset=0&search=foo
@@ -73,7 +68,7 @@ export async function GET(req) {
 //   "scopes": ["corporate"]   // zorunlu değil ama önerilir
 // }
 export async function POST(req) {
-  if (!requireAdmin(req)) return bad("Unauthorized", 401);
+  if (!isRouteAuthorized(req)) return bad("Unauthorized", 401);
 
   let payload;
   try {
@@ -151,7 +146,7 @@ export async function POST(req) {
 //   "remove_scopes": ["product","blog"]  // opsiyonel
 // }
 export async function PATCH(req) {
-  if (!requireAdmin(req)) return bad("Unauthorized", 401);
+  if (!isRouteAuthorized(req)) return bad("Unauthorized", 401);
 
   let payload;
   try {
@@ -233,7 +228,7 @@ export async function PATCH(req) {
 
 // --- DELETE /api/media?id=123
 export async function DELETE(req) {
-  if (!requireAdmin(req)) return bad("Unauthorized", 401);
+  if (!isRouteAuthorized(req)) return bad("Unauthorized", 401);
 
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");

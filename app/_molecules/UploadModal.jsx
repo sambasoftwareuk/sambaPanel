@@ -10,6 +10,7 @@ import { usePageEdit } from "../context/PageEditProvider";
 import UploadProgressBar from "../_atoms/UploadProgressBar";
 import { uploadWithProgress } from "../../lib/uploadWithProgress";
 import { showError } from "../utils/toast";
+import { apiFetch } from "../utils/apiFetch";
 import { getUploadErrorMessage } from "../../lib/uploadErrorMessage";
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
@@ -25,9 +26,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
   const { mediaScope } = usePageEdit();
 
   const handleFileSelect = (files) => {
-    const fileArray = files instanceof File
-      ? [files]
-      : Array.from(files || []);
+    const fileArray = files instanceof File ? [files] : Array.from(files || []);
     const imageFiles = fileArray.filter((file) => {
       if (file.type?.startsWith("image/")) return true;
       const ext = file.name.split(".").pop()?.toLowerCase();
@@ -98,18 +97,19 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
           },
         });
 
-        const mediaRes = await fetch("/api/media", {
+        // Media kaydı yap
+        const mediaRes = await apiFetch("/api/media", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             url: uploadData.url,
             alt_text: file.name,
             mime_type: uploadData?.mime_type || file.type || null,
-            scopes: [mediaScope],
+            scopes: [mediaScope], // ← hard-coded "kurumsal" yerine bu
           }),
         });
 
-        if (!mediaRes.ok) throw new Error("Media record failed");
+        if (!mediaRes.ok) throw new Error("Media kaydı başarısız");
       }
 
       setSelectedFiles([]);
@@ -197,13 +197,11 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }) {
                     {preview.file.name}
                   </p>
                 </div>
-              ))
-                ?? (
-                  <div className="col-span-2 text-center text-gray-500 text-sm py-4">
-                    No files found
-                  </div>
-                )
-              }
+              )) ?? (
+                <div className="col-span-2 text-center text-gray-500 text-sm py-4">
+                  No files found
+                </div>
+              )}
             </div>
           </div>
         )}

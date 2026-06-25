@@ -12,6 +12,7 @@ import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 import { uploadWithProgress } from "../../lib/uploadWithProgress";
 import { showError } from "../utils/toast";
+import { apiFetch } from "../utils/apiFetch";
 import { getUploadErrorMessage } from "../../lib/uploadErrorMessage";
 
 export default function BodyEditor({ className = "" }) {
@@ -103,16 +104,16 @@ export default function BodyEditor({ className = "" }) {
       showError("Only image files are accepted");
       return;
     }
-  
+
     setImageUploading(true);
     setUploadProgress(0);
     setUploadLoaded(0);
     setUploadTotal(file.size);
-  
+
     try {
       const formData = new FormData();
       formData.append("file", file);
-  
+
       const data = await uploadWithProgress("/api/upload", formData, {
         onProgress: ({ percent, loaded, total }) => {
           setUploadProgress(percent);
@@ -120,11 +121,12 @@ export default function BodyEditor({ className = "" }) {
           setUploadTotal(total);
         },
       });
-  
+
       const fileName = data.fileName || data.url.split("/").pop();
       const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
-  
-      await fetch("/api/media", {
+
+      // Media API'ye kaydet
+      await apiFetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -132,7 +134,7 @@ export default function BodyEditor({ className = "" }) {
           alt_text: altText,
         }),
       });
-  
+
       if (editor && data.url) {
         editor.commands.setCustomImage({
           src: data.url,
@@ -140,7 +142,7 @@ export default function BodyEditor({ className = "" }) {
           type: "image",
           width: "100%",
         });
-  
+
         const updatedHtml = editor.getHTML();
         setBodyHtml(updatedHtml);
       }
@@ -209,8 +211,8 @@ export default function BodyEditor({ className = "" }) {
         mode="image"
         imageUrl=""
         imageAlt=""
-        onImageUrlChange={() => { }}
-        onImageAltChange={() => { }}
+        onImageUrlChange={() => {}}
+        onImageAltChange={() => {}}
         onImageSelect={(id, url) => handleImageSelect(id, url)}
         onImageUpload={handleImageUpload}
         onSave={() => setImageModalOpen(false)}

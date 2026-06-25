@@ -27,6 +27,7 @@ export default async function SparePartDetailPage({ params }) {
   return (
     <DetailPageTemplate
       page={sparePart}
+      pageSlug={slug}
       // menu={arraySideMenu}
       activeHref={`/yedek-parcalar/${sparePart?.slug_i18n}`}
       otherItems={otherItems}

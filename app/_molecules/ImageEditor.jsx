@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import { usePageEdit } from "../context/PageEditProvider";
 import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 import UploadModal from "./UploadModal";
+import { apiFetch } from "../utils/apiFetch";
 import { uploadWithProgress } from "../../lib/uploadWithProgress";
 
 export default function ImageEditor({
@@ -26,6 +27,7 @@ export default function ImageEditor({
     pageId,
     locale,
     pageSlug,
+    mediaScope,
   } = usePageEdit();
 
   const [open, setOpen] = useState(false);
@@ -126,22 +128,7 @@ export default function ImageEditor({
     setUrl(heroUrl || initialUrl);
   };
 
-  const scopeFromPage = (slug) => {
-    // Sayfaya göre scope eşlemesi — ihtiyacına göre genişletebilirsin
-    if (!slug) return "gallery";
-    if (slug === "kurumsal" || slug === "about-us" || slug === "corporate")
-      return "kurumsal";
-    if (slug.startsWith("urun") || slug.startsWith("products"))
-      return "product";
-    if (slug.startsWith("hizmet") || slug.startsWith("services"))
-      return "service";
-    if (slug.startsWith("yedek") || slug.includes("spare")) return "spare";
-    if (slug.startsWith("iletisim") || slug.startsWith("contact"))
-      return "contact";
-    return "gallery";
-  };
-
-  const computedScope = useMemo(() => scopeFromPage(pageSlug), [pageSlug]);
+  const [galleryRefreshKey, setGalleryRefreshKey] = useState(0);
 
   const apply = async () => {
     if (!url) {
@@ -151,7 +138,7 @@ export default function ImageEditor({
     setUploading(true);
     setError("");
     try {
-      const scope = computedScope;
+      const scope = mediaScope;
       let finalUrl = url;
       let mime = stagedFile?.type || "image/png";
       let mediaId = null;
@@ -195,7 +182,7 @@ export default function ImageEditor({
         mediaId = stagedMediaId;
       } else {
         // Yeni dosya yüklendi, media kaydı oluştur
-        const mediaRes = await fetch("/api/media", {
+        const mediaRes = await apiFetch("/api/media", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -242,6 +229,8 @@ export default function ImageEditor({
         onClose={() => setOpen(false)}
         mode="image"
         pageSlug={pageSlug}
+        mediaScope={mediaScope}
+        galleryRefreshKey={galleryRefreshKey}
         imageUrl={url}
         imageAlt={alt}
         onImageUrlChange={setUrl}
@@ -258,23 +247,24 @@ export default function ImageEditor({
         error={error}
         onDeleteImage={(image) => setDeletedImages((prev) => [...prev, image])}
         deletedImages={deletedImages}
-        onUploadComplete={() => setUploadComplete(true)}
+        onUploadComplete={() => {
+          setUploadComplete(true);
+          setGalleryRefreshKey((k) => k + 1);
+        }}
         imageUploading={uploading && !!stagedFile}
         uploadProgress={uploadProgress}
         uploadLoaded={uploadLoaded}
         uploadTotal={uploadTotal}
       />
 
-      {/* Upload Modal */}
-
       <UploadModal
-        key={computedScope}
+        key={mediaScope}
         isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
-        mediaScope={computedScope}
         onUploadComplete={() => {
           setUploadComplete(true);
           setShowUploadModal(false);
+          setGalleryRefreshKey((k) => k + 1);
         }}
       />
     </>

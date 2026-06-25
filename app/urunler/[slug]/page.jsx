@@ -30,6 +30,7 @@ export default async function ProductDetailPage({ params }) {
   return (
     <DetailPageTemplate
       page={product}
+      pageSlug={slug}
       locale={locale}
       // menu={arraySideMenu}
       activeHref={`/urunler/${product?.slug_i18n}`}
