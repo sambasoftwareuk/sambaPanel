@@ -11,6 +11,7 @@ import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 import { showError } from "../utils/toast";
+import { apiFetch } from "../utils/apiFetch";
 
 export default function BodyEditor({ className = "" }) {
   const {
@@ -118,7 +119,7 @@ export default function BodyEditor({ className = "" }) {
       const altText = fileName.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ");
 
       // Media API'ye kaydet
-      await fetch("/api/media", {
+      await apiFetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

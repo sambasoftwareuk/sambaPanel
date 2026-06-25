@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { showError, showSuccess } from "../utils/toast";
 import { resolveMediaScope } from "@/lib/mediaScope";
+import { apiFetch } from "../utils/apiFetch";
 
 const PageEditContext = createContext(null);
 
@@ -119,10 +120,7 @@ export function PageEditProvider({
   }
 
   async function handleSave() {
-    if (!isDirty) {
-      showError("No changes to save.");
-      return;
-    }
+    if (!isDirty) return;
 
     if (!pageSlug) {
       showError("Cannot save: page slug is missing.");
@@ -163,10 +161,9 @@ export function PageEditProvider({
 
       console.log("[SaveAll] PATCH", endpoint, requestBody);
 
-      const res = await fetch(endpoint, {
+      const res = await apiFetch(endpoint, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        credentials: "same-origin",
         body: JSON.stringify(requestBody),
       });
 
@@ -177,7 +174,7 @@ export function PageEditProvider({
 
       for (const img of deletedImages) {
         try {
-          await fetch(`/api/media?id=${img.id}`, { method: "DELETE" });
+          await apiFetch(`/api/media?id=${img.id}`, { method: "DELETE" });
         } catch (e) {
           console.error("Failed to delete image:", e);
         }

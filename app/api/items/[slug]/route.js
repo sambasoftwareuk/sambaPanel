@@ -1,9 +1,9 @@
 // app/api/items/[slug]/route.js
 import { NextResponse } from "next/server";
 import sanitizeHtml from "sanitize-html";
-import { getAuth } from "@clerk/nextjs/server";
 import { getProductBySlug } from "@/lib/repos/products";
 import { tx } from "@/lib/db";
+import { isRouteAuthorized } from "@/lib/auth";
 
 function ok(data, init = 200) {
   return NextResponse.json(data, { status: init });
@@ -11,17 +11,6 @@ function ok(data, init = 200) {
 
 function bad(message, code = 400) {
   return NextResponse.json({ error: message }, { status: code });
-}
-
-function requireAuth(req) {
-  const { userId } = getAuth(req);
-  if (userId) return true;
-
-  const need = process.env.ADMIN_TOKEN;
-  if (!need) return true;
-
-  const got = req.headers.get("x-admin-token");
-  return need && got && got === need;
 }
 
 const sanitizeOptions = {
@@ -61,7 +50,7 @@ export async function GET(req, { params }) {
 }
 
 export async function PATCH(req, { params }) {
-  if (!requireAuth(req)) return bad("Unauthorized", 401);
+  if (!isRouteAuthorized(req)) return bad("Unauthorized", 401);
 
   const { slug } = await params;
 

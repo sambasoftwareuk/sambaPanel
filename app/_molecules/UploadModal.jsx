@@ -8,6 +8,7 @@ import { Header2 } from "../_atoms/Headers";
 import XButton from "../_atoms/XButton";
 import { usePageEdit } from "../context/PageEditProvider";
 import { showError } from "../utils/toast";
+import { apiFetch } from "../utils/apiFetch";
 
 export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
   const [selectedFiles, setSelectedFiles] = useState([]);
@@ -93,7 +94,7 @@ export default function UploadModal({ isOpen, onClose, onUploadComplete }  ) {
 
         
         // Media kaydı yap
-        const mediaRes = await fetch("/api/media", {
+        const mediaRes = await apiFetch("/api/media", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import XButton from "../_atoms/XButton";
 import DeleteConfirmModal from "../_atoms/DeleteConfirmModal";
+import { apiFetch } from "../utils/apiFetch";
 
 export default function ImageGallery({
   onImageSelect,
@@ -24,9 +25,7 @@ export default function ImageGallery({
     setLoading(true);
     try {
       const qs = new URLSearchParams({ scope: mediaScope });
-      const res = await fetch(`/api/media?${qs.toString()}`, {
-        credentials: "same-origin",
-      });
+      const res = await apiFetch(`/api/media?${qs.toString()}`);
       if (!res.ok) throw new Error(`Gallery load failed: ${res.status}`);
       const data = await res.json();
       setGallery(data.items || []);
@@ -58,9 +57,8 @@ export default function ImageGallery({
       await Promise.all(
         temporarilyDeleted.map(async (image) => {
           try {
-            const res = await fetch(`/api/media?id=${image.id}`, {
+            const res = await apiFetch(`/api/media?id=${image.id}`, {
               method: "DELETE",
-              credentials: "same-origin",
             });
             if (!res.ok) {
               const t = await res.text();

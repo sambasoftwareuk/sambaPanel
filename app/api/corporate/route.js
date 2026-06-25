@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import sanitizeHtml from "sanitize-html";
 import { q, tx } from "@/lib/db";
+import { isRouteAuthorized } from "@/lib/auth";
 
 // --- küçük yardımcılar ---
 const PUB = `p.status='published' AND (p.publish_at IS NULL OR p.publish_at<=NOW())`;
@@ -11,12 +12,6 @@ function ok(data, init = 200) {
 }
 function bad(message, code = 400) {
   return NextResponse.json({ error: message }, { status: code });
-}
-function requireAdmin(req) {
-  const need = process.env.ADMIN_TOKEN;
-  if (!need) return true; // admin token tanımlı değilse serbest (dev)
-  const got = req.headers.get("x-admin-token");
-  return need && got && got === need;
 }
 
 /** GET /api/corporate?locale=tr-TR
@@ -230,7 +225,7 @@ function requireAdmin(req) {
 // }
 
 export async function PATCH(req) {
-  if (!requireAdmin(req)) return bad("Unauthorized", 401);
+  if (!isRouteAuthorized(req)) return bad("Unauthorized", 401);
 
   const pageId = 1;
   if (!pageId) return bad("Invalid page id");

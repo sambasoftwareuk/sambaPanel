@@ -6,6 +6,7 @@ import EditButton from "../_atoms/EditButton";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 import UploadModal from "./UploadModal";
+import { apiFetch } from "../utils/apiFetch";
 
 export default function ImageEditor({
   initialUrl = "/generic-image.png",
@@ -174,7 +175,7 @@ export default function ImageEditor({
         mediaId = stagedMediaId;
       } else {
         // Yeni dosya yüklendi, media kaydı oluştur
-        const mediaRes = await fetch("/api/media", {
+        const mediaRes = await apiFetch("/api/media", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
