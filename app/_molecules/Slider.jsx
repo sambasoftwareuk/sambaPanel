@@ -15,7 +15,8 @@ export const SambaSlider = ({
   size = "sm",
   initialSlide = 0,
   onSlideChange,
-  className ="",
+  viewportClassName = "",
+  className = "",
 }) => {
   const scrollRef = useRef(null);
   const intervalRef = useRef(null);
@@ -193,33 +194,37 @@ export const SambaSlider = ({
 
   return (
     <div
-    className={`relative w-full overflow-hidden mx-auto ${
-      isSingleItem ? sizeClass : ""
-    } ${className}`}
+      className={`relative w-full mx-auto ${
+        isSingleItem ? sizeClass : ""
+      } ${className}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       <div
-        className={`flex transition-transform duration-500 ease-in-out ${
-          isDragging ? "transition-none" : ""
-        }`}
-        style={{
-          transform: `translateX(-${
-            (currentIndex * 100) / extendedSlides.length
-          }%)`,
-          width: `${(extendedSlides.length * 100) / itemsPerSlide}%`,
-        }}
+        className={`overflow-hidden w-full h-full ${viewportClassName}`}
       >
-        {extendedSlides.map((child, i) => (
-          <div
-            key={i}
-            style={{ flex: `0 0 ${100 / extendedSlides.length}%` }}
-            className="w-full flex-shrink-0"
-          >
-            {child}
-          </div>
-        ))}
+        <div
+          className={`flex h-full transition-transform duration-500 ease-in-out ${
+            isDragging ? "transition-none" : ""
+          }`}
+          style={{
+            transform: `translateX(-${
+              (currentIndex * 100) / extendedSlides.length
+            }%)`,
+            width: `${(extendedSlides.length * 100) / itemsPerSlide}%`,
+          }}
+        >
+          {extendedSlides.map((child, i) => (
+            <div
+              key={i}
+              style={{ flex: `0 0 ${100 / extendedSlides.length}%` }}
+              className="w-full flex-shrink-0 h-full"
+            >
+              {child}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Arrows */}

@@ -120,7 +120,7 @@ export const ProfileImage = ({ imageLink = "", imageAlt }) => {
 };
 
 // --- ZOOMABLE IMAGE ---
-export const ZoomableImage = ({ imageLink, alt = "zoomable" }) => {
+export const ZoomableImage = ({ imageLink, alt = "zoomable", cornerAction }) => {
   const [zoomed, setZoomed] = useState(false);
 
   const toggleZoom = (e) => {
@@ -131,19 +131,32 @@ export const ZoomableImage = ({ imageLink, alt = "zoomable" }) => {
   const src = getSrc(imageLink);
 
   return (
-    <Image
-      src={src}
-      width={800}
-      height={600}
-      alt={alt}
-      onClick={toggleZoom}
-      tabIndex={0}
-      onKeyPress={(e) => {
-        if (e.key === "Enter" || e.key === " ") toggleZoom(e);
-      }}
-      className={`object-contain transition-transform duration-300 cursor-zoom-in ${
+    <div
+      className={`relative w-fit max-w-full max-h-[450px] sm:max-h-[600px] origin-center transition-transform duration-300 ${
         zoomed ? "scale-[1.5]" : "scale-100"
       }`}
-    />
+    >
+      <Image
+        src={src}
+        width={800}
+        height={600}
+        alt={alt}
+        onClick={toggleZoom}
+        tabIndex={0}
+        onKeyPress={(e) => {
+          if (e.key === "Enter" || e.key === " ") toggleZoom(e);
+        }}
+        className="object-contain cursor-zoom-in max-w-full max-h-[450px] sm:max-h-[600px] w-auto h-auto"
+      />
+
+      {cornerAction && (
+        <div
+          className="absolute -top-1 -right-2 z-50 pointer-events-auto"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {cornerAction}
+        </div>
+      )}
+    </div>
   );
 };
