@@ -28,34 +28,37 @@ const GalleryComponent = ({ title = "Galeri", images = [] }) => {
 
       {selectedIndex !== null && (
         <Modal onClose={() => setSelectedIndex(null)}>
-          <div className="w-full max-w-5xl mx-auto px-4">
-            <SambaSlider
-              itemsPerSlide={1}
-              isScroll={false}
-              isInfinite={true}
-              showDots={true}
-              showArrows={true}
-              size="lg"
-              initialSlide={selectedIndex}
-            >
-              {images.map((img, i) => (
-                <div
-                  key={i}
-                  className="w-full h-full flex justify-center items-center"
-                >
-                  <div className="relative w-fit max-w-full [&_span]:!w-auto [&_span]:!h-auto [&_img]:max-w-full [&_img]:h-auto">
-                    <ZoomableImage imageLink={img} aspectRatio="aspect-[4/3]" />
-                    <div className="absolute top-2 right-0 z-30 translate-x-1/2">
-                      <XButton
-                        onClick={() => setSelectedIndex(null)}
-                        title="Kapat"
-                      />
+          <>
+            <XButton
+              onClick={() => setSelectedIndex(null)}
+              title="Kapat"
+              className="fixed top-4 right-4 z-[60] pointer-events-auto"
+            />
+
+            <div className="w-full max-w-5xl mx-auto px-4 pointer-events-none">
+              <SambaSlider
+                className="pointer-events-none"
+                itemsPerSlide={1}
+                isScroll={false}
+                isInfinite={true}
+                showDots={true}
+                showArrows={true}
+                size="lg"
+                initialSlide={selectedIndex}
+              >
+                {images.map((img, i) => (
+                  <div
+                    key={i}
+                    className="w-full h-full flex justify-center items-center pointer-events-none"
+                  >
+                    <div className="relative w-fit max-w-full pointer-events-auto [&_span]:!w-auto [&_span]:!h-auto [&_img]:max-w-full [&_img]:h-auto">
+                      <ZoomableImage imageLink={img} aspectRatio="aspect-[4/3]" />
                     </div>
                   </div>
-                </div>
-              ))}
-            </SambaSlider>
-          </div>
+                ))}
+              </SambaSlider>
+            </div>
+          </>
         </Modal>
       )}
     </div>

@@ -15,6 +15,7 @@ export const SambaSlider = ({
   size = "sm",
   initialSlide = 0,
   onSlideChange,
+  className ="",
 }) => {
   const scrollRef = useRef(null);
   const intervalRef = useRef(null);
@@ -192,9 +193,9 @@ export const SambaSlider = ({
 
   return (
     <div
-      className={`relative w-full overflow-hidden mx-auto ${
-        isSingleItem ? sizeClass : ""
-      }`}
+    className={`relative w-full overflow-hidden mx-auto ${
+      isSingleItem ? sizeClass : ""
+    } ${className}`}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -225,7 +226,7 @@ export const SambaSlider = ({
       {showArrows && (isInfinite || currentIndex > 0) && (
         <DirectionButton
           icon={<Icon variant={ChevronLeft} size={32} />}
-          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full shadow z-10"
+          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white rounded-full shadow z-10 pointer-events-auto"
           onClick={prevSlide}
         />
       )}
@@ -233,14 +234,14 @@ export const SambaSlider = ({
         (isInfinite || currentIndex < childArray.length - itemsPerSlide) && (
           <DirectionButton
             icon={<Icon variant={ChevronRight} size={32} />}
-            className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full shadow z-10"
+            className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white rounded-full shadow z-10 pointer-events-auto"
             onClick={nextSlide}
           />
         )}
 
       {/* Dots */}
       {showDots && (
-        <div className="flex justify-center mt-4 space-x-2">
+        <div className="flex justify-center mt-4 space-x-2 pointer-events-auto">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <button
               key={index}
