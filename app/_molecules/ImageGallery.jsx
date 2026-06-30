@@ -8,6 +8,7 @@ import { apiFetch } from "../utils/apiFetch";
 export default function ImageGallery({
   onImageSelect,
   selectedUrl = "",
+  selectedId,
   onDeleteImage,
   mediaScope,
   deletedImages = [],
@@ -121,8 +122,8 @@ export default function ImageGallery({
               <div
                 key={item.id}
                 className={`relative rounded border-2 p-1 transition-colors ${
-                  selectedUrl === item.id
-                    ? "border-blue-500"
+                  selectedId === item.id
+                    ? "border-blue-500 ring-2 ring-blue-200"
                     : "border-gray-200 hover:border-primary900"
                 }`}
               >

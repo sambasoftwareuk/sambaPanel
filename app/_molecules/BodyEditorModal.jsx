@@ -61,6 +61,7 @@ export default function BodyEditorModal({
   const [showGallery, setShowGallery] = useState(false);
   const [inlineGalleryTab, setInlineGalleryTab] = useState("gallery");
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [selectedMediaId, setSelectedMediaId] = useState(null);
 
   // Upload sekmesine basınca direkt modal aç
   useEffect(() => {
@@ -208,7 +209,11 @@ export default function BodyEditorModal({
         {/* Tab Content */}
         {activeTab === "gallery" ? (
           <ImageGallery
-            onImageSelect={(id, url) => onImageSelect(id, url)}
+            selectedId={selectedMediaId}
+            onImageSelect={(id, url) => {
+              setSelectedMediaId(id);
+              onImageSelect(id, url);
+            }}
             onDeleteImage={onDeleteImage}
             deletedImages={deletedImages}
             onApply={setGalleryActions}
