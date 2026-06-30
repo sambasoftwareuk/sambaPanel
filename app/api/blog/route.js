@@ -1,18 +1,12 @@
 // app/api/blog/route.js
 import { NextResponse } from "next/server";
 import { q, tx } from "@/lib/db";
-
+import { isRouteAuthorized } from "@/lib/auth";
 function ok(data, init = 200) {
   return NextResponse.json(data, { status: init });
 }
 function bad(message, code = 400) {
   return NextResponse.json({ error: message }, { status: code });
-}
-function requireAdmin(req) {
-  const need = process.env.ADMIN_TOKEN;
-  if (!need) return true; // dev'de serbest
-  const got = req.headers.get("x-admin-token");
-  return need && got && got === need;
 }
 
 /**
@@ -33,7 +27,9 @@ function requireAdmin(req) {
  * }
  */
 export async function POST(req) {
-  if (!requireAdmin(req)) return bad("Unauthorized", 401);
+  if (!isRouteAuthorized(req)) {
+    return bad("Unauthorized", 401);
+  }
 
   let payload;
   try {
