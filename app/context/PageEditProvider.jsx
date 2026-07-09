@@ -159,8 +159,6 @@ export function PageEditProvider({
         requestBody.type = itemType;
       }
 
-      console.log("[SaveAll] PATCH", endpoint, requestBody);
-
       const res = await apiFetch(endpoint, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

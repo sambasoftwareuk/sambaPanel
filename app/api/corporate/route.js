@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import sanitizeHtml from "sanitize-html";
 import { q, tx } from "@/lib/db";
 import { isRouteAuthorized } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 // --- küçük yardımcılar ---
 const PUB = `p.status='published' AND (p.publish_at IS NULL OR p.publish_at<=NOW())`;
@@ -339,7 +340,10 @@ export async function PATCH(req) {
       );
       return out[0];
     });
-
+    revalidatePath("/kurumsal");
+    if (locale === "en-US") {
+      revalidatePath("/en/corporate");
+    }
     return ok({
       message: "Page updated",
       page: result,
