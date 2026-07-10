@@ -255,6 +255,7 @@ export default function ImageEditor({
         uploadProgress={uploadProgress}
         uploadLoaded={uploadLoaded}
         uploadTotal={uploadTotal}
+        closeOnSave={false}
       />
 
       <UploadModal
