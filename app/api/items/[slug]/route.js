@@ -4,6 +4,8 @@ import sanitizeHtml from "sanitize-html";
 import { getProductBySlug } from "@/lib/repos/products";
 import { tx } from "@/lib/db";
 import { isRouteAuthorized } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
+import { buildItemUrl } from "@/lib/routes";
 
 function ok(data, init = 200) {
   return NextResponse.json(data, { status: init });
@@ -149,7 +151,7 @@ export async function PATCH(req, { params }) {
 
       return out[0];
     });
-
+    revalidatePath(buildItemUrl(type, locale, slug));
     return ok({ message: "Item updated", item: result });
   } catch (e) {
     console.error(e);
