@@ -31,7 +31,6 @@ const GalleryComponent = ({ title = "Galeri", images = [] }) => {
         <div className="w-full max-w-5xl mx-auto px-4 pointer-events-none">
           <SambaSlider
             className="pointer-events-none"
-            viewportClassName="pt-3 pr-3"
             itemsPerSlide={1}
             isScroll={false}
             isInfinite={true}
