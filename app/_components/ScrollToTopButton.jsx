@@ -13,6 +13,11 @@ export default function ScrollToTopButton() {
   const bottomThreshold = 100;
 
   const handleScroll = useCallback(() => {
+    if (document.body.dataset.modalOpen === "true") {
+      setVisible(false);
+      return;
+    }
+
     const scrollY = window.scrollY;
     const scrollingUp = scrollY < lastScrollY.current;
     const scrollEnough = scrollY > showThreshold;
@@ -27,7 +32,7 @@ export default function ScrollToTopButton() {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Run once on mount to check initial position
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 

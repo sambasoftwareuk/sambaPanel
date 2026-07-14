@@ -11,10 +11,10 @@ const GalleryComponent = ({ title = "Galeri", images = [] }) => {
   const [selectedIndex, setSelectedIndex] = useState(null);
 
   return (
-    <div className="px-4 py-8 max-w-screen-xl mx-auto">
+    <div className="px-2 py-4 sm:px-4 sm:py-6 md:py-8 max-w-screen-xl mx-auto">
       <Header1 className="mb-6 text-center">{title}</Header1>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-2 lg:gap-4">
         {images.map((img, index) => (
           <div
             key={index}
