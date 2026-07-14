@@ -51,7 +51,7 @@ const VideoCard = ({
 
   return (
     <div
-      className="relative bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer"
+      className="relative bg-white shadow-md rounded-lg overflow-hidden transition-transform hover:scale-105 cursor-pointer mb-4"
       onClick={() => onVideoClick && onVideoClick(videoLink, title)}
     >
       {/* Video Thumbnail */}
