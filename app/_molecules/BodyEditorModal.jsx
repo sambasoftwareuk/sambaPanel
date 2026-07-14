@@ -40,6 +40,7 @@ export default function BodyEditorModal({
   uploadProgress = 0,
   uploadLoaded = 0,
   uploadTotal = 0,
+  closeOnSave = true,
 }) {
   const { mediaScope: contextMediaScope } = usePageEdit();
   const mediaScope = mediaScopeProp || contextMediaScope;
@@ -282,8 +283,14 @@ export default function BodyEditorModal({
               if (galleryActions && galleryActions.applyDeletes) {
                 await galleryActions.applyDeletes();
               }
-              onSave();
+
+              await onSave();
               // Silme işlemi varsa sayfayı yenile
+
+              if (closeOnSave) {
+                onClose();
+              }
+
               if (galleryActions && galleryActions.hasTemporaryDeletes) {
                 window.location.reload();
               }
@@ -299,14 +306,13 @@ export default function BodyEditorModal({
         isOpen={showUploadModal}
         onClose={() => {
           setShowUploadModal(false);
-          setActiveTab("gallery"); // Upload modal kapanınca galeri sekmesine geç
+          setInlineGalleryTab("gallery");
         }}
         onUploadComplete={() => {
           onUploadComplete?.();
           setGalleryRefreshKey((k) => k + 1);
           setShowUploadModal(false);
-          setActiveTab("gallery");
-          setShowGallery(false);
+          setInlineGalleryTab("gallery");
         }}
       />
     </div>

@@ -11,7 +11,7 @@ import { usePageEdit } from "../context/PageEditProvider";
 import XButton from "../_atoms/XButton";
 import BodyEditorModal from "./BodyEditorModal";
 import { uploadWithProgress } from "../../lib/uploadWithProgress";
-import { showError } from "../utils/toast";
+import { showError, showSuccess } from "../utils/toast";
 import { apiFetch } from "../utils/apiFetch";
 import { getUploadErrorMessage } from "../../lib/uploadErrorMessage";
 
@@ -161,11 +161,9 @@ export default function BodyEditor({ className = "" }) {
 
     try {
       const html = editor.getHTML();
-
       // Sadece context'i güncelle (basit ve temiz)
       setBodyHtml(html);
-
-      setOpen(false);
+      showSuccess("Content saved successfully");
     } catch (e) {
       setError(e.message);
     } finally {
@@ -224,6 +222,7 @@ export default function BodyEditor({ className = "" }) {
         uploadLoaded={uploadLoaded}
         uploadTotal={uploadTotal}
         pageSlug={pageSlug}
+        closeOnSave={true}
       />
     </>
   );
