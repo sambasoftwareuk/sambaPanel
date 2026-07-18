@@ -1,7 +1,16 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Modal = ({ onClose, children }) => {
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    document.body.dataset.modalOpen = "true";
+    return () => {
+      document.body.style.overflow = "";
+      delete document.body.dataset.modalOpen;
+    };
+  }, []);
+
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();

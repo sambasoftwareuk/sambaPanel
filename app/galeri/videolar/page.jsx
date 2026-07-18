@@ -66,11 +66,11 @@ const Videos = () => {
   };
 
   return (
-    <div className="px-4 py-8 max-w-screen-xl mx-auto">
+    <div className="px-2 py-4 sm:px-4 sm:py-6 md:py-8 max-w-screen-xl mx-auto">
       <Header1 className="mb-6 text-center">Videolar</Header1>
 
       {/* Video Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 md:gap-2 lg:gap-4">
         {galleryVideos.map((video, index) => (
           <VideoCard
             key={video.id}

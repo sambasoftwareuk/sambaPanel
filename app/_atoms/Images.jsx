@@ -132,7 +132,7 @@ export const ZoomableImage = ({ imageLink, alt = "zoomable", cornerAction }) => 
 
   return (
     <div
-      className={`relative w-fit max-w-full max-h-[450px] sm:max-h-[600px] origin-center transition-transform duration-300 ${
+      className={`relative w-fit max-w-full max-h-[450px] sm:max-h-[600px] pt-3 pr-3 origin-center transition-transform duration-300 ${
         zoomed ? "scale-[1.5]" : "scale-100"
       }`}
     >
@@ -151,7 +151,7 @@ export const ZoomableImage = ({ imageLink, alt = "zoomable", cornerAction }) => 
 
       {cornerAction && (
         <div
-          className="absolute -top-1 -right-2 z-50 pointer-events-auto"
+          className="absolute top-3 right-4 -translate-y-1/2 translate-x-1/2 z-50 pointer-events-auto"
           onClick={(e) => e.stopPropagation()}
         >
           {cornerAction}
