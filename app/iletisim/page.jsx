@@ -54,7 +54,7 @@ const ContactPage = async () => {
         </div>
 
         <div className="flex flex-col lg:w-2/4 sm:w-9/12 w-full gap-2">
-            <Header2 className="text-center">Cari Bilgiler</Header2>
+            {/* <Header2 className="text-center">Cari Bilgiler</Header2> */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <Header1 className="text-xl font-bold text-primary900 mb-4">
               Firma Bilgileri
@@ -101,7 +101,7 @@ const ContactPage = async () => {
             </div>
           </div>
 
-          <ContactCard
+          {/* <ContactCard
             title="Banka Bilgileri"
             rightImage="/sampleimages/excel.png"
             className="mb-10"
@@ -153,7 +153,7 @@ const ContactPage = async () => {
                 </div>
               </div>
             </div>
-          </ContactCard>
+          </ContactCard> */}
           <ContactFormWrapper
             kvkkLink="/kvkk-aydinlatma-metni"
             className="w-full mb-12 text-center"

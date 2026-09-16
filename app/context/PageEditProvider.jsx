@@ -150,6 +150,8 @@ export function PageEditProvider({
       if (pageSlug === "kurumsal") {
         endpoint = "/api/corporate";
         if (sideMenuDirty) requestBody.side_menu = sideMenu;
+      } else if (pageSlug === "urunler") {
+        endpoint = "/api/product-overview";
       } else {
         const itemType = itemTypeFromBaseHref(baseHref);
         if (!itemType) {

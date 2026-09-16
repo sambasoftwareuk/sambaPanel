@@ -1,10 +1,11 @@
 import React from "react";
 // import products from "../constants/bigCardProducts.json"; (static data)
-import MainItemGrid from "../_components/MainItemGrid";
+import EditableProductOverview from "../_components/EditableProductOverview";
 import Breadcrumb from "../_molecules/BreadCrumb";
 import { getProductCollections } from "@/lib/repos/products";
 import { buildMetadata, getSeoPage } from "@/lib/repos/seo";
 import JsonLd from "@/components/seo/JsonLd";
+import { getPageBySlug } from "@/lib/repos/pages";
 
 const locale = "tr-TR";
 
@@ -20,16 +21,17 @@ export async function generateMetadata() {
 }
 
 const ProductPage = async () => {
-  const [products, seo] = await Promise.all([
+  const [products, seo, page] = await Promise.all([
     getProductCollections(locale, "product"),
     getSeoPage("urunler", locale),
+    getPageBySlug("urunler", locale),
   ]);
 
   return (
     <div className="min-h-screen bg-gray-50 text-center py-12 px-4">
       <JsonLd data={seo?.json_ld} />
       <Breadcrumb title={"Ürünler"} />
-      <MainItemGrid items={products} title="Ürünlerimiz" />
+      <EditableProductOverview items={products} page={page} locale={locale} />
     </div>
   );
 };
