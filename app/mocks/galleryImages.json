@@ -1,38 +1,86 @@
 [
   {
     "id": 1,
-    "imageLink": "/4.jpg",
+    "imageLink": "/gallery-1.png",
     "title": "Soğutma Kulesi 1",
     "description": "Monoblok soğutma kulesi görseli"
   },
   {
     "id": 2,
-    "imageLink": "/5.jpg",
+    "imageLink": "/gallery-2.png",
     "title": "Soğutma Kulesi 2",
     "description": "İnşai tip soğutma kulesi görseli"
   },
   {
     "id": 3,
-    "imageLink": "/6.jpg",
+    "imageLink": "/gallery-3.png",
     "title": "Soğutma Kulesi 3",
     "description": "Kapalı devre soğutma kulesi görseli"
   },
   {
     "id": 4,
-    "imageLink": "/7.jpg",
+    "imageLink": "/gallery-4.png",
     "title": "Soğutma Kulesi 4",
     "description": "Fan sistemleri görseli"
   },
   {
     "id": 5,
-    "imageLink": "/8.jpg",
+    "imageLink": "/gallery-5.png",
     "title": "Soğutma Kulesi 5",
     "description": "Yedek parça görseli"
   },
   {
     "id": 6,
-    "imageLink": "/9.jpg",
+    "imageLink": "/gallery-6.png",
     "title": "Soğutma Kulesi 6",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 7,
+    "imageLink": "/gallery-7.png",
+    "title": "Soğutma Kulesi 7",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 8,
+    "imageLink": "/gallery-8.png",
+    "title": "Soğutma Kulesi 8",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 9,
+    "imageLink": "/gallery-9.png",
+    "title": "Soğutma Kulesi 9",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 10,
+    "imageLink": "/gallery-10.png",
+    "title": "Soğutma Kulesi 10",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 11,
+    "imageLink": "/gallery-11.png",
+    "title": "Soğutma Kulesi 11",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 12,
+    "imageLink": "/gallery-12.png",
+    "title": "Soğutma Kulesi 12",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 13,
+    "imageLink": "/gallery-13.png",
+    "title": "Soğutma Kulesi 13",
+    "description": "Üretim tesisi görseli"
+  },
+  {
+    "id": 14,
+    "imageLink": "/gallery-14.png",
+    "title": "Soğutma Kulesi 14",
     "description": "Üretim tesisi görseli"
   }
 ]
